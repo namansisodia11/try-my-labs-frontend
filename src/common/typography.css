@@ -1,0 +1,40 @@
+:root {
+  --font-family-base: 'Inter', 'Segoe UI', sans-serif;
+  --font-size-base: 16px;
+  --font-size-lg: 28px;
+  --font-size-md: 18px;
+  --font-size-sm: 14px;
+  --line-height-base: 1.6;
+  --color-text: #111;
+  --color-muted: #555;
+}
+
+.typography-heading {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-lg);
+  line-height: 1.2;
+  color: var(--color-text);
+  margin: 0 0 8px;
+}
+
+.typography-subtitle {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-base);
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.typography-body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.typography-small {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-muted);
+}
