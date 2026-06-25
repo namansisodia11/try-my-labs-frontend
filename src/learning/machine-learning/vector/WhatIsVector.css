@@ -1,0 +1,41 @@
+.vector-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 24px;
+  font-family: sans-serif;
+  color: #1a1a2e;
+}
+
+.vector-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  border-bottom: 3px solid #4f46e5;
+  padding-bottom: 12px;
+}
+
+.vector-section {
+  margin-bottom: 28px;
+}
+
+.vector-section h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #4f46e5;
+  margin-bottom: 10px;
+}
+
+.vector-section p,
+.vector-section li {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #333;
+}
+
+.vector-section ul {
+  padding-left: 20px;
+}
+
+.vector-section li {
+  margin-bottom: 6px;
+}

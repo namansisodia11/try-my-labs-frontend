@@ -1,15 +1,15 @@
-import "./App.css";
-import HomeBanner from "./HomeBanner";
+import { BrowserRouter } from 'react-router-dom';
+import './App.css';
+import AppRoutes from './common/routes';
 
 function App() {
   return (
-    <>
+    <BrowserRouter>
       <header className="app-header">
-        <h1 className="typography-heading">My Labs Board</h1>
-        <p className="typography-subtitle">Placeholder header with top border lines and dummy text.</p>
+        <h1>My Labs Board</h1>
       </header>
-      <HomeBanner />
-    </>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 
