@@ -27,7 +27,10 @@ function WhatIsVector() {
     three.controls.update();
 
     const view = mathbox.cartesian({
-      range: [[-3, 3], [-3, 3]],
+      range: [
+        [-3, 3],
+        [-3, 3],
+      ],
       scale: [1, 1],
     });
 
