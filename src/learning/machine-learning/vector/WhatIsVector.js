@@ -1,86 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import './WhatIsVector.css';
+import CartesianCanvas from '../../../common/mathbox/CartesianCanvas';
+
+const DEMO_VECTORS = [
+  { x: 2, y: 1, color: 0x4f46e5 },
+  { x: 1, y: 2, color: 0xe53e3e },
+];
 
 function WhatIsVector() {
-  const mathboxRef = useRef(null);
-
   useEffect(() => {
     if (window.MathJax) {
       window.MathJax.typesetPromise();
     }
-  }, []);
-
-  useEffect(() => {
-    const container = mathboxRef.current;
-    if (!container || !window.MathBox) return;
-
-    const mathbox = window.MathBox.mathBox({
-      element: container,
-      plugins: ['core', 'controls', 'cursor'],
-      controls: { klass: window.THREE.OrbitControls },
-    });
-
-    const three = mathbox.three;
-    three.renderer.setClearColor(new window.THREE.Color(0xfafafa), 1.0);
-    three.camera.position.set(0, 0, 4);
-    three.controls.target.set(0, 0, 0);
-    three.controls.update();
-
-    const view = mathbox.cartesian({
-      range: [
-        [-3, 3],
-        [-3, 3],
-      ],
-      scale: [1, 1],
-    });
-
-    view.axis({ axis: 1, color: 0x999999, width: 2 });
-    view.axis({ axis: 2, color: 0x999999, width: 2 });
-    view.grid({ axes: 'xy', divideX: 10, divideY: 10, opacity: 0.3 });
-
-    // Vector A: (0,0) -> (2,1)
-    view.interval({
-      id: 'vecA',
-      width: 2,
-      expr: function (emit, x, i) {
-        if (i === 0) emit(0, 0);
-        else emit(2, 1);
-      },
-      channels: 2,
-    });
-    view.line({ points: '#vecA', color: 0x4f46e5, width: 6 });
-    view.point({ points: '#vecA', color: 0x4f46e5, size: 10 });
-
-    // Vector B: (0,0) -> (1,2)
-    view.interval({
-      id: 'vecB',
-      width: 2,
-      expr: function (emit, x, i) {
-        if (i === 0) emit(0, 0);
-        else emit(1, 2);
-      },
-      channels: 2,
-    });
-    view.line({ points: '#vecB', color: 0xe53e3e, width: 6 });
-    view.point({ points: '#vecB', color: 0xe53e3e, size: 10 });
-
-    // Vector A+B: (0,0) -> (3,3) shown as dashed result
-    view.interval({
-      id: 'vecSum',
-      width: 2,
-      expr: function (emit, x, i) {
-        if (i === 0) emit(0, 0);
-        else emit(3, 3);
-      },
-      channels: 2,
-    });
-    view.line({ points: '#vecSum', color: 0x38a169, width: 4 });
-    view.point({ points: '#vecSum', color: 0x38a169, size: 10 });
-
-    return () => {
-      three.renderer.dispose();
-      container.innerHTML = '';
-    };
   }, []);
 
   return (
@@ -90,7 +21,7 @@ function WhatIsVector() {
       <section className="vector-section">
         <h2>Live Demo</h2>
         <p>A simple 2D vector plotted using MathBox:</p>
-        <div ref={mathboxRef} className="mathbox-canvas" />
+        <CartesianCanvas vectors={DEMO_VECTORS} operation="addition" range={3} />
       </section>
 
       <section className="vector-section">
