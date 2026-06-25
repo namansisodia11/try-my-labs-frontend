@@ -39,3 +39,24 @@
 .vector-section li {
   margin-bottom: 6px;
 }
+
+.vector-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.vector-table th,
+.vector-table td {
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  color: #333;
+}
+
+.vector-table th {
+  background: #f0efff;
+  color: #4f46e5;
+  font-weight: 600;
+}
