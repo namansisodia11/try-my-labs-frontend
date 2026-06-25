@@ -13,9 +13,7 @@ function Home() {
         </h2>
         <ul className="home-topics-list">
           <li>
-            <Link to="/learning/machine-learning/what-is-vector">
-              What is a Vector?
-            </Link>
+            <Link to="/learning/machine-learning/what-is-vector">What is a Vector?</Link>
           </li>
         </ul>
       </section>

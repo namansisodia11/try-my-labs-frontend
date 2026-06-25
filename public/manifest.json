@@ -1,8 +1,7 @@
 {
   "short_name": "Try My Labs",
   "name": "Try My Labs",
-  "icons": [
-  ],
+  "icons": [],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
