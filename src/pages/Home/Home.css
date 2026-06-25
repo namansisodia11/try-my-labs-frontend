@@ -1,0 +1,42 @@
+.home {
+  padding: 0 32px 40px;
+}
+
+.home-topics {
+  margin-top: 32px;
+  max-width: 800px;
+}
+
+.home-topics-heading {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.home-topics-link {
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.home-topics-link:hover {
+  text-decoration: underline;
+}
+
+.home-topics-list {
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.home-topics-list li {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.home-topics-list a {
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.home-topics-list a:hover {
+  text-decoration: underline;
+}
