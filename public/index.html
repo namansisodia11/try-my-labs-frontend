@@ -1,16 +1,38 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      if (typeof self === 'undefined') {
+        window.self = window;
+      }
+      if (!self.postMessage) {
+        self.postMessage = function () {};
+      }
+      if (!self.addEventListener) {
+        self.addEventListener = function () {};
+      }
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Try My Labs</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathbox@latest/build/mathbox.css" />
+    <script src="https://cdn.jsdelivr.net/npm/three@0.137.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.137.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathbox@latest/build/bundle/mathbox.js"></script>
     <script>
       window.MathJax = {
-        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-        svg: { fontCache: 'global' }
+        tex: {
+          inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)'],
+          ],
+          displayMath: [['$$', '$$']],
+        },
+        svg: { fontCache: 'global' },
+        startup: { typeset: false },
       };
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
   </head>
   <body>
     <div id="root"></div>
