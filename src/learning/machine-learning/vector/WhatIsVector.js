@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './WhatIsVector.css';
-import CartesianCanvas from '../../../common/mathbox/CartesianCanvas';
+import VectorAdditionCanvas from '../../../common/mathbox/VectorAdditionCanvas';
+import VectorScalingCanvas from '../../../common/mathbox/VectorScalingCanvas';
+import useMathJax from '../../../common/hooks/useMathJax';
 
 function WhatIsVector() {
-  const [mathReady, setMathReady] = useState(false);
-
-  useEffect(() => {
-    if (window.MathJax) {
-      window.MathJax.typesetPromise().then(() => setMathReady(true));
-    } else {
-      setMathReady(true);
-    }
-  }, []);
+  const mathReady = useMathJax();
 
   return (
     <div className="vector-container" style={{ visibility: mathReady ? 'visible' : 'hidden' }}>
@@ -43,7 +37,7 @@ function WhatIsVector() {
               <strong style={{ color: '#059669' }}>sum (3,3)</strong> is the diagonal of the
               parallelogram — still a 2D arrow, still inside the same space.
             </p>
-            <CartesianCanvas mode="addition" />
+            <VectorAdditionCanvas a={{ x: 2, y: 1 }} b={{ x: 1, y: 2 }} />
             <p className="canvas-note">
               No matter which two 2D vectors you pick, their sum is always another 2D vector.
             </p>
@@ -70,7 +64,14 @@ function WhatIsVector() {
               <strong style={{ color: '#e53e3e' }}>−1</strong> flips it — but all results stay on
               the same line through the origin.
             </p>
-            <CartesianCanvas mode="scaling" />
+            <VectorScalingCanvas
+              vector={{ x: 2, y: 1 }}
+              scalars={[
+                { c: 2, color: 0x059669 },
+                { c: 0.5, color: 0xd97706 },
+                { c: -1, color: 0xe53e3e },
+              ]}
+            />
             <p className="canvas-note">
               Every scaled version is still a 2D vector. The scalar can be any real number —
               positive, fractional, or negative.
