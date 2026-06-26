@@ -64,11 +64,11 @@ function WhatIsVector() {
           </div>
           <div className="axiom-example">
             <p className="example-caption">
-              Starting from <strong style={{ color: '#4f46e5' }}>v (2,1)</strong>: multiplying
-              by <strong style={{ color: '#059669' }}>2</strong> stretches it,{' '}
+              Starting from <strong style={{ color: '#4f46e5' }}>v (2,1)</strong>: multiplying by{' '}
+              <strong style={{ color: '#059669' }}>2</strong> stretches it,{' '}
               <strong style={{ color: '#d97706' }}>0.5</strong> shrinks it, and{' '}
-              <strong style={{ color: '#e53e3e' }}>−1</strong> flips it — but all results stay
-              on the same line through the origin.
+              <strong style={{ color: '#e53e3e' }}>−1</strong> flips it — but all results stay on
+              the same line through the origin.
             </p>
             <CartesianCanvas mode="scaling" />
             <p className="canvas-note">
