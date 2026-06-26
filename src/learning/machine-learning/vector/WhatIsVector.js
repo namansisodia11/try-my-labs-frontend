@@ -12,7 +12,7 @@ function WhatIsVector() {
       <section className="vector-section">
         <h1 className="vector-title">What is a Vector?</h1>
         <p className="vector-lead">
-          A <strong>vector</strong> is any object that lives inside a <em>vector space</em> — a
+          A <strong>vector</strong> is any object that lives inside a <em>vector space</em>: a
           collection of objects {'$V$'} where two operations are always defined and always stay
           inside {'$V$'}:
         </p>
@@ -26,7 +26,7 @@ function WhatIsVector() {
               {'$\\mathbf{u}, \\mathbf{v} \\in V \\implies \\mathbf{u} + \\mathbf{v} \\in V$'}
             </span>
             <span className="axiom-gloss">
-              Add two objects — you must land back in the same collection.
+              Add two objects: you must land back in the same collection.
             </span>
           </div>
           <div className="axiom-example">
@@ -34,7 +34,7 @@ function WhatIsVector() {
               <strong style={{ color: '#4f46e5' }}>a (2,1)</strong> and{' '}
               <strong style={{ color: '#e53e3e' }}>b (1,2)</strong> add tip-to-tail. Their{' '}
               <strong style={{ color: '#059669' }}>sum (3,3)</strong> is the diagonal of the
-              parallelogram — still a 2D arrow, still inside the same space.
+              parallelogram. Still a 2D arrow, still inside the same space.
             </p>
             <VectorAdditionCanvas a={{ x: 2, y: 1 }} b={{ x: 1, y: 2 }} />
             <p className="canvas-note">
@@ -50,7 +50,7 @@ function WhatIsVector() {
               {'$\\mathbf{v} \\in V,\\; c \\in \\mathbb{R} \\implies c\\mathbf{v} \\in V$'}
             </span>
             <span className="axiom-gloss">
-              Scale any object by a real number — you must land back in the same collection.
+              Scale any object by a real number: you must land back in the same collection.
             </span>
           </div>
           <div className="axiom-example">
@@ -58,8 +58,8 @@ function WhatIsVector() {
               Starting from <strong style={{ color: '#4f46e5' }}>v (2,1)</strong>: multiplying by{' '}
               <strong style={{ color: '#059669' }}>2</strong> stretches it,{' '}
               <strong style={{ color: '#d97706' }}>0.5</strong> shrinks it, and{' '}
-              <strong style={{ color: '#e53e3e' }}>−1</strong> flips it — but all results stay on
-              the same line through the origin.
+              <strong style={{ color: '#e53e3e' }}>−1</strong> flips it. All results stay on the
+              same line through the origin.
             </p>
             <VectorScalingCanvas
               vector={{ x: 2, y: 1 }}
@@ -70,7 +70,7 @@ function WhatIsVector() {
               ]}
             />
             <p className="canvas-note">
-              Every scaled version is still a 2D vector. The scalar can be any real number —
+              Every scaled version is still a 2D vector. The scalar can be any real number:
               positive, fractional, or negative.
             </p>
           </div>
@@ -78,8 +78,8 @@ function WhatIsVector() {
       </div>
 
       <p className="vector-closing">
-        That's the whole definition. The objects can be anything — arrows, polynomials, audio
-        signals, images — as long as both rules hold.
+        That's the whole definition. The objects can be anything: arrows, polynomials, audio
+        signals, images. As long as both rules hold.
       </p>
     </div>
   );

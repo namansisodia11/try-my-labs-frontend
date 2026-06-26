@@ -36,3 +36,8 @@
 
 - No error boundaries, loading states, or edge-case handling unless explicitly asked.
 - No TypeScript — plain JavaScript only.
+
+## Content Writing
+
+- Never use em dashes (—) in UI-facing text. Use a colon, comma, or period instead.
+- Avoid AI-sounding phrasing. Write like a textbook, not a language model.
