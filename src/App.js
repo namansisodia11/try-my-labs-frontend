@@ -1,6 +1,6 @@
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
-import AppRoutes from './common/routes';
+import AppRoutes from './common/Routes';
 
 function App() {
   return (

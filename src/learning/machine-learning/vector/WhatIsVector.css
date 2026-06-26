@@ -1,7 +1,7 @@
 .vector-container {
-  max-width: 800px;
+  max-width: 1100px;
   margin: 40px auto;
-  padding: 0 24px;
+  padding: 0 40px;
   font-family: sans-serif;
   color: #1a1a2e;
 }
@@ -9,33 +9,172 @@
 .vector-title {
   font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 32px;
-  border-bottom: 3px solid #4f46e5;
-  padding-bottom: 12px;
+  margin-bottom: 16px;
+  color: #1a1a2e;
 }
 
 .vector-section {
-  margin-bottom: 28px;
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #ebebeb;
 }
 
-.vector-section h2 {
+.axiom-list {
+  margin-bottom: 48px;
+}
+
+.vector-lead {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #333;
+  margin: 0;
+}
+
+.vector-closing {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #555;
+  margin: 0;
+}
+
+.axiom-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0 20px 0;
+}
+
+.axiom-name {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #9ca3af;
+}
+
+.axiom-math {
   font-size: 1.25rem;
+  color: #1a1a2e;
+  line-height: 1.6;
+}
+
+.axiom-gloss {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.example-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.example-chip {
+  padding: 8px 16px;
+  border: 2px solid #4f46e5;
+  border-radius: 20px;
+  background: #fff;
+  color: #4f46e5;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.example-chip:hover {
+  background: #eeecff;
+}
+
+.example-chip.active {
+  background: #4f46e5;
+  color: #fff;
+}
+
+.example-detail {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px 24px;
+  background: #fafafa;
+}
+
+.example-detail h2 {
+  font-size: 1.15rem;
   font-weight: 600;
   color: #4f46e5;
-  margin-bottom: 10px;
+  margin: 0 0 16px 0;
 }
 
-.vector-section p,
-.vector-section li {
+.rule-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.rule-row:last-child {
+  margin-bottom: 0;
+}
+
+.rule-badge {
+  flex-shrink: 0;
+  padding: 2px 10px;
+  border-radius: 4px;
+  background: #4f46e5;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.rule-row p {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #333;
+  margin: 0;
+}
+
+.axiom-card {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 0 56px;
+  align-items: center;
+  padding: 48px 0;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.axiom-card:last-of-type {
+  border-bottom: none;
+}
+
+.axiom-card .axiom {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+
+.axiom-example {
+  padding: 0;
+  background: none;
+}
+
+.example-caption {
   font-size: 1rem;
   line-height: 1.7;
   color: #333;
+  margin: 0 0 14px 0;
 }
 
-.vector-section ul {
-  padding-left: 20px;
-}
-
-.vector-section li {
-  margin-bottom: 6px;
+.canvas-note {
+  font-size: 0.875rem;
+  color: #666;
+  font-style: italic;
+  margin: 10px 0 0 0;
 }
