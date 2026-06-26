@@ -1,7 +1,7 @@
 .vector-container {
-  max-width: 720px;
+  max-width: 1100px;
   margin: 40px auto;
-  padding: 0 24px;
+  padding: 0 40px;
   font-family: sans-serif;
   color: #1a1a2e;
 }
@@ -9,20 +9,32 @@
 .vector-title {
   font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 32px;
-  border-bottom: 3px solid #4f46e5;
-  padding-bottom: 12px;
+  margin-bottom: 16px;
+  color: #1a1a2e;
 }
 
 .vector-section {
-  margin-bottom: 32px;
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.axiom-list {
+  margin-bottom: 48px;
 }
 
 .vector-lead {
   font-size: 1.05rem;
   line-height: 1.75;
   color: #333;
-  margin-bottom: 12px;
+  margin: 0;
+}
+
+.vector-closing {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #555;
+  margin: 0;
 }
 
 .axiom-block {
@@ -32,34 +44,25 @@
   margin: 16px 0 20px 0;
 }
 
-.axiom {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 14px 18px;
-  border-left: 4px solid #4f46e5;
-  background: #f5f4ff;
-  border-radius: 0 6px 6px 0;
-}
 
 .axiom-name {
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.72rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #4f46e5;
+  letter-spacing: 0.1em;
+  color: #9ca3af;
 }
 
 .axiom-math {
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   color: #1a1a2e;
-  margin: 2px 0;
+  line-height: 1.6;
 }
 
 .axiom-gloss {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #555;
-  font-style: italic;
+  line-height: 1.6;
 }
 
 .example-grid {
@@ -136,22 +139,31 @@
 }
 
 .axiom-card {
-  border: 1px solid #e0deff;
-  border-radius: 10px;
-  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 0 56px;
+  align-items: center;
+  padding: 48px 0;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.axiom-card:last-of-type {
+  border-bottom: none;
 }
 
 .axiom-card .axiom {
-  border-left: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0;
+  background: none;
+  border: none;
   border-radius: 0;
-  border-bottom: 1px solid #e0deff;
-  background: #f5f4ff;
-  padding: 16px 20px;
 }
 
 .axiom-example {
-  padding: 20px;
-  background: #fff;
+  padding: 0;
+  background: none;
 }
 
 .example-caption {

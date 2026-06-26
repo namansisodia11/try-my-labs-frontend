@@ -9,9 +9,8 @@ function WhatIsVector() {
 
   return (
     <div className="vector-container" style={{ visibility: mathReady ? 'visible' : 'hidden' }}>
-      <h1 className="vector-title">What is a Vector?</h1>
-
       <section className="vector-section">
+        <h1 className="vector-title">What is a Vector?</h1>
         <p className="vector-lead">
           A <strong>vector</strong> is any object that lives inside a <em>vector space</em> — a
           collection of objects {'$V$'} where two operations are always defined and always stay
@@ -19,7 +18,7 @@ function WhatIsVector() {
         </p>
       </section>
 
-      <section className="vector-section">
+      <div className="axiom-list">
         <div className="axiom-card">
           <div className="axiom">
             <span className="axiom-name">Closure under addition</span>
@@ -43,9 +42,7 @@ function WhatIsVector() {
             </p>
           </div>
         </div>
-      </section>
 
-      <section className="vector-section">
         <div className="axiom-card">
           <div className="axiom">
             <span className="axiom-name">Closure under scalar multiplication</span>
@@ -78,14 +75,12 @@ function WhatIsVector() {
             </p>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section className="vector-section">
-        <p className="vector-lead">
-          That's the whole definition. The objects can be anything — arrows, polynomials, audio
-          signals, images — as long as both rules hold.
-        </p>
-      </section>
+      <p className="vector-closing">
+        That's the whole definition. The objects can be anything — arrows, polynomials, audio
+        signals, images — as long as both rules hold.
+      </p>
     </div>
   );
 }
