@@ -40,4 +40,4 @@
 ## Content Writing
 
 - Never use em dashes (—) in UI-facing text. Use a colon, comma, or period instead.
-- Avoid AI-sounding phrasing. Write like a textbook, not a language model.
+- Write like a person explaining to a friend, not a language model writing a report. Casual is fine. Funny is fine. Short is better. Avoid stiff, over-formal phrasing — if it sounds like something a textbook would say in a boring lecture, rewrite it.

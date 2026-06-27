@@ -15,6 +15,9 @@ function Home() {
           <li>
             <Link to="/learning/machine-learning/what-is-vector">What is a Vector?</Link>
           </li>
+          <li>
+            <Link to="/learning/machine-learning/what-is-point">What is a Point?</Link>
+          </li>
         </ul>
       </section>
     </div>
