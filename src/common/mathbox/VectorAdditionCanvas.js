@@ -1,8 +1,8 @@
 import { useRef, useCallback } from 'react';
 import Cartesian2DCanvas from './Cartesian2DCanvas';
 
-// a: { x, y }  b: { x, y }  range: number
-function VectorAdditionCanvas({ a, b, range = 5 }) {
+// a: { x, y }  b: { x, y }  range: number  onDrag: (idx, {x,y}) => void
+function VectorAdditionCanvas({ a, b, range = 5, onDrag }) {
   const aRef = useRef(a);
   const bRef = useRef(b);
 
@@ -95,15 +95,19 @@ function VectorAdditionCanvas({ a, b, range = 5 }) {
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleDrag = useCallback((idx, { x, y }) => {
-    if (idx === 0) {
-      aRef.current.x = x;
-      aRef.current.y = y;
-    } else {
-      bRef.current.x = x;
-      bRef.current.y = y;
-    }
-  }, []);
+  const handleDrag = useCallback(
+    (idx, { x, y }) => {
+      if (idx === 0) {
+        aRef.current.x = x;
+        aRef.current.y = y;
+      } else {
+        bRef.current.x = x;
+        bRef.current.y = y;
+      }
+      if (onDrag) onDrag(idx, { x, y });
+    },
+    [onDrag],
+  );
 
   return (
     <Cartesian2DCanvas

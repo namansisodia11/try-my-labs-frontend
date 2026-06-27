@@ -1,8 +1,8 @@
 import { useRef, useCallback } from 'react';
 import Cartesian2DCanvas from './Cartesian2DCanvas';
 
-// vector: { x, y }  scalars: [{ c, color }]  range: number
-function VectorScalingCanvas({ vector, scalars, range = 5 }) {
+// vector: { x, y }  scalars: [{ c, color }]  range: number  onDrag: ({x,y}) => void
+function VectorScalingCanvas({ vector, scalars, range = 5, onDrag }) {
   const vecRef = useRef(vector);
 
   const draw = useCallback((view, pts) => {
@@ -64,10 +64,14 @@ function VectorScalingCanvas({ vector, scalars, range = 5 }) {
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleDrag = useCallback((_, { x, y }) => {
-    vecRef.current.x = x;
-    vecRef.current.y = y;
-  }, []);
+  const handleDrag = useCallback(
+    (_, { x, y }) => {
+      vecRef.current.x = x;
+      vecRef.current.y = y;
+      if (onDrag) onDrag({ x, y });
+    },
+    [onDrag],
+  );
 
   return (
     <Cartesian2DCanvas points={[vecRef.current]} onDrag={handleDrag} draw={draw} range={range} />
