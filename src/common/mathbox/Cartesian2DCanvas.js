@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
 import './CartesianCanvas.css';
 
-// point: { x, y } — mutable ref object, updated in-place on drag
-// onDrag: ({ x, y }) => void
+// Single-point mode:  point: { x, y },  onDrag: ({ x, y }) => void
+// Multi-point mode:   points: [{ x, y }, ...],  onDrag: (index, { x, y }) => void
+// Optional:          draw: (view, pts) => void  — called after axes, receives live pts array
 // range: number — grid spans [-range, range]
-function Cartesian2DCanvas({ point, onDrag, range = 5 }) {
+function Cartesian2DCanvas({ point, points, onDrag, draw, range = 5 }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -49,13 +50,15 @@ function Cartesian2DCanvas({ point, onDrag, range = 5 }) {
     view.axis({ axis: 1, color: 0x666666, width: 3 });
     view.axis({ axis: 2, color: 0x666666, width: 3 });
 
+    const sources = points || [point];
+    const pts = sources.map((p) => [p.x ?? 0, p.y ?? 0, 0]);
+    const n = pts.length;
+
     const pointSize = 30;
     const hiliteColor = [0, 0.5, 0.5, 0.75];
     const hitRadius = pointSize;
 
-    const pts = [[point.x ?? 0, point.y ?? 0, 0]];
-
-    view.array({ id: 'drag-points', channels: 3, width: 1, data: pts });
+    view.array({ id: 'drag-points', channels: 3, width: n, data: pts });
 
     let hovered = -1;
     let dragging = -1;
@@ -65,7 +68,7 @@ function Cartesian2DCanvas({ point, onDrag, range = 5 }) {
     view.array({
       id: 'drag-colors',
       channels: 4,
-      width: 1,
+      width: n,
       expr: (emit, i) => {
         if (dragging === i || hovered === i) emit(...hiliteColor);
         else emit(1, 1, 1, 0);
@@ -81,6 +84,8 @@ function Cartesian2DCanvas({ point, onDrag, range = 5 }) {
       zWrite: false,
     });
 
+    if (draw) draw(view, pts);
+
     // MathBox cartesian maps math coords to world coords via viewMatrix.
     // We project through it then through the camera to get screen position.
     const viewMatrix = view[0].controller.viewMatrix;
@@ -88,22 +93,22 @@ function Cartesian2DCanvas({ point, onDrag, range = 5 }) {
     const scratch = new THREE.Vector3();
 
     function mathToScreen(mx, my, mz) {
-      // math → view space (MathBox cartesian transform)
       scratch.set(mx, my, mz).applyMatrix4(viewMatrix);
-      // view space → NDC via camera
       scratch.project(camera);
-      // NDC → canvas pixels
       const dpr = window.devicePixelRatio || 1;
       const sx = ((scratch.x + 1) / 2) * canvas.offsetWidth * dpr;
       const sy = ((-scratch.y + 1) / 2) * canvas.offsetHeight * dpr;
       return { sx, sy };
     }
 
-    function isNear(mouseX, mouseY) {
-      const { sx, sy } = mathToScreen(pts[0][0], pts[0][1], 0);
-      const dx = mouseX - sx;
-      const dy = mouseY - sy;
-      return dx * dx + dy * dy < hitRadius * hitRadius;
+    function hitTest(mouseX, mouseY) {
+      for (let i = 0; i < n; i++) {
+        const { sx, sy } = mathToScreen(pts[i][0], pts[i][1], 0);
+        const dx = mouseX - sx;
+        const dy = mouseY - sy;
+        if (dx * dx + dy * dy < hitRadius * hitRadius) return i;
+      }
+      return -1;
     }
 
     const mat = new THREE.Matrix4();
@@ -111,12 +116,12 @@ function Cartesian2DCanvas({ point, onDrag, range = 5 }) {
     const projected = new THREE.Vector3();
     const vector = new THREE.Vector3();
 
-    function movePoint(offsetX, offsetY) {
+    function movePoint(idx, offsetX, offsetY) {
       const screenX = (offsetX / canvas.offsetWidth) * 2 - 1.0;
       const screenY = -((offsetY / canvas.offsetHeight) * 2 - 1.0);
 
       // Project current point to get its NDC depth (z)
-      projected.set(pts[0][0], pts[0][1], 0).applyMatrix4(viewMatrix);
+      projected.set(pts[idx][0], pts[idx][1], 0).applyMatrix4(viewMatrix);
       mat.multiplyMatrices(camera.projectionMatrix, matInv.copy(camera.matrixWorld).invert());
       const e = mat.elements;
       const px = projected.x,
@@ -130,30 +135,37 @@ function Cartesian2DCanvas({ point, onDrag, range = 5 }) {
       vector.applyMatrix4(viewMatrixInv);
 
       const clamp = (v) => Math.max(-range, Math.min(range, v));
-      pts[0][0] = clamp(vector.x);
-      pts[0][1] = clamp(vector.y);
-      point.x = pts[0][0];
-      point.y = pts[0][1];
-      if (onDrag) onDrag({ x: pts[0][0], y: pts[0][1] });
+      pts[idx][0] = clamp(vector.x);
+      pts[idx][1] = clamp(vector.y);
+
+      const src = sources[idx];
+      src.x = pts[idx][0];
+      src.y = pts[idx][1];
+
+      if (onDrag) {
+        if (points) onDrag(idx, { x: pts[idx][0], y: pts[idx][1] });
+        else onDrag({ x: pts[idx][0], y: pts[idx][1] });
+      }
     }
 
     function onMouseDown(e) {
       const dpr = window.devicePixelRatio || 1;
-      if (!isNear(e.offsetX * dpr, e.offsetY * dpr)) return;
+      const i = hitTest(e.offsetX * dpr, e.offsetY * dpr);
+      if (i < 0) return;
       e.preventDefault();
       e.stopPropagation();
-      dragging = 0;
-      hovered = 0;
+      dragging = i;
+      hovered = i;
     }
 
     function onMouseMove(e) {
       const dpr = window.devicePixelRatio || 1;
       if (dragging >= 0) {
         e.preventDefault();
-        movePoint(e.offsetX, e.offsetY);
+        movePoint(dragging, e.offsetX, e.offsetY);
         return;
       }
-      hovered = isNear(e.offsetX * dpr, e.offsetY * dpr) ? 0 : -1;
+      hovered = hitTest(e.offsetX * dpr, e.offsetY * dpr);
     }
 
     function onMouseUp(e) {
@@ -169,9 +181,10 @@ function Cartesian2DCanvas({ point, onDrag, range = 5 }) {
       const dpr = window.devicePixelRatio || 1;
       const ox = (touch.pageX - rect.left) * dpr;
       const oy = (touch.pageY - rect.top) * dpr;
-      if (!isNear(ox, oy)) return;
+      const i = hitTest(ox, oy);
+      if (i < 0) return;
       e.preventDefault();
-      dragging = 0;
+      dragging = i;
       canvas.addEventListener('touchmove', onTouchMove, { passive: false });
       canvas.addEventListener('touchend', onTouchEnd, false);
       canvas.addEventListener('touchcancel', onTouchEnd, false);
@@ -182,7 +195,7 @@ function Cartesian2DCanvas({ point, onDrag, range = 5 }) {
       e.preventDefault();
       const touch = e.targetTouches[0];
       const rect = canvas.getBoundingClientRect();
-      movePoint(touch.pageX - rect.left, touch.pageY - rect.top);
+      movePoint(dragging, touch.pageX - rect.left, touch.pageY - rect.top);
     }
 
     function onTouchEnd(e) {
