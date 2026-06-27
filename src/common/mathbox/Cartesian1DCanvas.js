@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import CartesianCanvas from './CartesianCanvas';
+import { BG_COLOR, AXIS_COLOR, AXIS_WIDTH, GRID_WIDTH } from './canvasTheme';
 
 // point: { x } — mutable ref object, updated in-place on drag
 // onDrag: ({ x }) => void
@@ -18,7 +19,7 @@ function Cartesian1DCanvas({ point, onDrag, range = 5 }) {
     });
 
     const three = mathbox.three;
-    three.renderer.setClearColor(new THREE.Color(0xfafafa), 1.0);
+    three.renderer.setClearColor(new THREE.Color(BG_COLOR), 1.0);
     three.camera.position.set(0, 0, ortho);
     three.camera.lookAt(0, 0, 0);
     three.controls.noRotate = true;
@@ -27,14 +28,17 @@ function Cartesian1DCanvas({ point, onDrag, range = 5 }) {
     three.controls.update();
 
     const view = mathbox.set('focus', ortho / 1.5).cartesian({
-      range: [[-range, range], [-1, 1]],
+      range: [
+        [-range, range],
+        [-1, 1],
+      ],
       scale: [2, 0.5],
     });
 
-    view.axis({ axis: 1, color: 0x666666, width: 3 });
+    view.axis({ axis: 1, color: AXIS_COLOR, width: AXIS_WIDTH });
     view.scale({ axis: 1, divide: range * 2 });
-    view.ticks({ classes: ['foo'], width: 2, color: 0x666666 });
-    view.label({ color: 0x444444, offset: [0, -20] });
+    view.ticks({ classes: ['foo'], width: GRID_WIDTH * 1.5, color: AXIS_COLOR });
+    view.label({ color: AXIS_COLOR, offset: [0, -20], size: 14 });
 
     const pts = [[point.x ?? 0, 0, 0]];
     const hitRadius = 30;

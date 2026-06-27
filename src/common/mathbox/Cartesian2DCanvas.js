@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import CartesianCanvas from './CartesianCanvas';
+import { BG_COLOR, AXIS_COLOR, AXIS_WIDTH, GRID_COLOR, GRID_WIDTH } from './canvasTheme';
 
 // Single-point mode:  point: { x, y },  onDrag: ({ x, y }) => void
 // Multi-point mode:   points: [{ x, y }, ...],  onDrag: (index, { x, y }) => void
@@ -19,7 +20,7 @@ function Cartesian2DCanvas({ point, points, onDrag, draw, range = 5 }) {
     });
 
     const three = mathbox.three;
-    three.renderer.setClearColor(new THREE.Color(0xfafafa), 1.0);
+    three.renderer.setClearColor(new THREE.Color(BG_COLOR), 1.0);
     three.camera.position.set(0, 0, ortho);
     three.camera.lookAt(0, 0, 0);
     three.controls.noRotate = true;
@@ -28,13 +29,35 @@ function Cartesian2DCanvas({ point, points, onDrag, draw, range = 5 }) {
     three.controls.update();
 
     const view = mathbox.set('focus', ortho / 1.5).cartesian({
-      range: [[-range, range], [-range, range]],
+      range: [
+        [-range, range],
+        [-range, range],
+      ],
       scale: [2, 2],
     });
 
-    view.grid({ axes: 'xy', divideX: range * 2, divideY: range * 2, color: 0xcccccc, opacity: 1 });
-    view.axis({ axis: 1, color: 0x666666, width: 3 });
-    view.axis({ axis: 2, color: 0x666666, width: 3 });
+    view.grid({
+      axes: 'xy',
+      divideX: range * 2,
+      divideY: range * 2,
+      color: GRID_COLOR,
+      opacity: 1,
+      width: GRID_WIDTH,
+    });
+    view.axis({ axis: 1, color: AXIS_COLOR, width: AXIS_WIDTH });
+    view.axis({ axis: 2, color: AXIS_COLOR, width: AXIS_WIDTH });
+
+    view.array({
+      id: 'axis-labels-pos',
+      channels: 3,
+      width: 2,
+      data: [
+        [range * 0.92, 0.28, 0],
+        [0.28, range * 0.92, 0],
+      ],
+    });
+    view.text({ data: ['x', 'y'] });
+    view.label({ points: '#axis-labels-pos', color: AXIS_COLOR, size: 18, offset: [0, 0] });
 
     const sources = points || [point];
     const pts = sources.map((p) => [p.x ?? 0, p.y ?? 0, 0]);

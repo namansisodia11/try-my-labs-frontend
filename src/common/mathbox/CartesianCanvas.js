@@ -84,7 +84,9 @@ function CartesianCanvas({ setup, hints = [] }) {
       projected.set(pts[idx][0], pts[idx][1], pts[idx][2] ?? 0).applyMatrix4(viewMatrix);
       mat.multiplyMatrices(camera.projectionMatrix, matInv.copy(camera.matrixWorld).invert());
       const e = mat.elements;
-      const px = projected.x, py = projected.y, pz = projected.z;
+      const px = projected.x,
+        py = projected.y,
+        pz = projected.z;
       const pw = 1 / (e[3] * px + e[7] * py + e[11] * pz + e[15]);
       const ndcZ = (e[2] * px + e[6] * py + e[10] * pz + e[14]) * pw;
 
@@ -180,7 +182,9 @@ function CartesianCanvas({ setup, hints = [] }) {
       {hints.length > 0 && (
         <div className="mathbox-hint">
           {hints.map((h) => (
-            <span key={h} className="mathbox-hint-item">{h}</span>
+            <span key={h} className="mathbox-hint-item">
+              {h}
+            </span>
           ))}
         </div>
       )}
