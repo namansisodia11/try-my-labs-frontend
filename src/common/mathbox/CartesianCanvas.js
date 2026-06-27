@@ -1,88 +1,193 @@
 import { useEffect, useRef } from 'react';
 import './CartesianCanvas.css';
 
-// draw: (view) => void  — called once after grid/axes are set up
-// range: number         — grid spans [-range, range] on both axes (default 5)
-// cameraZ: number       — camera distance on Z axis (default 6)
-// fov: number           — camera field of view in degrees (default 30)
-function CartesianCanvas({ draw, range = 5, cameraZ = 8, fov = 30 }) {
+// setup: (element, THREE) => { three, view, pts, n, hitRadius, onMove }
+//   three:     MathBox three object (renderer / camera / canvas / controls)
+//   view:      MathBox cartesian view node
+//   pts:       mutable [[x,y,z], ...] shared with the caller
+//   n:         number of draggable points
+//   hitRadius: pixel hit detection radius
+//   onMove:    (idx, unprojected THREE.Vector3, ptArr) => void
+// hints: [string]
+function CartesianCanvas({ setup, hints = [] }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || !window.MathBox) return;
+    if (!container || !window.MathBox || !window.THREE) return;
 
-    const mathbox = window.MathBox.mathBox({
-      element: container,
-      plugins: ['core', 'controls', 'cursor'],
-      controls: { klass: window.THREE.OrbitControls },
-      camera: { fov },
+    const THREE = window.THREE;
+    const { three, view, pts, n, hitRadius, onMove } = setup(container, THREE);
+
+    const camera = three.camera;
+    const canvas = three.canvas;
+    const pointSize = 20;
+
+    view.array({ id: 'drag-points', channels: 3, width: n, data: pts });
+
+    let hovered = -1;
+    let dragging = -1;
+
+    view.point({ points: '#drag-points', color: [0.15, 0.4, 0.85, 1], size: pointSize, zIndex: 2 });
+
+    view.array({
+      id: 'drag-colors',
+      channels: 4,
+      width: n,
+      expr: (emit, i) => {
+        if (dragging === i || hovered === i) emit(1, 1, 1, 0.9);
+        else emit(1, 1, 1, 0);
+      },
+    });
+    view.point({
+      points: '#drag-points',
+      colors: '#drag-colors',
+      color: 'white',
+      size: pointSize * 0.4,
+      zIndex: 3,
+      zTest: false,
+      zWrite: false,
     });
 
-    const three = mathbox.three;
-    three.renderer.setClearColor(new window.THREE.Color(0xfafafa), 1.0);
-    three.camera.position.set(0, 0, cameraZ);
-    three.controls.target.set(0, 0, 0);
-    three.controls.update();
+    const viewMatrix = view[0].controller.viewMatrix;
+    const viewMatrixInv = new THREE.Matrix4().copy(viewMatrix).invert();
+    const scratch = new THREE.Vector3();
+    const mat = new THREE.Matrix4();
+    const matInv = new THREE.Matrix4();
+    const projected = new THREE.Vector3();
+    const vector = new THREE.Vector3();
 
-    const view = mathbox.set('focus', cameraZ).cartesian({
-      range: [
-        [-range, range],
-        [-range, range],
-      ],
-      scale: [2, 2],
-    });
+    function mathToScreen(mx, my, mz) {
+      scratch.set(mx, my, mz).applyMatrix4(viewMatrix);
+      scratch.project(camera);
+      const dpr = window.devicePixelRatio || 1;
+      return {
+        sx: ((scratch.x + 1) / 2) * canvas.offsetWidth * dpr,
+        sy: ((-scratch.y + 1) / 2) * canvas.offsetHeight * dpr,
+      };
+    }
 
-    view.grid({ axes: 'xy', divideX: range * 2, divideY: range * 2, color: 0xcccccc, opacity: 1 });
-    view.axis({ axis: 1, color: 0x666666, width: 3 });
-    view.axis({ axis: 2, color: 0x666666, width: 3 });
+    function hitTest(mouseX, mouseY) {
+      for (let i = 0; i < n; i++) {
+        const { sx, sy } = mathToScreen(pts[i][0], pts[i][1], pts[i][2] ?? 0);
+        const dx = mouseX - sx;
+        const dy = mouseY - sy;
+        if (dx * dx + dy * dy < hitRadius * hitRadius) return i;
+      }
+      return -1;
+    }
 
-    draw(view);
+    function movePoint(idx, offsetX, offsetY) {
+      const screenX = (offsetX / canvas.offsetWidth) * 2 - 1.0;
+      const screenY = -((offsetY / canvas.offsetHeight) * 2 - 1.0);
+
+      projected.set(pts[idx][0], pts[idx][1], pts[idx][2] ?? 0).applyMatrix4(viewMatrix);
+      mat.multiplyMatrices(camera.projectionMatrix, matInv.copy(camera.matrixWorld).invert());
+      const e = mat.elements;
+      const px = projected.x,
+        py = projected.y,
+        pz = projected.z;
+      const pw = 1 / (e[3] * px + e[7] * py + e[11] * pz + e[15]);
+      const ndcZ = (e[2] * px + e[6] * py + e[10] * pz + e[14]) * pw;
+
+      vector.set(screenX, screenY, ndcZ).unproject(camera);
+      vector.applyMatrix4(viewMatrixInv);
+
+      onMove(idx, vector, pts[idx]);
+    }
+
+    function onMouseDown(e) {
+      const dpr = window.devicePixelRatio || 1;
+      const i = hitTest(e.offsetX * dpr, e.offsetY * dpr);
+      if (i < 0) return;
+      e.preventDefault();
+      e.stopPropagation();
+      dragging = i;
+      hovered = i;
+    }
+
+    function onMouseMove(e) {
+      const dpr = window.devicePixelRatio || 1;
+      if (dragging >= 0) {
+        e.preventDefault();
+        movePoint(dragging, e.offsetX, e.offsetY);
+        return;
+      }
+      hovered = hitTest(e.offsetX * dpr, e.offsetY * dpr);
+    }
+
+    function onMouseUp(e) {
+      if (dragging < 0) return;
+      e.preventDefault();
+      dragging = -1;
+    }
+
+    function onTouchStart(e) {
+      if (e.touches.length !== 1 || e.targetTouches.length !== 1) return;
+      const touch = e.targetTouches[0];
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      const i = hitTest((touch.pageX - rect.left) * dpr, (touch.pageY - rect.top) * dpr);
+      if (i < 0) return;
+      e.preventDefault();
+      dragging = i;
+      canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+      canvas.addEventListener('touchend', onTouchEnd, false);
+      canvas.addEventListener('touchcancel', onTouchEnd, false);
+    }
+
+    function onTouchMove(e) {
+      if (e.touches.length !== 1 || dragging < 0) return;
+      e.preventDefault();
+      const touch = e.targetTouches[0];
+      const rect = canvas.getBoundingClientRect();
+      movePoint(dragging, touch.pageX - rect.left, touch.pageY - rect.top);
+    }
+
+    function onTouchEnd(e) {
+      if (dragging < 0) return;
+      e.preventDefault();
+      dragging = -1;
+      canvas.removeEventListener('touchmove', onTouchMove);
+      canvas.removeEventListener('touchend', onTouchEnd);
+      canvas.removeEventListener('touchcancel', onTouchEnd);
+    }
+
+    function post() {
+      const wantEnabled = hovered < 0 && dragging < 0;
+      if (three.controls.enabled !== wantEnabled) three.controls.enabled = wantEnabled;
+      canvas.style.cursor = dragging >= 0 || hovered >= 0 ? 'pointer' : '';
+    }
+
+    canvas.addEventListener('mousedown', onMouseDown, true);
+    canvas.addEventListener('mousemove', onMouseMove, false);
+    canvas.addEventListener('mouseup', onMouseUp, false);
+    canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+    three.on('post', post);
 
     return () => {
+      canvas.removeEventListener('mousedown', onMouseDown, true);
+      canvas.removeEventListener('mousemove', onMouseMove);
+      canvas.removeEventListener('mouseup', onMouseUp);
+      canvas.removeEventListener('touchstart', onTouchStart);
+      three.off('post', post);
       three.renderer.dispose();
       container.innerHTML = '';
     };
-  }, [draw, range, cameraZ, fov]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="mathbox-canvas-wrap">
       <div ref={containerRef} className="mathbox-canvas" />
-      <div className="mathbox-hint">
-        <span className="mathbox-hint-item" title="Scroll to zoom">
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            <line x1="11" y1="8" x2="11" y2="14" />
-            <line x1="8" y1="11" x2="14" y2="11" />
-          </svg>
-          Scroll to zoom
-        </span>
-        <span className="mathbox-hint-item" title="Drag to rotate">
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-          Drag to pan
-        </span>
-      </div>
+      {hints.length > 0 && (
+        <div className="mathbox-hint">
+          {hints.map((h) => (
+            <span key={h} className="mathbox-hint-item">
+              {h}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

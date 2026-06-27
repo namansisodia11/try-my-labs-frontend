@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import './WhatIsVector.css';
 import VectorAdditionCanvas from '../../../common/mathbox/VectorAdditionCanvas';
 import VectorScalingCanvas from '../../../common/mathbox/VectorScalingCanvas';
 import useMathJax from '../../../common/hooks/useMathJax';
 
+const fmt = (n) => +n.toFixed(1);
+
 function WhatIsVector() {
   const mathReady = useMathJax();
+
+  const [a, setA] = useState({ x: 2, y: 1 });
+  const [b, setB] = useState({ x: 1, y: 2 });
+  const [v, setV] = useState({ x: 2, y: 1 });
+
+  const handleAddDrag = useCallback((idx, { x, y }) => {
+    if (idx === 0) setA({ x: fmt(x), y: fmt(y) });
+    else setB({ x: fmt(x), y: fmt(y) });
+  }, []);
+
+  const handleScaleDrag = useCallback(({ x, y }) => {
+    setV({ x: fmt(x), y: fmt(y) });
+  }, []);
+
+  const sum = { x: fmt(a.x + b.x), y: fmt(a.y + b.y) };
 
   return (
     <div className="vector-container" style={{ visibility: mathReady ? 'visible' : 'hidden' }}>
@@ -31,12 +48,20 @@ function WhatIsVector() {
           </div>
           <div className="axiom-example">
             <p className="example-caption">
-              <strong style={{ color: '#4f46e5' }}>a (2,1)</strong> and{' '}
-              <strong style={{ color: '#e53e3e' }}>b (1,2)</strong> add tip-to-tail. Their{' '}
-              <strong style={{ color: '#059669' }}>sum (3,3)</strong> is the diagonal of the
-              parallelogram. Still a 2D arrow, still inside the same space.
+              <strong style={{ color: '#4f46e5' }}>
+                a ({a.x},{a.y})
+              </strong>{' '}
+              and{' '}
+              <strong style={{ color: '#e53e3e' }}>
+                b ({b.x},{b.y})
+              </strong>{' '}
+              add tip-to-tail. Their{' '}
+              <strong style={{ color: '#059669' }}>
+                sum ({sum.x},{sum.y})
+              </strong>{' '}
+              is the diagonal of the parallelogram. Still a 2D arrow, still inside the same space.
             </p>
-            <VectorAdditionCanvas a={{ x: 2, y: 1 }} b={{ x: 1, y: 2 }} />
+            <VectorAdditionCanvas a={{ x: 2, y: 1 }} b={{ x: 1, y: 2 }} onDrag={handleAddDrag} />
             <p className="canvas-note">
               No matter which two 2D vectors you pick, their sum is always another 2D vector.
             </p>
@@ -55,10 +80,13 @@ function WhatIsVector() {
           </div>
           <div className="axiom-example">
             <p className="example-caption">
-              Starting from <strong style={{ color: '#4f46e5' }}>v (2,1)</strong>: multiplying by{' '}
-              <strong style={{ color: '#059669' }}>2</strong> stretches it,{' '}
+              Starting from{' '}
+              <strong style={{ color: '#4f46e5' }}>
+                v ({v.x},{v.y})
+              </strong>
+              : multiplying by <strong style={{ color: '#059669' }}>2</strong> stretches it,{' '}
               <strong style={{ color: '#d97706' }}>0.5</strong> shrinks it, and{' '}
-              <strong style={{ color: '#e53e3e' }}>−1</strong> flips it. All results stay on the
+              <strong style={{ color: '#e53e3e' }}>-1</strong> flips it. All results stay on the
               same line through the origin.
             </p>
             <VectorScalingCanvas
@@ -68,6 +96,7 @@ function WhatIsVector() {
                 { c: 0.5, color: 0xd97706 },
                 { c: -1, color: 0xe53e3e },
               ]}
+              onDrag={handleScaleDrag}
             />
             <p className="canvas-note">
               Every scaled version is still a 2D vector. The scalar can be any real number:
