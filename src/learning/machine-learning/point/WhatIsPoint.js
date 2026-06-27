@@ -1,16 +1,24 @@
 import { useState, useRef, useCallback } from 'react';
 import './WhatIsPoint.css';
+import Draggable1D from '../../../common/mathbox/Draggable1D';
 import Draggable2D from '../../../common/mathbox/Draggable2D';
 import Draggable3D from '../../../common/mathbox/Draggable3D';
 
+const init1D = { x: 3 };
 const init2D = { x: 2, y: 3 };
 const init3D = { x: 2, y: 3, z: 1 };
 
 function WhatIsPoint() {
+  const [coords1D, setCoords1D] = useState({ x: init1D.x });
   const [coords2D, setCoords2D] = useState({ x: init2D.x, y: init2D.y });
   const [coords3D, setCoords3D] = useState({ x: init3D.x, y: init3D.y, z: init3D.z });
+  const pt1D = useRef({ ...init1D });
   const pt2D = useRef({ ...init2D });
   const pt3D = useRef({ ...init3D });
+
+  const handleDrag1D = useCallback(({ x }) => {
+    setCoords1D({ x: +x.toFixed(2) });
+  }, []);
 
   const handleDrag2D = useCallback(({ x, y }) => {
     setCoords2D({ x: +x.toFixed(2), y: +y.toFixed(2) });
@@ -29,6 +37,26 @@ function WhatIsPoint() {
           Just a place.
         </p>
       </section>
+
+      <div className="point-card">
+        <div className="point-explanation">
+          <span className="point-label">1D</span>
+          <p className="point-heading">The simplest case: just (x)</p>
+          <p className="point-desc">
+            On a number line, a point is a single number. That one number tells you exactly where
+            you are. There is nowhere else to go.
+          </p>
+          <p className="point-desc">Drag the point left and right and watch x change.</p>
+        </div>
+        <div className="point-demo">
+          <p className="demo-caption">
+            This is the point <strong style={{ color: '#3380e8' }}>P = ({coords1D.x})</strong>. One
+            number, one location.
+          </p>
+          <Draggable1D point={pt1D.current} onDrag={handleDrag1D} range={5} />
+          <p className="canvas-note">Drag the blue dot along the number line.</p>
+        </div>
+      </div>
 
       <div className="point-card">
         <div className="point-explanation">
@@ -87,11 +115,23 @@ function WhatIsPoint() {
         </div>
       </div>
 
-      <p className="point-closing">
-        That is all a point is. A location. Two numbers in 2D, three in 3D. No arrows, no magnitude,
-        no direction. When you start adding those things, you get a vector, but that is a different
-        story.
-      </p>
+      <section className="point-section point-nd-section">
+        <p className="point-heading">What about 4D, 5D, or a million dimensions?</p>
+        <p className="point-desc">
+          The pattern keeps going. A point in 4D is just four numbers: (x, y, z, w). In 100
+          dimensions it is 100 numbers. The math works exactly the same way.
+        </p>
+        <p className="point-desc">
+          The catch: you cannot visualize it. Our brains max out at 3D. But the computer does not
+          care. A point in machine learning might have hundreds or thousands of coordinates, one for
+          each feature in your data. It is still just a location, just in a much bigger space.
+        </p>
+        <p className="point-desc">
+          That is the real reason points matter in ML. Every data sample you have is a point
+          somewhere in a high-dimensional space. Everything else, distance, similarity, clusters,
+          builds on top of that one idea.
+        </p>
+      </section>
     </div>
   );
 }
