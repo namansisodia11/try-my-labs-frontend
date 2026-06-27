@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import './CartesianCanvas.css';
 
-// point: { x } — mutable ref object, updated in-place on drag
-// onDrag: ({ x }) => void
-// range: number — number line spans [-range, range]
-function Draggable1D({ point, onDrag, range = 5 }) {
+// point: { x, y, z } — mutable ref object, updated in-place on drag
+// onDrag: ({ x, y, z }) => void
+// range: number — grid spans [-range, range]
+function Cartesian3DCanvas({ point, onDrag, range = 5 }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -13,15 +13,11 @@ function Draggable1D({ point, onDrag, range = 5 }) {
 
     const THREE = window.THREE;
 
-    const ortho = 10000;
-    const vertical = 2.5;
-    const fov = Math.atan(vertical / ortho) * (360 / Math.PI);
-
     const mathbox = window.MathBox.mathBox({
       element: container,
       plugins: ['core', 'controls', 'cursor'],
       controls: { klass: THREE.OrbitControls },
-      camera: { fov, near: ortho / 4, far: ortho * 4 },
+      camera: { fov: 30 },
     });
 
     const three = mathbox.three;
@@ -29,33 +25,35 @@ function Draggable1D({ point, onDrag, range = 5 }) {
     const canvas = three.canvas;
 
     three.renderer.setClearColor(new THREE.Color(0xfafafa), 1.0);
-    camera.position.set(0, 0, ortho);
-    camera.lookAt(0, 0, 0);
-    three.controls.noRotate = true;
-    three.controls.noPan = true;
+    camera.position.set(6, 5, 8);
     three.controls.target.set(0, 0, 0);
     three.controls.update();
 
-    const view = mathbox.set('focus', ortho / 1.5).cartesian({
+    const view = mathbox.set('focus', 8).cartesian({
       range: [
         [-range, range],
-        [-1, 1],
+        [-range, range],
+        [-range, range],
       ],
-      scale: [2, 0.5],
+      scale: [2, 2, 2],
     });
 
-    view.axis({ axis: 1, color: 0x666666, width: 3 });
-
-    // Tick marks at each integer
-    view.scale({ axis: 1, divide: range * 2 });
-    view.ticks({ classes: ['foo'], width: 2, color: 0x666666 });
-    view.label({ color: 0x444444, offset: [0, -20] });
+    view.grid({
+      axes: 'xz',
+      divideX: range * 2,
+      divideY: range * 2,
+      color: 0xcccccc,
+      opacity: 0.6,
+    });
+    view.axis({ axis: 1, color: 0xee5555, width: 3 });
+    view.axis({ axis: 2, color: 0x55aa55, width: 3 });
+    view.axis({ axis: 3, color: 0x5555ee, width: 3 });
 
     const pointSize = 30;
     const hiliteColor = [0, 0.5, 0.5, 0.75];
     const hitRadius = pointSize;
 
-    const pts = [[point.x ?? 0, 0, 0]];
+    const pts = [[point.x ?? 0, point.y ?? 0, point.z ?? 0]];
 
     view.array({ id: 'drag-points', channels: 3, width: 1, data: pts });
 
@@ -97,7 +95,7 @@ function Draggable1D({ point, onDrag, range = 5 }) {
     }
 
     function isNear(mouseX, mouseY) {
-      const { sx, sy } = mathToScreen(pts[0][0], 0, 0);
+      const { sx, sy } = mathToScreen(pts[0][0], pts[0][1], pts[0][2]);
       const dx = mouseX - sx;
       const dy = mouseY - sy;
       return dx * dx + dy * dy < hitRadius * hitRadius;
@@ -112,7 +110,7 @@ function Draggable1D({ point, onDrag, range = 5 }) {
       const screenX = (offsetX / canvas.offsetWidth) * 2 - 1.0;
       const screenY = -((offsetY / canvas.offsetHeight) * 2 - 1.0);
 
-      projected.set(pts[0][0], 0, 0).applyMatrix4(viewMatrix);
+      projected.set(pts[0][0], pts[0][1], pts[0][2]).applyMatrix4(viewMatrix);
       mat.multiplyMatrices(camera.projectionMatrix, matInv.copy(camera.matrixWorld).invert());
       const e = mat.elements;
       const px = projected.x,
@@ -126,9 +124,12 @@ function Draggable1D({ point, onDrag, range = 5 }) {
 
       const clamp = (v) => Math.max(-range, Math.min(range, v));
       pts[0][0] = clamp(vector.x);
-      // y stays 0 — constrained to number line
+      pts[0][1] = clamp(vector.y);
+      pts[0][2] = clamp(vector.z);
       point.x = pts[0][0];
-      if (onDrag) onDrag({ x: pts[0][0] });
+      point.y = pts[0][1];
+      point.z = pts[0][2];
+      if (onDrag) onDrag({ x: pts[0][0], y: pts[0][1], z: pts[0][2] });
     }
 
     function onMouseDown(e) {
@@ -189,9 +190,12 @@ function Draggable1D({ point, onDrag, range = 5 }) {
     }
 
     function post() {
-      const wantEnabled = hovered < 0 && dragging < 0;
-      if (three.controls.enabled !== wantEnabled) three.controls.enabled = wantEnabled;
-      canvas.style.cursor = dragging >= 0 || hovered >= 0 ? 'pointer' : '';
+      if (dragging >= 0 || hovered >= 0) {
+        canvas.style.cursor = 'pointer';
+      } else {
+        canvas.style.cursor = 'move';
+      }
+      three.controls.enabled = hovered < 0 && dragging < 0;
     }
 
     canvas.addEventListener('mousedown', onMouseDown, true);
@@ -216,9 +220,10 @@ function Draggable1D({ point, onDrag, range = 5 }) {
       <div ref={containerRef} className="mathbox-canvas" />
       <div className="mathbox-hint">
         <span className="mathbox-hint-item">Drag the blue point</span>
+        <span className="mathbox-hint-item">Right-click drag to orbit</span>
       </div>
     </div>
   );
 }
 
-export default Draggable1D;
+export default Cartesian3DCanvas;

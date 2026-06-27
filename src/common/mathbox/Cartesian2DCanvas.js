@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import './CartesianCanvas.css';
 
-// point: { x, y, z } — mutable ref object, updated in-place on drag
-// onDrag: ({ x, y, z }) => void
+// point: { x, y } — mutable ref object, updated in-place on drag
+// onDrag: ({ x, y }) => void
 // range: number — grid spans [-range, range]
-function Draggable3D({ point, onDrag, range = 5 }) {
+function Cartesian2DCanvas({ point, onDrag, range = 5 }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -13,11 +13,16 @@ function Draggable3D({ point, onDrag, range = 5 }) {
 
     const THREE = window.THREE;
 
+    // Pseudo-orthographic: camera far away with tiny FOV, same trick as Demo2D in coffee
+    const ortho = 10000;
+    const vertical = 2.5;
+    const fov = Math.atan(vertical / ortho) * (360 / Math.PI);
+
     const mathbox = window.MathBox.mathBox({
       element: container,
       plugins: ['core', 'controls', 'cursor'],
       controls: { klass: THREE.OrbitControls },
-      camera: { fov: 30 },
+      camera: { fov, near: ortho / 4, far: ortho * 4 },
     });
 
     const three = mathbox.three;
@@ -25,35 +30,30 @@ function Draggable3D({ point, onDrag, range = 5 }) {
     const canvas = three.canvas;
 
     three.renderer.setClearColor(new THREE.Color(0xfafafa), 1.0);
-    camera.position.set(6, 5, 8);
+    camera.position.set(0, 0, ortho);
+    camera.lookAt(0, 0, 0);
+    three.controls.noRotate = true;
+    three.controls.noPan = true;
     three.controls.target.set(0, 0, 0);
     three.controls.update();
 
-    const view = mathbox.set('focus', 8).cartesian({
+    const view = mathbox.set('focus', ortho / 1.5).cartesian({
       range: [
         [-range, range],
         [-range, range],
-        [-range, range],
       ],
-      scale: [2, 2, 2],
+      scale: [2, 2],
     });
 
-    view.grid({
-      axes: 'xz',
-      divideX: range * 2,
-      divideY: range * 2,
-      color: 0xcccccc,
-      opacity: 0.6,
-    });
-    view.axis({ axis: 1, color: 0xee5555, width: 3 });
-    view.axis({ axis: 2, color: 0x55aa55, width: 3 });
-    view.axis({ axis: 3, color: 0x5555ee, width: 3 });
+    view.grid({ axes: 'xy', divideX: range * 2, divideY: range * 2, color: 0xcccccc, opacity: 1 });
+    view.axis({ axis: 1, color: 0x666666, width: 3 });
+    view.axis({ axis: 2, color: 0x666666, width: 3 });
 
     const pointSize = 30;
     const hiliteColor = [0, 0.5, 0.5, 0.75];
     const hitRadius = pointSize;
 
-    const pts = [[point.x ?? 0, point.y ?? 0, point.z ?? 0]];
+    const pts = [[point.x ?? 0, point.y ?? 0, 0]];
 
     view.array({ id: 'drag-points', channels: 3, width: 1, data: pts });
 
@@ -81,13 +81,18 @@ function Draggable3D({ point, onDrag, range = 5 }) {
       zWrite: false,
     });
 
+    // MathBox cartesian maps math coords to world coords via viewMatrix.
+    // We project through it then through the camera to get screen position.
     const viewMatrix = view[0].controller.viewMatrix;
     const viewMatrixInv = new THREE.Matrix4().copy(viewMatrix).invert();
     const scratch = new THREE.Vector3();
 
     function mathToScreen(mx, my, mz) {
+      // math → view space (MathBox cartesian transform)
       scratch.set(mx, my, mz).applyMatrix4(viewMatrix);
+      // view space → NDC via camera
       scratch.project(camera);
+      // NDC → canvas pixels
       const dpr = window.devicePixelRatio || 1;
       const sx = ((scratch.x + 1) / 2) * canvas.offsetWidth * dpr;
       const sy = ((-scratch.y + 1) / 2) * canvas.offsetHeight * dpr;
@@ -95,7 +100,7 @@ function Draggable3D({ point, onDrag, range = 5 }) {
     }
 
     function isNear(mouseX, mouseY) {
-      const { sx, sy } = mathToScreen(pts[0][0], pts[0][1], pts[0][2]);
+      const { sx, sy } = mathToScreen(pts[0][0], pts[0][1], 0);
       const dx = mouseX - sx;
       const dy = mouseY - sy;
       return dx * dx + dy * dy < hitRadius * hitRadius;
@@ -110,7 +115,8 @@ function Draggable3D({ point, onDrag, range = 5 }) {
       const screenX = (offsetX / canvas.offsetWidth) * 2 - 1.0;
       const screenY = -((offsetY / canvas.offsetHeight) * 2 - 1.0);
 
-      projected.set(pts[0][0], pts[0][1], pts[0][2]).applyMatrix4(viewMatrix);
+      // Project current point to get its NDC depth (z)
+      projected.set(pts[0][0], pts[0][1], 0).applyMatrix4(viewMatrix);
       mat.multiplyMatrices(camera.projectionMatrix, matInv.copy(camera.matrixWorld).invert());
       const e = mat.elements;
       const px = projected.x,
@@ -119,17 +125,16 @@ function Draggable3D({ point, onDrag, range = 5 }) {
       const pw = 1 / (e[3] * px + e[7] * py + e[11] * pz + e[15]);
       const ndcZ = (e[2] * px + e[6] * py + e[10] * pz + e[14]) * pw;
 
+      // Unproject mouse at same depth, then back to math space
       vector.set(screenX, screenY, ndcZ).unproject(camera);
       vector.applyMatrix4(viewMatrixInv);
 
       const clamp = (v) => Math.max(-range, Math.min(range, v));
       pts[0][0] = clamp(vector.x);
       pts[0][1] = clamp(vector.y);
-      pts[0][2] = clamp(vector.z);
       point.x = pts[0][0];
       point.y = pts[0][1];
-      point.z = pts[0][2];
-      if (onDrag) onDrag({ x: pts[0][0], y: pts[0][1], z: pts[0][2] });
+      if (onDrag) onDrag({ x: pts[0][0], y: pts[0][1] });
     }
 
     function onMouseDown(e) {
@@ -190,12 +195,9 @@ function Draggable3D({ point, onDrag, range = 5 }) {
     }
 
     function post() {
-      if (dragging >= 0 || hovered >= 0) {
-        canvas.style.cursor = 'pointer';
-      } else {
-        canvas.style.cursor = 'move';
-      }
-      three.controls.enabled = hovered < 0 && dragging < 0;
+      const wantEnabled = hovered < 0 && dragging < 0;
+      if (three.controls.enabled !== wantEnabled) three.controls.enabled = wantEnabled;
+      canvas.style.cursor = dragging >= 0 || hovered >= 0 ? 'pointer' : '';
     }
 
     canvas.addEventListener('mousedown', onMouseDown, true);
@@ -220,10 +222,9 @@ function Draggable3D({ point, onDrag, range = 5 }) {
       <div ref={containerRef} className="mathbox-canvas" />
       <div className="mathbox-hint">
         <span className="mathbox-hint-item">Drag the blue point</span>
-        <span className="mathbox-hint-item">Right-click drag to orbit</span>
       </div>
     </div>
   );
 }
 
-export default Draggable3D;
+export default Cartesian2DCanvas;

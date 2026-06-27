@@ -1,8 +1,8 @@
 import { useState, useRef, useCallback } from 'react';
 import './WhatIsPoint.css';
-import Draggable1D from '../../../common/mathbox/Draggable1D';
-import Draggable2D from '../../../common/mathbox/Draggable2D';
-import Draggable3D from '../../../common/mathbox/Draggable3D';
+import Cartesian1DCanvas from '../../../common/mathbox/Cartesian1DCanvas';
+import Cartesian2DCanvas from '../../../common/mathbox/Cartesian2DCanvas';
+import Cartesian3DCanvas from '../../../common/mathbox/Cartesian3DCanvas';
 
 const init1D = { x: 3 };
 const init2D = { x: 2, y: 3 };
@@ -53,7 +53,7 @@ function WhatIsPoint() {
             This is the point <strong style={{ color: '#3380e8' }}>P = ({coords1D.x})</strong>. One
             number, one location.
           </p>
-          <Draggable1D point={pt1D.current} onDrag={handleDrag1D} range={5} />
+          <Cartesian1DCanvas point={pt1D.current} onDrag={handleDrag1D} range={5} />
           <p className="canvas-note">Drag the blue dot along the number line.</p>
         </div>
       </div>
@@ -79,7 +79,7 @@ function WhatIsPoint() {
             . Its x-coordinate is <strong>{coords2D.x}</strong> and its y-coordinate is{' '}
             <strong>{coords2D.y}</strong>.
           </p>
-          <Draggable2D point={pt2D.current} onDrag={handleDrag2D} range={5} />
+          <Cartesian2DCanvas point={pt2D.current} onDrag={handleDrag2D} range={5} />
           <p className="canvas-note">
             Drag the blue dot anywhere on the grid. The coordinates update as you move it.
           </p>
@@ -108,7 +108,7 @@ function WhatIsPoint() {
             </strong>
             . Drag it to move along the xz-plane. The projection lines update as you go.
           </p>
-          <Draggable3D point={pt3D.current} onDrag={handleDrag3D} range={4} />
+          <Cartesian3DCanvas point={pt3D.current} onDrag={handleDrag3D} range={4} />
           <p className="canvas-note">
             Drag the blue point to move it. Right-click drag to rotate the scene.
           </p>
