@@ -59,7 +59,10 @@ function Cartesian3DCanvas({ point, onDrag, range = 5 }) {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <CartesianCanvas setup={setup} hints={['Drag the blue point', 'Right-click drag to orbit']} />
+    <CartesianCanvas
+      setup={setup}
+      hints={['Drag the blue point', 'Scroll to zoom', 'Pan to move']}
+    />
   );
 }
 

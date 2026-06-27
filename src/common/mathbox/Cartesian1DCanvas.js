@@ -38,6 +38,7 @@ function Cartesian1DCanvas({ point, onDrag, range = 5 }) {
     view.axis({ axis: 1, color: AXIS_COLOR, width: AXIS_WIDTH });
     view.scale({ axis: 1, divide: range * 2 });
     view.ticks({ classes: ['foo'], width: GRID_WIDTH * 1.5, color: AXIS_COLOR });
+    view.format({ digits: 2, weight: 'normal' });
     view.label({ color: AXIS_COLOR, offset: [0, -20], size: 14 });
 
     const pts = [[point.x ?? 0, 0, 0]];
@@ -54,7 +55,12 @@ function Cartesian1DCanvas({ point, onDrag, range = 5 }) {
     return { three, view, pts, n: 1, hitRadius, onMove };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <CartesianCanvas setup={setup} hints={['Drag the blue point']} />;
+  return (
+    <CartesianCanvas
+      setup={setup}
+      hints={['Drag the blue point', 'Scroll to zoom', 'Pan to move']}
+    />
+  );
 }
 
 export default Cartesian1DCanvas;

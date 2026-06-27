@@ -16,7 +16,7 @@ function VectorScalingCanvas({ vector, scalars, range = 5, onDrag }) {
         emit(pts[0][0], pts[0][1], 0);
       },
     });
-    view.line({ points: '#sv0', color: 0x4f46e5, width: 3, end: true });
+    view.line({ points: '#sv0', color: 0x4f46e5, width: 5, end: true });
 
     // scaled vectors
     scalars.forEach(({ c, color }, i) => {
@@ -30,7 +30,7 @@ function VectorScalingCanvas({ vector, scalars, range = 5, onDrag }) {
           emit(c * pts[0][0], c * pts[0][1], 0);
         },
       });
-      view.line({ points: `#${id}`, color, width: 2, end: true });
+      view.line({ points: `#${id}`, color, width: 3.5, end: true });
     });
 
     // labels for v and each scaled vector
@@ -60,7 +60,7 @@ function VectorScalingCanvas({ vector, scalars, range = 5, onDrag }) {
           emit(label);
         },
       });
-      view.label({ points: `#slp${i}`, text: `#slt${i}`, color, size: 14, offset: [0, 16] });
+      view.label({ points: `#slp${i}`, text: `#slt${i}`, color, size: 15, offset: [0, 18] });
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
