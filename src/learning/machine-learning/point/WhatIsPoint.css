@@ -1,0 +1,101 @@
+.point-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 40px;
+  font-family: sans-serif;
+  color: #1a1a2e;
+}
+
+.point-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #1a1a2e;
+}
+
+.point-section {
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.point-lead {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #333;
+  margin: 0;
+}
+
+.point-card {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 0 56px;
+  align-items: center;
+  padding: 48px 0;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.point-card:last-of-type {
+  border-bottom: none;
+}
+
+.point-explanation {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.point-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #9ca3af;
+}
+
+.point-heading {
+  font-size: 1.25rem;
+  color: #1a1a2e;
+  font-weight: 600;
+  margin: 0;
+}
+
+.point-desc {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.point-demo {
+  padding: 0;
+}
+
+.demo-caption {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #333;
+  margin: 0 0 14px 0;
+  min-height: 3.4em;
+}
+
+.demo-coords {
+  margin-top: 14px;
+  font-family: monospace;
+  font-size: 1rem;
+  color: #333;
+}
+
+.canvas-note {
+  font-size: 0.875rem;
+  color: #666;
+  font-style: italic;
+  margin: 10px 0 0 0;
+}
+
+.point-closing {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #555;
+  margin: 0;
+}
