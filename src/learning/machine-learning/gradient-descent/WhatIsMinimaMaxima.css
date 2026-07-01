@@ -1,0 +1,148 @@
+.minima-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 40px;
+  font-family: sans-serif;
+  color: #1a1a2e;
+}
+
+.minima-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #1a1a2e;
+}
+
+.minima-subtitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: #1a1a2e;
+}
+
+.minima-section {
+  margin-bottom: 52px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.minima-section:last-child {
+  border-bottom: none;
+}
+
+.minima-lead {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #333;
+  margin: 0 0 14px 0;
+}
+
+.minima-caption {
+  font-size: 0.97rem;
+  color: #555;
+  line-height: 1.7;
+  margin: 0 0 18px 0;
+}
+
+/* Formula display */
+.minima-formula-block {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.minima-formula {
+  font-size: 1.35rem;
+  color: #1a1a2e;
+  font-weight: 500;
+}
+
+.minima-formula-caption {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+/* Slope sign grid */
+.minima-slope-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 4px 0 0 0;
+}
+
+.minima-slope-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.minima-slope-row p {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #333;
+  margin: 0;
+  padding-top: 2px;
+}
+
+.minima-slope-badge {
+  flex-shrink: 0;
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  min-width: 110px;
+  text-align: center;
+}
+
+.minima-slope-badge { background: #e85d4a; }
+
+/* Cards */
+.minima-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 8px;
+}
+
+.minima-card {
+  padding: 22px 22px 18px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.minima-card p {
+  font-size: 0.97rem;
+  line-height: 1.65;
+  color: #444;
+  margin: 0;
+}
+
+.minima-card-note {
+  font-size: 0.875rem !important;
+  color: #888 !important;
+  font-style: italic;
+}
+
+.minima-card-label {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+  padding: 3px 10px;
+  color: #fff;
+  align-self: flex-start;
+}
+
+.local-min  { background: #e85d4a; }
+.local-max  { background: #f59e0b; }
+.global-min { background: #b94035; }

@@ -18,6 +18,9 @@ function Home() {
           <li>
             <Link to="/learning/machine-learning/what-is-vector">What is a Vector?</Link>
           </li>
+          <li>
+            <Link to="/learning/machine-learning/what-is-minima-maxima">What is Minima and Maxima?</Link>
+          </li>
         </ul>
       </section>
     </div>

@@ -13,6 +13,8 @@
 - Pages go in `src/pages/<PageName>/`.
 - Learning content goes in `src/learning/<subject>/<topic>/`.
 - Shared/reusable components go in `src/common/<package>/` (e.g. `src/common/mathbox/`).
+- Always create a matching CSS file alongside every new component file, even if initially empty.
+- Every new learning file in `src/learning/machine-learning/` must also: (1) have a `<Route>` added in `src/common/Routes.js`, and (2) have a `<Link>` added in the correct section of `src/pages/Home/Home.js`.
 
 ## File Naming
 
@@ -41,3 +43,12 @@
 
 - Never use em dashes (—) in UI-facing text. Use a colon, comma, or period instead.
 - Write like a person explaining to a friend, not a language model writing a report. Casual is fine. Funny is fine. Short is better. Avoid stiff, over-formal phrasing — if it sounds like something a textbook would say in a boring lecture, rewrite it.
+
+## Teaching Philosophy
+
+- You are an expert teacher. Your job is to make hard things feel obvious, not to sound impressive.
+- Always prefer a visual or interactive explanation over a written one. If something can be shown with a canvas, show it. Text is a fallback, not the default.
+- Every concept should have at least one interactive element the reader can touch and manipulate. Passive reading does not build intuition.
+- Build up from concrete examples. Introduce the abstract definition only after the reader has already seen it work.
+- Never assume the reader knows the prerequisites. If a concept needs prior knowledge, explain it inline in one sentence or link to the page that covers it.
+- Short paragraphs. One idea per paragraph. If a sentence can be cut without losing meaning, cut it.
