@@ -1,0 +1,255 @@
+.mm-container {
+  max-width: 1160px;
+  margin: 40px auto;
+  padding: 0 40px;
+  font-family: sans-serif;
+  color: #1a1a2e;
+}
+
+.mm-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #1a1a2e;
+}
+
+.mm-lead {
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: #333;
+  margin: 0 0 28px 0;
+}
+
+.mm-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.mm-left {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.mm-right {
+  padding-top: 4px;
+}
+
+.mm-block {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.mm-block:last-child {
+  border-bottom: none;
+}
+
+.mm-block-full {
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid #ebebeb;
+}
+
+.mm-block-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+
+.mm-text {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #333;
+  margin: 0 0 10px 0;
+}
+
+.mm-math {
+  font-size: 1.05rem;
+  color: #1a1a2e;
+  margin: 6px 0;
+}
+
+.mm-def {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.mm-example-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+  background: #fafafa;
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.mm-example-row {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  grid-template-areas: 'x eq badge' 'note note note';
+  align-items: center;
+  gap: 4px 12px;
+}
+
+.mm-example-x {
+  grid-area: x;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #888;
+}
+
+.mm-example-eq {
+  grid-area: eq;
+  font-size: 0.95rem;
+  color: #1a1a2e;
+}
+
+.mm-example-note {
+  grid-area: note;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.mm-badge {
+  grid-area: badge;
+  flex-shrink: 0;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+}
+
+.badge-pos {
+  background: #16a34a;
+}
+.badge-neg {
+  background: #e85d4a;
+}
+.badge-zero {
+  background: #6366f1;
+}
+
+.mm-graph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.mm-graph-hint {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.mm-reset-btn {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #888;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.mm-reset-btn:hover {
+  color: #1a1a2e;
+}
+
+.mm-desmos-container {
+  width: 100%;
+  height: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.mm-slope-readout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.mm-slope-pill {
+  flex-shrink: 0;
+  display: inline-block;
+  padding: 5px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  min-width: 120px;
+  text-align: center;
+  font-family: monospace;
+  transition: background 0.2s;
+}
+
+.slope-pos {
+  background: #16a34a;
+}
+.slope-neg {
+  background: #e85d4a;
+}
+.slope-zero {
+  background: #6366f1;
+}
+
+.mm-slope-desc {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.mm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.mm-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #555;
+}
+
+.mm-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-gmin {
+  background: #b94035;
+}
+.dot-lmax {
+  background: #f59e0b;
+}
+.dot-lmin {
+  background: #e85d4a;
+}
+
+@media (max-width: 860px) {
+  .mm-layout {
+    grid-template-columns: 1fr;
+  }
+}
