@@ -7,6 +7,11 @@ function df(x) {
   return x ** 3 - 3 * x ** 2 - x + 3.4;
 }
 
+const CRITICAL_XS = [-1.1, 1.1, 2.9];
+// Snapping in slope-space (not x-space) keeps the pull equally gentle at all
+// three points, even though the curve bends more sharply near the global min.
+const SNAP_SLOPE = 0.35;
+
 function DesmosGraph({ onSlopeChange, resetRef }) {
   const containerRef = useRef(null);
 
@@ -76,14 +81,29 @@ function DesmosGraph({ onSlopeChange, resetRef }) {
       showLabel: true,
     });
 
-    // Observe slider `a` and push slope to parent
+    // Observe slider `a` and push slope to parent. Snapping mid-drag fights
+    // Desmos's own per-frame writes to `a` and makes the point stutter, so
+    // the live drag is left untouched here and snapping happens on release.
+    let lastA = 0.5;
     calculator.observe('expressionAnalysis', () => {
       const analysis = calculator.expressionAnalysis['a'];
       if (analysis && analysis.evaluation && analysis.evaluation.value != null) {
-        const aVal = analysis.evaluation.value;
-        onSlopeChange(df(aVal));
+        lastA = analysis.evaluation.value;
+        onSlopeChange(df(lastA));
       }
     });
+
+    function snapOnRelease() {
+      const nearest = CRITICAL_XS.reduce((best, cx) =>
+        Math.abs(cx - lastA) < Math.abs(best - lastA) ? cx : best,
+      );
+      if (Math.abs(df(lastA)) < SNAP_SLOPE && nearest !== lastA) {
+        calculator.setExpression({ id: 'a', latex: `a = ${nearest}` });
+        lastA = nearest;
+        onSlopeChange(df(nearest));
+      }
+    }
+    containerRef.current.addEventListener('pointerup', snapOnRelease);
 
     if (resetRef) {
       resetRef.current = () => {
