@@ -23,6 +23,11 @@ function Home() {
               What is Minima and Maxima?
             </Link>
           </li>
+          <li>
+            <Link to="/learning/machine-learning/what-is-gradient-descent">
+              What is Gradient Descent?
+            </Link>
+          </li>
         </ul>
       </section>
     </div>
