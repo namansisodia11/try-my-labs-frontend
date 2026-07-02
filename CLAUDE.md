@@ -39,6 +39,12 @@
 - No error boundaries, loading states, or edge-case handling unless explicitly asked.
 - No TypeScript — plain JavaScript only.
 
+## Verification
+
+- Don't install or launch a browser (Playwright, Puppeteer, chromium-cli, etc.) to visually verify UI changes. The user runs the dev server themselves and checks the UI visually.
+- It's fine to confirm the dev server compiles cleanly (no build errors) as a sanity check, but stop there for routine UI work.
+- Reserve heavier verification (browser automation, extensive scripted checks, multi-step debugging) for genuinely complex problems you're stuck on, not everyday component/style changes.
+
 ## Content Writing
 
 - Never use em dashes (—) in UI-facing text. Use a colon, comma, or period instead.

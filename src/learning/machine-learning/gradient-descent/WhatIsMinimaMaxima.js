@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import useDesmosCalculator from '../../../common/desmos/useDesmosCalculator';
+import useMathJax from '../../../common/hooks/useMathJax';
 import './WhatIsMinimaMaxima.css';
 
 function df(x) {
@@ -94,10 +95,11 @@ function DesmosGraph({ onSlopeChange, resetRef }) {
     }
   });
 
-  return <div ref={containerRef} className="desmos-container" />;
+  return <div ref={containerRef} className="mm-desmos-container" />;
 }
 
 function WhatIsMinimaMaxima() {
+  const mathReady = useMathJax();
   const [slope, setSlope] = useState(df(0.5));
   const resetRef = useRef(null);
 
@@ -110,120 +112,103 @@ function WhatIsMinimaMaxima() {
         : "Flat. You're at a turning point.";
 
   return (
-    <div className="v2-container">
-      <section className="v2-section">
-        <h1 className="v2-title">Minima and Maxima</h1>
-        <p className="v2-lead">
-          Gradient descent has one job: find the lowest point of a function. But most real functions
-          don't have just one valley. They have several, and the algorithm can fall into any of them
-          depending on where it starts.
-        </p>
-        <p className="v2-lead">
-          Before we run gradient descent, we need to learn how to read a curve: where is it going
-          up, where is it going down, and what makes a point a minimum or a maximum?
-        </p>
-      </section>
+    <div className="mm-container" style={{ visibility: mathReady ? 'visible' : 'hidden' }}>
+      <h1 className="mm-title">Minima and Maxima</h1>
+      <p className="mm-lead">
+        Gradient descent's whole job is finding the lowest point of a function. Most real functions
+        have more than one valley, and where you start decides which one you fall into. Before
+        running the algorithm, we need to read a curve: where it's rising, where it's falling, and
+        what makes a point a min or a max.
+      </p>
 
-      <section className="v2-section">
-        <h2 className="v2-subtitle">The curve</h2>
-        <div className="v2-formula-block">
-          <code className="v2-formula">f(x) = x&#x2074;/4 - x&#x00B3; - x&#x00B2;/2 + 3.4x</code>
-          <span className="v2-formula-caption">
-            Two valleys, one peak, all at different heights.
-          </span>
-        </div>
-        <p className="v2-caption">
-          Drag the white dot along the curve. The tangent line and slope update live. Zoom and pan
-          freely too.
-        </p>
-        <div className="v2-graph-header">
-          <button className="v2-reset-btn" onClick={() => resetRef.current && resetRef.current()}>
-            Reset view
-          </button>
-        </div>
-        <DesmosGraph onSlopeChange={setSlope} resetRef={resetRef} />
-        <div className="v2-slope-readout">
-          <span className={`v2-slope-pill slope-${slopeSign}`}>
-            slope = {slope >= 0 ? '+' : ''}
-            {slope.toFixed(2)}
-          </span>
-          <span className="v2-slope-desc">{slopeLabel}</span>
-        </div>
-      </section>
+      <div className="mm-layout">
+        <div className="mm-left">
+          <div className="mm-block">
+            <span className="mm-block-label">The curve</span>
+            <p className="mm-math">{'$$f(x) = \\dfrac{x^4}{4} - x^3 - \\dfrac{x^2}{2} + 3.4x$$'}</p>
+          </div>
 
-      <section className="v2-section">
-        <h2 className="v2-subtitle">What the slope is telling you</h2>
-        <p className="v2-lead">
-          The slope at any point is the derivative f'(x). It tells you which way the function is
-          tilting right there.
-        </p>
-        <div className="v2-slope-grid">
-          <div className="v2-slope-row">
-            <span className="v2-badge badge-pos">f'(x) &gt; 0</span>
-            <p>Going uphill to the right. Gradient descent steps left.</p>
-          </div>
-          <div className="v2-slope-row">
-            <span className="v2-badge badge-neg">f'(x) &lt; 0</span>
-            <p>Going downhill to the right. Gradient descent steps right.</p>
-          </div>
-          <div className="v2-slope-row">
-            <span className="v2-badge badge-zero">f'(x) = 0</span>
-            <p>Slope is zero. You're at a turning point.</p>
-          </div>
-        </div>
-        <p className="v2-lead" style={{ marginTop: 16 }}>
-          For this curve, f'(x) = x&#x00B3; - 3x&#x00B2; - x + 3.4. It has three zeros near x
-          &asymp; -1.1, x &asymp; 1.1, and x &asymp; 2.9.
-        </p>
-      </section>
-
-      <section className="v2-section">
-        <h2 className="v2-subtitle">Local vs. Global</h2>
-        <div className="v2-card-grid">
-          <div className="v2-card">
-            <span className="v2-card-label label-lmin">Local Minimum</span>
-            <p>
-              Lower than everything immediately around it. Slope goes from negative to positive as
-              you pass through.
+          <div className="mm-block">
+            <span className="mm-block-label">Slope = derivative</span>
+            <p className="mm-text">
+              The slope at any point is just {"$f'(x)$"}, the derivative. It tells you which way the
+              curve is tilting right there.
             </p>
-            <p className="v2-card-note">One at x &asymp; 2.9, f &asymp; -1.05.</p>
+            <p className="mm-math">{"$$f'(x) = x^3 - 3x^2 - x + 3.4$$"}</p>
+            <div className="mm-rule-grid">
+              <div className="mm-rule">
+                <span className="mm-badge badge-pos">{"f'(x) > 0"}</span>
+                <p>Uphill. Descent steps left.</p>
+              </div>
+              <div className="mm-rule">
+                <span className="mm-badge badge-neg">{"f'(x) < 0"}</span>
+                <p>Downhill. Descent steps right.</p>
+              </div>
+              <div className="mm-rule">
+                <span className="mm-badge badge-zero">{"f'(x) = 0"}</span>
+                <p>Flat. A turning point.</p>
+              </div>
+            </div>
           </div>
-          <div className="v2-card">
-            <span className="v2-card-label label-lmax">Local Maximum</span>
-            <p>
-              Higher than everything immediately around it. Slope goes from positive to negative.
+
+          <div className="mm-block">
+            <span className="mm-block-label">Local vs. global</span>
+            <p className="mm-def">
+              <strong>Local minimum:</strong> lower than every point right around it, {"$f'(x)$"}{' '}
+              flips negative to positive as you pass through.
             </p>
-            <p className="v2-card-note">One peak at x &asymp; 1.1, f &asymp; 2.17.</p>
-          </div>
-          <div className="v2-card">
-            <span className="v2-card-label label-gmin">Global Minimum</span>
-            <p>
-              The absolute lowest value across the whole domain. Every local minimum is a candidate,
-              but only the lowest one is global.
+            <p className="mm-def">
+              <strong>Local maximum:</strong> higher than every point right around it, {"$f'(x)$"}{' '}
+              flips positive to negative.
             </p>
-            <p className="v2-card-note">The deeper valley is at x &asymp; -1.1, f &asymp; -2.65.</p>
+            <p className="mm-def">
+              <strong>Global minimum:</strong> the lowest value across the entire domain, not just
+              nearby. Every local min is a candidate, only the deepest one is global.
+            </p>
           </div>
         </div>
-      </section>
 
-      <section className="v2-section">
-        <h2 className="v2-subtitle">Why this matters for gradient descent</h2>
-        <p className="v2-lead">
-          Gradient descent only sees the slope at its current position. It steps downhill, reaches a
-          flat point, and stops. It has no idea whether it found the global minimum or just a local
-          one.
+        <div className="mm-right">
+          <div className="mm-graph-header">
+            <span className="mm-graph-hint">Drag the point. Zoom and pan freely.</span>
+            <button className="mm-reset-btn" onClick={() => resetRef.current && resetRef.current()}>
+              Reset view
+            </button>
+          </div>
+          <DesmosGraph onSlopeChange={setSlope} resetRef={resetRef} />
+          <div className="mm-slope-readout">
+            <span className={`mm-slope-pill slope-${slopeSign}`}>
+              slope = {slope >= 0 ? '+' : ''}
+              {slope.toFixed(2)}
+            </span>
+            <span className="mm-slope-desc">{slopeLabel}</span>
+          </div>
+          <div className="mm-legend">
+            <span className="mm-legend-item">
+              <span className="mm-dot dot-gmin" /> Global min, x &asymp; -1.1
+            </span>
+            <span className="mm-legend-item">
+              <span className="mm-dot dot-lmax" /> Local max, x &asymp; 1.1
+            </span>
+            <span className="mm-legend-item">
+              <span className="mm-dot dot-lmin" /> Local min, x &asymp; 2.9
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="mm-block mm-block-full">
+        <span className="mm-block-label">Why it matters</span>
+        <p className="mm-text">
+          Gradient descent only ever sees the slope where it's standing. It walks downhill, hits a
+          flat spot, and stops, with no idea if that's the best valley or just the nearest one.
         </p>
-        <p className="v2-lead">
-          On this curve, start left of the peak at x &asymp; 1.1 and you roll into the global
-          minimum at x &asymp; -1.1. Start right and you fall into the shallower local minimum at x
-          &asymp; 2.9. The algorithm stopped because the slope hit zero, not because it found the
-          best answer.
+        <p className="mm-text">
+          Start left of the peak here and you roll into the global min. Start right and you get
+          stuck in the shallower local min. Same algorithm, same rule, different answer. That's why
+          initialization and learning rate matter so much.
         </p>
-        <p className="v2-lead">
-          In real machine learning the valleys are rarely equal. That's why initialization and
-          learning rate matter so much: they control which valley you end up in.
-        </p>
-      </section>
+      </div>
     </div>
   );
 }
