@@ -131,22 +131,28 @@ function WhatIsMinimaMaxima() {
           <div className="mm-block">
             <span className="mm-block-label">Slope = derivative</span>
             <p className="mm-text">
-              The slope at any point is just {"$f'(x)$"}, the derivative. It tells you which way the
-              curve is tilting right there.
+              The slope at any point is just {"$f'(x)$"}, the derivative. Plug in an x and the sign
+              of the answer tells you which way the curve is tilting there.
             </p>
             <p className="mm-math">{"$$f'(x) = x^3 - 3x^2 - x + 3.4$$"}</p>
-            <div className="mm-rule-grid">
-              <div className="mm-rule">
-                <span className="mm-badge badge-pos">{"f'(x) > 0"}</span>
-                <p>Uphill. Descent steps left.</p>
+            <div className="mm-example-grid">
+              <div className="mm-example-row">
+                <span className="mm-example-x">x = -2</span>
+                <span className="mm-example-eq">{"$f'(-2) = -14.6$"}</span>
+                <span className="mm-badge badge-neg">negative</span>
+                <span className="mm-example-note">Downhill, descent steps right.</span>
               </div>
-              <div className="mm-rule">
-                <span className="mm-badge badge-neg">{"f'(x) < 0"}</span>
-                <p>Downhill. Descent steps right.</p>
+              <div className="mm-example-row">
+                <span className="mm-example-x">x = 0</span>
+                <span className="mm-example-eq">{"$f'(0) = 3.4$"}</span>
+                <span className="mm-badge badge-pos">positive</span>
+                <span className="mm-example-note">Uphill, descent steps left.</span>
               </div>
-              <div className="mm-rule">
-                <span className="mm-badge badge-zero">{"f'(x) = 0"}</span>
-                <p>Flat. A turning point.</p>
+              <div className="mm-example-row">
+                <span className="mm-example-x">x = 1.1</span>
+                <span className="mm-example-eq">{"$f'(1.1) = 0$"}</span>
+                <span className="mm-badge badge-zero">zero</span>
+                <span className="mm-example-note">Flat, a turning point.</span>
               </div>
             </div>
           </div>

@@ -82,34 +82,53 @@
   margin: 0 0 8px 0;
 }
 
-.mm-rule-grid {
+.mm-example-grid {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
+  gap: 10px;
+  margin-top: 14px;
+  background: #fafafa;
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  padding: 14px 16px;
 }
 
-.mm-rule {
-  display: flex;
+.mm-example-row {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  grid-template-areas: 'x eq badge' 'note note note';
   align-items: center;
-  gap: 12px;
+  gap: 4px 12px;
 }
 
-.mm-rule p {
-  font-size: 0.9rem;
-  color: #444;
-  margin: 0;
+.mm-example-x {
+  grid-area: x;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #888;
+}
+
+.mm-example-eq {
+  grid-area: eq;
+  font-size: 0.95rem;
+  color: #1a1a2e;
+}
+
+.mm-example-note {
+  grid-area: note;
+  font-size: 0.85rem;
+  color: #666;
 }
 
 .mm-badge {
+  grid-area: badge;
   flex-shrink: 0;
   display: inline-block;
   padding: 3px 10px;
   border-radius: 6px;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: #fff;
-  min-width: 90px;
   text-align: center;
 }
 
@@ -136,18 +155,19 @@
 }
 
 .mm-reset-btn {
-  padding: 5px 14px;
-  font-size: 0.85rem;
+  padding: 5px 12px;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: #555;
-  background: #f4f4f8;
-  border: 1px solid #ddd;
+  color: #888;
+  background: transparent;
+  border: none;
   border-radius: 6px;
   cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .mm-reset-btn:hover {
-  background: #e8e8f0;
   color: #1a1a2e;
 }
 
