@@ -252,7 +252,13 @@ function WhatIsGradientDescent() {
               Reset
             </button>
           </div>
-          <DesmosGraph x={x} startX={startX} trail={trail} onPick={handlePick} resetRef={resetRef} />
+          <DesmosGraph
+            x={x}
+            startX={startX}
+            trail={trail}
+            onPick={handlePick}
+            resetRef={resetRef}
+          />
           <button
             className={`gd-step-btn ${running ? 'running' : ''}`}
             onClick={running ? stopRun : handleStart}
