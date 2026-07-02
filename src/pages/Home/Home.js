@@ -21,9 +21,6 @@ function Home() {
           <li>
             <Link to="/learning/machine-learning/what-is-minima-maxima">What is Minima and Maxima?</Link>
           </li>
-          <li>
-            <Link to="/learning/machine-learning/what-is-minima-maxima-v2">What is Minima and Maxima? (Desmos)</Link>
-          </li>
         </ul>
       </section>
     </div>

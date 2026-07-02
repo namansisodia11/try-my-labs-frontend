@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import './WhatIsMinimaMaximaV2.css';
+import React, { useRef, useState } from 'react';
+import useDesmosCalculator from '../../../common/desmos/useDesmosCalculator';
+import './WhatIsMinimaMaxima.css';
 
 function df(x) {
   return x ** 3 - 3 * x ** 2 - x + 3.4;
@@ -7,145 +8,96 @@ function df(x) {
 
 function DesmosGraph({ onSlopeChange, resetRef }) {
   const containerRef = useRef(null);
-  const calculatorRef = useRef(null);
 
-  useEffect(() => {
-    let cancelled = false;
+  useDesmosCalculator(containerRef, (calculator, Desmos) => {
+    calculator.setMathBounds({ left: -3, right: 5, bottom: -4, top: 4 });
 
-    function initDesmos() {
-      if (cancelled || !window.Desmos || !containerRef.current) return;
-      const Desmos = window.Desmos;
-      const calculator = Desmos.GraphingCalculator(containerRef.current, {
-        expressions: false,
-        settingsMenu: false,
-        zoomButtons: false,
-        lockViewport: false,
-        border: false,
-      });
-      calculator.setMathBounds({ left: -3, right: 5, bottom: -4, top: 4 });
+    // Curve
+    calculator.setExpression({
+      id: 'curve',
+      latex: 'y = \\frac{x^4}{4} - x^3 - \\frac{x^2}{2} + 3.4x',
+      color: '#e85d4a',
+      lineWidth: 3,
+    });
 
-      // Curve
-      calculator.setExpression({
-        id: 'curve',
-        latex: 'y = \\frac{x^4}{4} - x^3 - \\frac{x^2}{2} + 3.4x',
-        color: '#e85d4a',
-        lineWidth: 3,
-      });
+    // Slider variable for draggable point x-position
+    calculator.setExpression({ id: 'a', latex: 'a = 0.5' });
 
-      // Slider variable for draggable point x-position
-      calculator.setExpression({ id: 'a', latex: 'a = 0.5' });
+    // Tangent line through (a, f(a)) with slope f'(a)
+    // y = f'(a)*(x - a) + f(a)  =>  stored as a full line expression
+    calculator.setExpression({
+      id: 'tangent',
+      latex: 'y = (a^3 - 3a^2 - a + 3.4)(x - a) + (\\frac{a^4}{4} - a^3 - \\frac{a^2}{2} + 3.4a)',
+      color: '#f59e0b',
+      lineWidth: 2,
+    });
 
-      // Tangent line through (a, f(a)) with slope f'(a)
-      // y = f'(a)*(x - a) + f(a)  =>  stored as a full line expression
-      calculator.setExpression({
-        id: 'tangent',
-        latex: 'y = (a^3 - 3a^2 - a + 3.4)(x - a) + (\\frac{a^4}{4} - a^3 - \\frac{a^2}{2} + 3.4a)',
-        color: '#f59e0b',
-        lineWidth: 2,
-      });
+    // Draggable point — colored ring underneath, white fill on top
+    calculator.setExpression({
+      id: 'drag-ring',
+      latex: '(a, \\frac{a^4}{4} - a^3 - \\frac{a^2}{2} + 3.4a)',
+      color: '#e85d4a',
+      pointSize: 28,
+      dragMode: Desmos.DragModes.X,
+    });
+    calculator.setExpression({
+      id: 'drag',
+      latex: '(a, \\frac{a^4}{4} - a^3 - \\frac{a^2}{2} + 3.4a)',
+      color: '#ffffff',
+      pointSize: 16,
+      dragMode: Desmos.DragModes.NONE,
+      secret: true,
+    });
 
-      // Draggable point — colored ring underneath, white fill on top
-      calculator.setExpression({
-        id: 'drag-ring',
-        latex: '(a, \\frac{a^4}{4} - a^3 - \\frac{a^2}{2} + 3.4a)',
-        color: '#e85d4a',
-        pointSize: 28,
-        dragMode: Desmos.DragModes.X,
-      });
-      calculator.setExpression({
-        id: 'drag',
-        latex: '(a, \\frac{a^4}{4} - a^3 - \\frac{a^2}{2} + 3.4a)',
-        color: '#ffffff',
-        pointSize: 16,
-        dragMode: Desmos.DragModes.NONE,
-        secret: true,
-      });
+    // Critical-point markers
+    calculator.setExpression({
+      id: 'gmin',
+      latex: '(-1.1, -2.65)',
+      color: '#b94035',
+      pointSize: 12,
+      label: 'Global min',
+      showLabel: true,
+    });
+    calculator.setExpression({
+      id: 'lmax',
+      latex: '(1.1, 2.17)',
+      color: '#f59e0b',
+      pointSize: 12,
+      label: 'Local max',
+      showLabel: true,
+    });
+    calculator.setExpression({
+      id: 'lmin',
+      latex: '(2.9, -1.05)',
+      color: '#e85d4a',
+      pointSize: 12,
+      label: 'Local min',
+      showLabel: true,
+    });
 
-      // Critical-point markers
-      calculator.setExpression({
-        id: 'gmin',
-        latex: '(-1.1, -2.65)',
-        color: '#b94035',
-        pointSize: 12,
-        label: 'Global min',
-        showLabel: true,
-      });
-      calculator.setExpression({
-        id: 'lmax',
-        latex: '(1.1, 2.17)',
-        color: '#f59e0b',
-        pointSize: 12,
-        label: 'Local max',
-        showLabel: true,
-      });
-      calculator.setExpression({
-        id: 'lmin',
-        latex: '(2.9, -1.05)',
-        color: '#e85d4a',
-        pointSize: 12,
-        label: 'Local min',
-        showLabel: true,
-      });
-
-      // Observe slider `a` and push slope to parent
-      calculator.observe('expressionAnalysis', () => {
-        const analysis = calculator.expressionAnalysis['a'];
-        if (analysis && analysis.evaluation && analysis.evaluation.value != null) {
-          const aVal = analysis.evaluation.value;
-          onSlopeChange(df(aVal));
-        }
-      });
-
-      calculatorRef.current = calculator;
-
-      if (resetRef) {
-        resetRef.current = () => {
-          calculator.setExpression({ id: 'a', latex: 'a = 0.5' });
-          calculator.setMathBounds({ left: -3, right: 5, bottom: -4, top: 4 });
-          // observe('expressionAnalysis') doesn't reliably re-fire on programmatic resets, so push the slope directly
-          onSlopeChange(df(0.5));
-        };
+    // Observe slider `a` and push slope to parent
+    calculator.observe('expressionAnalysis', () => {
+      const analysis = calculator.expressionAnalysis['a'];
+      if (analysis && analysis.evaluation && analysis.evaluation.value != null) {
+        const aVal = analysis.evaluation.value;
+        onSlopeChange(df(aVal));
       }
+    });
+
+    if (resetRef) {
+      resetRef.current = () => {
+        calculator.setExpression({ id: 'a', latex: 'a = 0.5' });
+        calculator.setMathBounds({ left: -3, right: 5, bottom: -4, top: 4 });
+        // observe('expressionAnalysis') doesn't reliably re-fire on programmatic resets, so push the slope directly
+        onSlopeChange(df(0.5));
+      };
     }
-
-    let poll;
-
-    if (window.Desmos) {
-      initDesmos();
-    } else {
-      // Desmos CDN script not yet loaded — inject it once
-      if (!document.getElementById('desmos-script')) {
-        const script = document.createElement('script');
-        script.id = 'desmos-script';
-        script.src =
-          'https://www.desmos.com/api/v1.9/calculator.js?apiKey=63bf3722472543709cad20a4196e40c9';
-        script.async = true;
-        script.onload = initDesmos;
-        document.head.appendChild(script);
-      } else {
-        // Script tag exists but hasn't fired onload yet — poll briefly
-        poll = setInterval(() => {
-          if (window.Desmos) {
-            clearInterval(poll);
-            initDesmos();
-          }
-        }, 100);
-      }
-    }
-
-    return () => {
-      cancelled = true;
-      if (poll) clearInterval(poll);
-      if (calculatorRef.current) calculatorRef.current.destroy();
-      calculatorRef.current = null;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return <div ref={containerRef} className="desmos-container" />;
 }
 
-function WhatIsMinimaMaximaV2() {
+function WhatIsMinimaMaxima() {
   const [slope, setSlope] = useState(df(0.5));
   const resetRef = useRef(null);
 
@@ -276,4 +228,4 @@ function WhatIsMinimaMaximaV2() {
   );
 }
 
-export default WhatIsMinimaMaximaV2;
+export default WhatIsMinimaMaxima;

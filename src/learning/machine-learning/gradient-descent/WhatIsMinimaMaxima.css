@@ -117,9 +117,15 @@
   transition: background 0.2s;
 }
 
-.slope-pos  { background: #16a34a; }
-.slope-neg  { background: #e85d4a; }
-.slope-zero { background: #6366f1; }
+.slope-pos {
+  background: #16a34a;
+}
+.slope-neg {
+  background: #e85d4a;
+}
+.slope-zero {
+  background: #6366f1;
+}
 
 .v2-slope-desc {
   font-size: 0.97rem;
@@ -160,9 +166,15 @@
   text-align: center;
 }
 
-.badge-pos  { background: #16a34a; }
-.badge-neg  { background: #e85d4a; }
-.badge-zero { background: #6366f1; }
+.badge-pos {
+  background: #16a34a;
+}
+.badge-neg {
+  background: #e85d4a;
+}
+.badge-zero {
+  background: #6366f1;
+}
 
 .v2-card-grid {
   display: grid;
@@ -206,6 +218,12 @@
   align-self: flex-start;
 }
 
-.label-lmin { background: #e85d4a; }
-.label-lmax { background: #f59e0b; }
-.label-gmin { background: #b94035; }
+.label-lmin {
+  background: #e85d4a;
+}
+.label-lmax {
+  background: #f59e0b;
+}
+.label-gmin {
+  background: #b94035;
+}
