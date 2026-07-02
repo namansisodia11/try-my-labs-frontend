@@ -1,15 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './WhatIsMinimaMaximaV2.css';
 
-function df(x) { return x ** 3 - 3 * x ** 2 - x + 3.4; }
+function df(x) {
+  return x ** 3 - 3 * x ** 2 - x + 3.4;
+}
 
 function DesmosGraph({ onSlopeChange, resetRef }) {
   const containerRef = useRef(null);
   const calculatorRef = useRef(null);
 
   useEffect(() => {
+    let cancelled = false;
+
     function initDesmos() {
-      if (!window.Desmos || !containerRef.current) return;
+      if (cancelled || !window.Desmos || !containerRef.current) return;
       const Desmos = window.Desmos;
       const calculator = Desmos.GraphingCalculator(containerRef.current, {
         expressions: false,
@@ -58,9 +62,30 @@ function DesmosGraph({ onSlopeChange, resetRef }) {
       });
 
       // Critical-point markers
-      calculator.setExpression({ id: 'gmin', latex: '(-1.1, -2.65)', color: '#b94035', pointSize: 12, label: 'Global min', showLabel: true });
-      calculator.setExpression({ id: 'lmax', latex: '(1.1, 2.17)',   color: '#f59e0b', pointSize: 12, label: 'Local max',  showLabel: true });
-      calculator.setExpression({ id: 'lmin', latex: '(2.9, -1.05)',  color: '#e85d4a', pointSize: 12, label: 'Local min',  showLabel: true });
+      calculator.setExpression({
+        id: 'gmin',
+        latex: '(-1.1, -2.65)',
+        color: '#b94035',
+        pointSize: 12,
+        label: 'Global min',
+        showLabel: true,
+      });
+      calculator.setExpression({
+        id: 'lmax',
+        latex: '(1.1, 2.17)',
+        color: '#f59e0b',
+        pointSize: 12,
+        label: 'Local max',
+        showLabel: true,
+      });
+      calculator.setExpression({
+        id: 'lmin',
+        latex: '(2.9, -1.05)',
+        color: '#e85d4a',
+        pointSize: 12,
+        label: 'Local min',
+        showLabel: true,
+      });
 
       // Observe slider `a` and push slope to parent
       calculator.observe('expressionAnalysis', () => {
@@ -75,11 +100,15 @@ function DesmosGraph({ onSlopeChange, resetRef }) {
 
       if (resetRef) {
         resetRef.current = () => {
-          calculator.setMathBounds({ left: -3, right: 5, bottom: -4, top: 4 });
           calculator.setExpression({ id: 'a', latex: 'a = 0.5' });
+          calculator.setMathBounds({ left: -3, right: 5, bottom: -4, top: 4 });
+          // observe('expressionAnalysis') doesn't reliably re-fire on programmatic resets, so push the slope directly
+          onSlopeChange(df(0.5));
         };
       }
     }
+
+    let poll;
 
     if (window.Desmos) {
       initDesmos();
@@ -95,7 +124,7 @@ function DesmosGraph({ onSlopeChange, resetRef }) {
         document.head.appendChild(script);
       } else {
         // Script tag exists but hasn't fired onload yet — poll briefly
-        const poll = setInterval(() => {
+        poll = setInterval(() => {
           if (window.Desmos) {
             clearInterval(poll);
             initDesmos();
@@ -105,8 +134,12 @@ function DesmosGraph({ onSlopeChange, resetRef }) {
     }
 
     return () => {
+      cancelled = true;
+      if (poll) clearInterval(poll);
       if (calculatorRef.current) calculatorRef.current.destroy();
+      calculatorRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <div ref={containerRef} className="desmos-container" />;
@@ -117,9 +150,12 @@ function WhatIsMinimaMaximaV2() {
   const resetRef = useRef(null);
 
   const slopeSign = slope > 0.01 ? 'pos' : slope < -0.01 ? 'neg' : 'zero';
-  const slopeLabel = slope > 0.01 ? "Going uphill. Gradient descent steps left."
-    : slope < -0.01 ? "Going downhill. Gradient descent steps right."
-    : "Flat. You're at a turning point.";
+  const slopeLabel =
+    slope > 0.01
+      ? 'Going uphill. Gradient descent steps left.'
+      : slope < -0.01
+        ? 'Going downhill. Gradient descent steps right.'
+        : "Flat. You're at a turning point.";
 
   return (
     <div className="v2-container">
@@ -145,8 +181,8 @@ function WhatIsMinimaMaximaV2() {
           </span>
         </div>
         <p className="v2-caption">
-          Drag the white dot along the curve. The tangent line and slope update live.
-          Zoom and pan freely too.
+          Drag the white dot along the curve. The tangent line and slope update live. Zoom and pan
+          freely too.
         </p>
         <div className="v2-graph-header">
           <button className="v2-reset-btn" onClick={() => resetRef.current && resetRef.current()}>
@@ -156,7 +192,8 @@ function WhatIsMinimaMaximaV2() {
         <DesmosGraph onSlopeChange={setSlope} resetRef={resetRef} />
         <div className="v2-slope-readout">
           <span className={`v2-slope-pill slope-${slopeSign}`}>
-            slope = {slope >= 0 ? '+' : ''}{slope.toFixed(2)}
+            slope = {slope >= 0 ? '+' : ''}
+            {slope.toFixed(2)}
           </span>
           <span className="v2-slope-desc">{slopeLabel}</span>
         </div>
