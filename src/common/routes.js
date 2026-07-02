@@ -11,7 +11,10 @@ function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/learning/machine-learning/what-is-vector" element={<WhatIsVector />} />
       <Route path="/learning/machine-learning/what-is-point" element={<WhatIsPoint />} />
-      <Route path="/learning/machine-learning/what-is-minima-maxima" element={<WhatIsMinimaMaxima />} />
+      <Route
+        path="/learning/machine-learning/what-is-minima-maxima"
+        element={<WhatIsMinimaMaxima />}
+      />
     </Routes>
   );
 }

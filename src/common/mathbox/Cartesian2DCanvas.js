@@ -81,7 +81,12 @@ function Cartesian2DCanvas({ point, points, onDrag, draw, range = 5 }) {
     return { three, view, pts, n, hitRadius, onMove };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <CartesianCanvas setup={setup} hints={['Drag the blue point', 'Scroll to zoom', 'Pan to move']} />;
+  return (
+    <CartesianCanvas
+      setup={setup}
+      hints={['Drag the blue point', 'Scroll to zoom', 'Pan to move']}
+    />
+  );
 }
 
 export default Cartesian2DCanvas;
