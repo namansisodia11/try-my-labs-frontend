@@ -12,7 +12,7 @@ function df(x) {
   return x ** 3 - 3 * x ** 2 - x + 3.4;
 }
 
-const START_RANGE = [-2.8, 4.5];
+const START_RANGE = [-1.9, 3.7];
 const LEARNING_RATES = [0.02, 0.05, 0.1, 0.3];
 
 function randomStartX() {
@@ -37,19 +37,20 @@ function DesmosGraph({ x, startX, trail, onPick, resetRef }) {
     calculator.setExpression({ id: 'a', latex: `a = ${startX}` });
 
     calculator.setExpression({
-      id: 'pick-ring',
+      id: 'pick-halo',
       latex: '(a, \\frac{a^4}{4} - a^3 - \\frac{a^2}{2} + 3.4a)',
-      color: '#1a1a2e',
-      pointSize: 22,
-      dragMode: Desmos.DragModes.X,
+      color: '#6366f1',
+      pointSize: 34,
+      pointOpacity: 0.25,
+      dragMode: Desmos.DragModes.NONE,
+      secret: true,
     });
     calculator.setExpression({
       id: 'pick',
       latex: '(a, \\frac{a^4}{4} - a^3 - \\frac{a^2}{2} + 3.4a)',
-      color: '#ffffff',
-      pointSize: 12,
-      dragMode: Desmos.DragModes.NONE,
-      secret: true,
+      color: '#6366f1',
+      pointSize: 16,
+      dragMode: Desmos.DragModes.X,
     });
 
     calculator.observe('expressionAnalysis', () => {
@@ -63,7 +64,7 @@ function DesmosGraph({ x, startX, trail, onPick, resetRef }) {
     });
 
     if (resetRef) {
-      resetRef.current = (newStartX) => {
+      resetRef.current = (newStartX, options = {}) => {
         for (let i = 0; i < maxTrailRef.current; i++) {
           calculator.removeExpression({ id: `trail-${i}` });
         }
@@ -71,7 +72,9 @@ function DesmosGraph({ x, startX, trail, onPick, resetRef }) {
         maxTrailRef.current = 0;
         lastSyncedARef.current = newStartX;
         calculator.setExpression({ id: 'a', latex: `a = ${newStartX}` });
-        calculator.setMathBounds({ left: -3, right: 5, bottom: -4, top: 4 });
+        if (!options.keepView) {
+          calculator.setMathBounds({ left: -3, right: 5, bottom: -4, top: 4 });
+        }
       };
     }
   });
@@ -160,10 +163,11 @@ function WhatIsGradientDescent() {
 
   function handleReset() {
     stopRun();
-    setX(startX);
+    const newX = randomStartX();
+    setX(newX);
     setTrail([]);
     setHistory([]);
-    if (resetRef.current) resetRef.current(startX);
+    if (resetRef.current) resetRef.current(newX);
   }
 
   function handlePick(newX) {
@@ -171,6 +175,7 @@ function WhatIsGradientDescent() {
     setX(newX);
     setTrail([]);
     setHistory([]);
+    if (resetRef.current) resetRef.current(newX, { keepView: true });
   }
 
   React.useEffect(() => stopRun, []);
@@ -188,12 +193,22 @@ function WhatIsGradientDescent() {
       <div className="gd-layout">
         <div className="gd-left">
           <div className="gd-block">
+            <span className="gd-block-label">The curve and its derivative</span>
+            <p className="gd-text">
+              To know which way is downhill at any point, we differentiate {'$f(x)$'} to get{' '}
+              {"$f'(x)$"}, the slope.
+            </p>
+            <p className="gd-math">{'$$f(x) = \\dfrac{x^4}{4} - x^3 - \\dfrac{x^2}{2} + 3.4x$$'}</p>
+            <p className="gd-math">{"$$f'(x) = x^3 - 3x^2 - x + 3.4$$"}</p>
+          </div>
+
+          <div className="gd-block">
             <span className="gd-block-label">The update rule</span>
             <p className="gd-text">
               At every step, move a little in the opposite direction of the slope. That's it, that's
               the whole algorithm.
             </p>
-            <p className="gd-math">{"$$x_{new} = x - \\alpha \\cdot f'(x)$$"}</p>
+            <p className="gd-math">{"$$x_{new} = x_{old} - \\alpha \\cdot f'(x_{old})$$"}</p>
             <p className="gd-text">
               {'$\\alpha$'} is the <strong>learning rate</strong>, how big a step to take. Too small
               and you crawl forever. Too big and you overshoot the valley entirely.
@@ -222,6 +237,10 @@ function WhatIsGradientDescent() {
                   {step.toFixed(3)}
                 </span>
               </div>
+              <div className="gd-readout">
+                <span className="gd-readout-label">steps taken</span>
+                <span className="gd-readout-value">{history.length}</span>
+              </div>
             </div>
             {converged && <p className="gd-converged">Slope is basically zero, you've landed.</p>}
           </div>
@@ -246,12 +265,9 @@ function WhatIsGradientDescent() {
         </div>
 
         <div className="gd-right">
-          <div className="gd-graph-header">
-            <span className="gd-graph-hint">Drag the point to choose a start.</span>
-            <button className="gd-reset-btn" onClick={handleReset}>
-              Reset
-            </button>
-          </div>
+          <span className="gd-graph-hint">
+            <strong>Drag the point</strong> to choose a starting spot.
+          </span>
           <DesmosGraph
             x={x}
             startX={startX}
@@ -259,27 +275,36 @@ function WhatIsGradientDescent() {
             onPick={handlePick}
             resetRef={resetRef}
           />
-          <button
-            className={`gd-step-btn ${running ? 'running' : ''}`}
-            onClick={running ? stopRun : handleStart}
-            disabled={converged}
-          >
-            {converged ? 'Converged' : running ? 'Stop' : 'Start'}
-          </button>
+          <div className="gd-controls">
+            <button
+              className={`gd-step-btn ${running ? 'running' : ''}`}
+              onClick={running ? stopRun : handleStart}
+              disabled={converged}
+            >
+              <span className={`gd-btn-icon ${running ? 'icon-stop' : 'icon-play'}`} />
+              {converged ? 'Converged' : running ? 'Stop' : 'Start'}
+            </button>
+            <button className="gd-reset-btn" onClick={handleReset}>
+              Reset
+            </button>
+          </div>
 
           {history.length > 0 && (
-            <div className="gd-history">
-              {history.map((h, i) => (
-                <div className="gd-history-row" key={i}>
-                  <span className="gd-history-step">{i + 1}</span>
-                  <span className="gd-history-calc">
-                    {h.xNew.toFixed(3)} = {h.x.toFixed(3)} &minus; {rate} &times;{' '}
-                    {h.slope >= 0 ? '' : '('}
-                    {h.slope.toFixed(3)}
-                    {h.slope >= 0 ? '' : ')'}
-                  </span>
-                </div>
-              ))}
+            <div className="gd-block gd-history-block">
+              <span className="gd-block-label">Step by step</span>
+              <div className="gd-history">
+                {history.map((h, i) => (
+                  <div className="gd-history-row" key={i}>
+                    <span className="gd-history-step">{i + 1}</span>
+                    <span className="gd-history-calc">
+                      {h.xNew.toFixed(3)} = {h.x.toFixed(3)} &minus; {rate} &times;{' '}
+                      {h.slope >= 0 ? '' : '('}
+                      {h.slope.toFixed(3)}
+                      {h.slope >= 0 ? '' : ')'}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

@@ -77,8 +77,8 @@
 
 .gd-readout-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 10px;
   background: #fafafa;
   border: 1px solid #ebebeb;
   border-radius: 10px;
@@ -136,33 +136,18 @@
   margin-top: 10px;
 }
 
-.gd-graph-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
 .gd-graph-hint {
+  display: inline-block;
   font-size: 0.85rem;
-  color: #888;
+  color: #4338ca;
+  background: #eef2ff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  margin-bottom: 10px;
 }
 
-.gd-reset-btn {
-  padding: 5px 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #888;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.gd-reset-btn:hover {
-  color: #1a1a2e;
+.gd-graph-hint strong {
+  font-weight: 700;
 }
 
 .gd-desmos-container {
@@ -171,12 +156,43 @@
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid #ddd;
+  cursor: ew-resize;
+}
+
+.gd-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.gd-btn-icon {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  flex-shrink: 0;
+}
+
+.icon-play {
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 9px solid currentColor;
+  margin-left: 1px;
+}
+
+.icon-stop {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: currentColor;
 }
 
 .gd-step-btn {
-  width: 100%;
-  margin-top: 12px;
-  padding: 10px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px;
   font-size: 0.95rem;
   font-weight: 700;
   color: #fff;
@@ -204,21 +220,57 @@
   cursor: default;
 }
 
+.gd-reset-btn {
+  flex-shrink: 0;
+  padding: 0 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #555;
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.gd-reset-btn:hover {
+  color: #1a1a2e;
+  background: #f0f0f0;
+}
+
+.gd-history-block {
+  margin-top: 20px;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
 .gd-history {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  margin-top: 14px;
-  max-height: 220px;
+  max-height: 260px;
   overflow-y: auto;
 }
 
 .gd-history-row {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 7px 10px;
   border-radius: 6px;
+}
+
+.gd-history-row:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 26px;
+  width: 1px;
+  height: calc(100% - 12px);
+  background: #e5e5e5;
 }
 
 .gd-history-row:nth-child(odd) {
@@ -237,6 +289,7 @@
   color: #888;
   background: #ececec;
   border-radius: 50%;
+  z-index: 1;
 }
 
 .gd-history-calc {
