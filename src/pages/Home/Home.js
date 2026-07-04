@@ -33,6 +33,11 @@ function Home() {
               What is Gradient Descent with Momentum?
             </Link>
           </li>
+          <li>
+            <Link to="/learning/machine-learning/what-is-stochastic-gradient-descent">
+              What is Stochastic Gradient Descent?
+            </Link>
+          </li>
         </ul>
       </section>
     </div>

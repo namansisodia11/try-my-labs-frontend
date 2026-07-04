@@ -6,6 +6,7 @@ import WhatIsPoint from '../learning/machine-learning/point/WhatIsPoint';
 import WhatIsMinimaMaxima from '../learning/machine-learning/gradient-descent/WhatIsMinimaMaxima';
 import WhatIsGradientDescent from '../learning/machine-learning/gradient-descent/WhatIsGradientDescent';
 import WhatIsGradientDescentWithMomentum from '../learning/machine-learning/gradient-descent/WhatIsGradientDescentWithMomentum';
+import WhatIsStochasticGradientDescent from '../learning/machine-learning/gradient-descent/WhatIsStochasticGradientDescent';
 
 function AppRoutes() {
   return (
@@ -24,6 +25,10 @@ function AppRoutes() {
       <Route
         path="/learning/machine-learning/what-is-gradient-descent-with-momentum"
         element={<WhatIsGradientDescentWithMomentum />}
+      />
+      <Route
+        path="/learning/machine-learning/what-is-stochastic-gradient-descent"
+        element={<WhatIsStochasticGradientDescent />}
       />
     </Routes>
   );

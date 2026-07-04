@@ -22,6 +22,7 @@
 - `src/common/desmos/CurveDesmosGraph.js`: renders a 1D curve with a single draggable point and its trail, backed by Desmos.
 - `src/common/desmos/GradientDescentGraph.js`: drives `CurveDesmosGraph` through the plain gradient descent update rule (step/start/stop/reset).
 - `src/common/desmos/GradientDescentWithMomentumGraph.js`: drives `CurveDesmosGraph` through the momentum-based gradient descent update rule.
+- `src/common/desmos/StochasticGradientDescentGraph.js`: drives `CurveDesmosGraph` through a batch-or-stochastic gradient descent update rule over a fixed set of data points.
 - `src/common/hooks/useMathJax.js`: hook that waits for MathJax to finish typesetting before revealing a page.
 - `src/common/mathbox/canvasTheme.js`: shared color/width constants for MathBox scenes (background, axes, grid).
 - `src/common/mathbox/CartesianCanvas.js`: low-level MathBox canvas that handles camera setup, dragging, and hit-testing for N points.
