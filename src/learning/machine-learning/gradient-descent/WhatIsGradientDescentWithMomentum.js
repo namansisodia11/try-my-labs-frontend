@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import CurveDesmosGraph from '../../../common/desmos/CurveDesmosGraph';
+import GradientDescentWithMomentumGraph from '../../../common/desmos/GradientDescentWithMomentumGraph';
 import useMathJax from '../../../common/hooks/useMathJax';
 import './WhatIsGradientDescentWithMomentum.css';
 
@@ -24,95 +24,25 @@ function randomStartX() {
   return min + Math.random() * (max - min);
 }
 
+const initialState = (startX) => ({
+  x: startX,
+  slope: df(startX),
+  lastStep: 0,
+  converged: false,
+  history: [],
+  running: false,
+  start: () => {},
+  stop: () => {},
+  reset: () => {},
+});
+
 function WhatIsGradientDescentWithMomentum() {
   const mathReady = useMathJax();
   const [startX] = useState(randomStartX);
-  const [x, setX] = useState(startX);
-  const [prevX, setPrevX] = useState(startX);
-  const [trail, setTrail] = useState([]);
-  const [history, setHistory] = useState([]);
   const [beta, setBeta] = useState(0.8);
-  const [running, setRunning] = useState(false);
-  const [plainX, setPlainX] = useState(startX);
-  const [plainTrail, setPlainTrail] = useState([]);
-  const resetRef = useRef(null);
-  const xRef = useRef(x);
-  xRef.current = x;
-  const prevXRef = useRef(prevX);
-  prevXRef.current = prevX;
-  const betaRef = useRef(beta);
-  betaRef.current = beta;
-  const plainXRef = useRef(plainX);
-  plainXRef.current = plainX;
-  const intervalRef = useRef(null);
+  const [state, setState] = useState(() => initialState(startX));
 
-  const slope = df(x);
-  const lastStep = x - prevX;
-  const converged = Math.abs(slope) < 0.01 && Math.abs(lastStep) < 0.01;
-
-  function stopRun() {
-    setRunning(false);
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  }
-
-  function takeStep() {
-    const curX = xRef.current;
-    const curSlope = df(curX);
-    const curLastStep = curX - prevXRef.current;
-    const curStep = RATE * curSlope - betaRef.current * curLastStep;
-    if (Math.abs(curSlope) < 0.01 && Math.abs(curStep) < 0.01) {
-      stopRun();
-      return;
-    }
-    const xNew = curX - curStep;
-    setHistory((h) => [
-      ...h,
-      { x: curX, fx: f(curX), slope: curSlope, lastStep: curLastStep, xNew },
-    ]);
-    setTrail((t) => [...t, curX]);
-    setPrevX(curX);
-    setX(xNew);
-
-    const curPlainX = plainXRef.current;
-    if (Math.abs(df(curPlainX)) >= 0.01) {
-      setPlainTrail((t) => [...t, curPlainX]);
-      setPlainX(curPlainX - RATE * df(curPlainX));
-    }
-  }
-
-  function handleStart() {
-    if (converged || running) return;
-    setRunning(true);
-    intervalRef.current = setInterval(takeStep, 500);
-  }
-
-  function handleReset() {
-    stopRun();
-    const newX = randomStartX();
-    setX(newX);
-    setPrevX(newX);
-    setTrail([]);
-    setHistory([]);
-    setPlainX(newX);
-    setPlainTrail([]);
-    if (resetRef.current) resetRef.current(newX);
-  }
-
-  function handlePick(newX) {
-    stopRun();
-    setX(newX);
-    setPrevX(newX);
-    setTrail([]);
-    setHistory([]);
-    setPlainX(newX);
-    setPlainTrail([]);
-    if (resetRef.current) resetRef.current(newX, { keepView: true });
-  }
-
-  React.useEffect(() => stopRun, []);
+  const { x, slope, lastStep, converged, history, running, start, stop, reset } = state;
 
   return (
     <div className="gdwm-container" style={{ visibility: mathReady ? 'visible' : 'hidden' }}>
@@ -152,9 +82,9 @@ function WhatIsGradientDescentWithMomentum() {
             </p>
             <p className="gdwm-text">
               {'$(x_i - x_{i-1})$'} is just last step's move. {'$\\beta$'} decides how much of it
-              carries into the next one, somewhere between 0 and 1. {'$\\beta = 0$'} means no
-              memory at all, just plain gradient descent. The bigger {'$\\beta$'} is, the more of
-              the old step keeps pushing you forward.
+              carries into the next one, somewhere between 0 and 1. {'$\\beta = 0$'} means no memory
+              at all, just plain gradient descent. The bigger {'$\\beta$'} is, the more of the old
+              step keeps pushing you forward.
             </p>
           </div>
 
@@ -215,37 +145,34 @@ function WhatIsGradientDescentWithMomentum() {
           <span className="gdwm-graph-hint">
             <strong>Drag the point</strong> to choose a starting spot.
           </span>
-          <p className="gdwm-legend">
-            <span className="gdwm-legend-dot gdwm-legend-dot-momentum" /> momentum
-            <span className="gdwm-legend-dot gdwm-legend-dot-plain" /> plain descent
-          </p>
-          <CurveDesmosGraph
+          <GradientDescentWithMomentumGraph
             curveLatex={CURVE_LATEX}
             pointLatex={POINT_LATEX}
             f={f}
-            x={x}
-            trail={trail}
-            onPick={handlePick}
-            resetRef={resetRef}
+            df={df}
+            rate={RATE}
+            beta={beta}
+            startX={startX}
+            getRandomStart={randomStartX}
+            onStateChange={setState}
             className="gdwm-desmos-container"
-            extraPoints={[{ x: plainX, trail: plainTrail, color: '#9ca3af' }]}
           />
           <div className="gdwm-controls">
             <button
               className={`gdwm-step-btn ${running ? 'running' : ''}`}
-              onClick={running ? stopRun : handleStart}
+              onClick={running ? stop : start}
               disabled={converged}
             >
               <span className={`gdwm-btn-icon ${running ? 'icon-stop' : 'icon-play'}`} />
               {converged ? 'Converged' : running ? 'Stop' : 'Start'}
             </button>
-            <button className="gdwm-reset-btn" onClick={handleReset}>
+            <button className="gdwm-reset-btn" onClick={reset}>
               Reset
             </button>
           </div>
           <p className="gdwm-run-note">
-            Hitting Start runs both points at once, from the same spot, so you can watch momentum
-            (blue) pull ahead of plain descent (gray).
+            Try different {'$\\beta$'} values and hit Start to see how much momentum changes the
+            ride.
           </p>
 
           {history.length > 0 && (
@@ -259,8 +186,7 @@ function WhatIsGradientDescentWithMomentum() {
                       {h.xNew.toFixed(3)} = {h.x.toFixed(3)} &minus; {RATE} &times;{' '}
                       {h.slope >= 0 ? '' : '('}
                       {h.slope.toFixed(3)}
-                      {h.slope >= 0 ? '' : ')'} + {beta} &times;{' '}
-                      {h.lastStep >= 0 ? '' : '('}
+                      {h.slope >= 0 ? '' : ')'} + {beta} &times; {h.lastStep >= 0 ? '' : '('}
                       {h.lastStep.toFixed(3)}
                       {h.lastStep >= 0 ? '' : ')'}
                     </span>

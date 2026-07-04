@@ -5,21 +5,9 @@ import useDesmosCalculator from './useDesmosCalculator';
 // pointLatex: (varName) => string, e.g. (a) => `(${a}, \\frac{${a}^4}{4} - ...)`
 // f: (x) => number, used to plot trail points
 // x, trail, onPick, resetRef, className: same shape as before
-// extraPoints: [{ x, trail, color }], optional read-only comparison points/trails
-function CurveDesmosGraph({
-  curveLatex,
-  pointLatex,
-  f,
-  x,
-  trail,
-  onPick,
-  resetRef,
-  className,
-  extraPoints = [],
-}) {
+function CurveDesmosGraph({ curveLatex, pointLatex, f, x, trail, onPick, resetRef, className }) {
   const containerRef = useRef(null);
   const maxTrailRef = useRef(0);
-  const maxExtraTrailRef = useRef([]);
   const lastSyncedARef = useRef(x);
   const calcRef = useDesmosCalculator(containerRef, (calculator, Desmos) => {
     calculator.setMathBounds({ left: -3, right: 5, bottom: -4, top: 4 });
@@ -50,16 +38,6 @@ function CurveDesmosGraph({
       dragMode: Desmos.DragModes.X,
     });
 
-    extraPoints.forEach((extra, ei) => {
-      calculator.setExpression({
-        id: `extra-${ei}-point`,
-        latex: `(${extra.x}, ${f(extra.x)})`,
-        color: extra.color,
-        pointSize: 14,
-        dragMode: Desmos.DragModes.NONE,
-      });
-    });
-
     calculator.observe('expressionAnalysis', () => {
       const analysis = calculator.expressionAnalysis['a'];
       if (analysis && analysis.evaluation && analysis.evaluation.value != null) {
@@ -76,15 +54,6 @@ function CurveDesmosGraph({
           calculator.removeExpression({ id: `trail-${i}` });
         }
         calculator.removeExpression({ id: 'path' });
-        extraPoints.forEach((_, ei) => {
-          const count = maxExtraTrailRef.current[ei] || 0;
-          for (let i = 0; i < count; i++) {
-            calculator.removeExpression({ id: `extra-${ei}-trail-${i}` });
-          }
-          calculator.removeExpression({ id: `extra-${ei}-path` });
-          maxExtraTrailRef.current[ei] = 0;
-          calculator.setExpression({ id: `extra-${ei}-point`, latex: `(${newX}, ${f(newX)})` });
-        });
         maxTrailRef.current = 0;
         lastSyncedARef.current = newX;
         calculator.setExpression({ id: 'a', latex: `a = ${newX}` });
@@ -103,7 +72,7 @@ function CurveDesmosGraph({
       calculator.setExpression({
         id: `trail-${i}`,
         latex: `(${tx}, ${f(tx)})`,
-        color: '#e85d4a',
+        color: '#6366f1',
         pointSize: 9,
         pointOpacity: 0.55,
       });
@@ -125,39 +94,8 @@ function CurveDesmosGraph({
 
     lastSyncedARef.current = x;
     calculator.setExpression({ id: 'a', latex: `a = ${x}` });
-
-    extraPoints.forEach((extra, ei) => {
-      extra.trail.forEach((tx, i) => {
-        calculator.setExpression({
-          id: `extra-${ei}-trail-${i}`,
-          latex: `(${tx}, ${f(tx)})`,
-          color: extra.color,
-          pointSize: 9,
-          pointOpacity: 0.55,
-        });
-      });
-      maxExtraTrailRef.current[ei] = Math.max(
-        maxExtraTrailRef.current[ei] || 0,
-        extra.trail.length,
-      );
-
-      if (extra.trail.length > 0) {
-        const points = [...extra.trail, extra.x].map((tx) => `(${tx},${f(tx)})`).join(',');
-        calculator.setExpression({
-          id: `extra-${ei}-path`,
-          latex: `[${points}]`,
-          lines: true,
-          points: false,
-          color: extra.color,
-          lineOpacity: 0.6,
-          lineWidth: 2,
-        });
-      }
-
-      calculator.setExpression({ id: `extra-${ei}-point`, latex: `(${extra.x}, ${f(extra.x)})` });
-    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [x, trail, calcRef, f, extraPoints]);
+  }, [x, trail, calcRef, f]);
 
   return <div ref={containerRef} className={className} />;
 }

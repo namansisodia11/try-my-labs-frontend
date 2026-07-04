@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import CurveDesmosGraph from '../../../common/desmos/CurveDesmosGraph';
+import GradientDescentGraph from '../../../common/desmos/GradientDescentGraph';
 import useMathJax from '../../../common/hooks/useMathJax';
 import './WhatIsGradientDescent.css';
 
@@ -23,71 +23,27 @@ function randomStartX() {
   return min + Math.random() * (max - min);
 }
 
+const DEFAULT_RATE = 0.1;
+
+const initialState = (startX, rate) => ({
+  x: startX,
+  slope: df(startX),
+  step: -rate * df(startX),
+  converged: false,
+  history: [],
+  running: false,
+  start: () => {},
+  stop: () => {},
+  reset: () => {},
+});
+
 function WhatIsGradientDescent() {
   const mathReady = useMathJax();
   const [startX] = useState(randomStartX);
-  const [x, setX] = useState(startX);
-  const [trail, setTrail] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [rate, setRate] = useState(0.1);
-  const [running, setRunning] = useState(false);
-  const resetRef = useRef(null);
-  const xRef = useRef(x);
-  xRef.current = x;
-  const rateRef = useRef(rate);
-  rateRef.current = rate;
-  const intervalRef = useRef(null);
+  const [rate, setRate] = useState(DEFAULT_RATE);
+  const [state, setState] = useState(() => initialState(startX, DEFAULT_RATE));
 
-  const slope = df(x);
-  const step = -rate * slope;
-  const converged = Math.abs(slope) < 0.01;
-
-  function stopRun() {
-    setRunning(false);
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  }
-
-  function takeStep() {
-    const curX = xRef.current;
-    const curSlope = df(curX);
-    if (Math.abs(curSlope) < 0.01) {
-      stopRun();
-      return;
-    }
-    const curStep = -rateRef.current * curSlope;
-    const xNew = curX + curStep;
-    setHistory((h) => [...h, { x: curX, fx: f(curX), slope: curSlope, step: curStep, xNew }]);
-    setTrail((t) => [...t, curX]);
-    setX(xNew);
-  }
-
-  function handleStart() {
-    if (converged || running) return;
-    setRunning(true);
-    intervalRef.current = setInterval(takeStep, 500);
-  }
-
-  function handleReset() {
-    stopRun();
-    const newX = randomStartX();
-    setX(newX);
-    setTrail([]);
-    setHistory([]);
-    if (resetRef.current) resetRef.current(newX);
-  }
-
-  function handlePick(newX) {
-    stopRun();
-    setX(newX);
-    setTrail([]);
-    setHistory([]);
-    if (resetRef.current) resetRef.current(newX, { keepView: true });
-  }
-
-  React.useEffect(() => stopRun, []);
+  const { x, slope, step, converged, history, running, start, stop, reset } = state;
 
   return (
     <div className="gd-container" style={{ visibility: mathReady ? 'visible' : 'hidden' }}>
@@ -177,26 +133,27 @@ function WhatIsGradientDescent() {
           <span className="gd-graph-hint">
             <strong>Drag the point</strong> to choose a starting spot.
           </span>
-          <CurveDesmosGraph
+          <GradientDescentGraph
             curveLatex={CURVE_LATEX}
             pointLatex={POINT_LATEX}
             f={f}
-            x={x}
-            trail={trail}
-            onPick={handlePick}
-            resetRef={resetRef}
+            df={df}
+            rate={rate}
+            startX={startX}
+            getRandomStart={randomStartX}
+            onStateChange={setState}
             className="gd-desmos-container"
           />
           <div className="gd-controls">
             <button
               className={`gd-step-btn ${running ? 'running' : ''}`}
-              onClick={running ? stopRun : handleStart}
+              onClick={running ? stop : start}
               disabled={converged}
             >
               <span className={`gd-btn-icon ${running ? 'icon-stop' : 'icon-play'}`} />
               {converged ? 'Converged' : running ? 'Stop' : 'Start'}
             </button>
-            <button className="gd-reset-btn" onClick={handleReset}>
+            <button className="gd-reset-btn" onClick={reset}>
               Reset
             </button>
           </div>

@@ -158,34 +158,6 @@
   font-weight: 700;
 }
 
-.gdwm-legend {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.85rem;
-  color: #555;
-  margin: 0 0 10px 0;
-}
-
-.gdwm-legend-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  margin-left: 12px;
-}
-
-.gdwm-legend-dot:first-child {
-  margin-left: 0;
-}
-
-.gdwm-legend-dot-momentum {
-  background: #6366f1;
-}
-
-.gdwm-legend-dot-plain {
-  background: #9ca3af;
-}
-
 .gdwm-desmos-container {
   width: 100%;
   height: 400px;
