@@ -13,8 +13,23 @@
 - Pages go in `src/pages/<PageName>/`.
 - Learning content goes in `src/learning/<subject>/<topic>/`.
 - Shared/reusable components go in `src/common/<package>/` (e.g. `src/common/mathbox/`).
-- Always create a matching CSS file alongside every new component file, even if initially empty.
 - Every new learning file in `src/learning/machine-learning/` must also: (1) have a `<Route>` added in `src/common/Routes.js`, and (2) have a `<Link>` added in the correct section of `src/pages/Home/Home.js`.
+
+## Common Folder Reference
+
+- `src/common/Routes.js`: defines every app route and maps paths to page/learning components.
+- `src/common/desmos/useDesmosCalculator.js`: hook that loads the Desmos API script and creates/destroys a calculator instance in a container.
+- `src/common/desmos/CurveDesmosGraph.js`: renders a 1D curve with a single draggable point and its trail, backed by Desmos.
+- `src/common/desmos/GradientDescentGraph.js`: drives `CurveDesmosGraph` through the plain gradient descent update rule (step/start/stop/reset).
+- `src/common/desmos/GradientDescentWithMomentumGraph.js`: drives `CurveDesmosGraph` through the momentum-based gradient descent update rule.
+- `src/common/hooks/useMathJax.js`: hook that waits for MathJax to finish typesetting before revealing a page.
+- `src/common/mathbox/canvasTheme.js`: shared color/width constants for MathBox scenes (background, axes, grid).
+- `src/common/mathbox/CartesianCanvas.js`: low-level MathBox canvas that handles camera setup, dragging, and hit-testing for N points.
+- `src/common/mathbox/Cartesian1DCanvas.js`: `CartesianCanvas` wrapper constrained to a single draggable point on a number line.
+- `src/common/mathbox/Cartesian2DCanvas.js`: `CartesianCanvas` wrapper for one or more draggable points on an xy plane, with an optional custom `draw` hook.
+- `src/common/mathbox/Cartesian3DCanvas.js`: `CartesianCanvas` wrapper for a single draggable point in xyz space.
+- `src/common/mathbox/VectorAdditionCanvas.js`: 2D scene showing two draggable vectors, their sum, and the parallelogram between them.
+- `src/common/mathbox/VectorScalingCanvas.js`: 2D scene showing a draggable vector and its scalar multiples.
 
 ## File Naming
 
@@ -49,6 +64,10 @@
 
 - Never use em dashes (—) in UI-facing text. Use a colon, comma, or period instead.
 - Write like a person explaining to a friend, not a language model writing a report. Casual is fine. Funny is fine. Short is better. Avoid stiff, over-formal phrasing — if it sounds like something a textbook would say in a boring lecture, rewrite it.
+
+## Math Notation
+
+- Use step-indexed notation for iterative update formulas: `x_i`, `x_{i+1}`, `v_i`, etc. Never use `x_old` / `x_new` or `x_prev`.
 
 ## Teaching Philosophy
 

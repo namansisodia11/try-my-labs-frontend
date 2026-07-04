@@ -4,6 +4,8 @@ import Home from '../pages/Home/Home';
 import WhatIsVector from '../learning/machine-learning/vector/WhatIsVector';
 import WhatIsPoint from '../learning/machine-learning/point/WhatIsPoint';
 import WhatIsMinimaMaxima from '../learning/machine-learning/gradient-descent/WhatIsMinimaMaxima';
+import WhatIsGradientDescent from '../learning/machine-learning/gradient-descent/WhatIsGradientDescent';
+import WhatIsGradientDescentWithMomentum from '../learning/machine-learning/gradient-descent/WhatIsGradientDescentWithMomentum';
 
 function AppRoutes() {
   return (
@@ -14,6 +16,14 @@ function AppRoutes() {
       <Route
         path="/learning/machine-learning/what-is-minima-maxima"
         element={<WhatIsMinimaMaxima />}
+      />
+      <Route
+        path="/learning/machine-learning/what-is-gradient-descent"
+        element={<WhatIsGradientDescent />}
+      />
+      <Route
+        path="/learning/machine-learning/what-is-gradient-descent-with-momentum"
+        element={<WhatIsGradientDescentWithMomentum />}
       />
     </Routes>
   );
