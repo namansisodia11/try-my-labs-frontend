@@ -1,8 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import useDesmosCalculator from '../../../common/desmos/useDesmosCalculator';
+import CurveDesmosGraph from '../../../common/desmos/CurveDesmosGraph';
 import useMathJax from '../../../common/hooks/useMathJax';
 import './WhatIsGradientDescent.css';
+
+const CURVE_LATEX = 'y = \\frac{x^4}{4} - x^3 - \\frac{x^2}{2} + 3.4x';
+const POINT_LATEX = (a) => `(${a}, \\frac{${a}^4}{4} - ${a}^3 - \\frac{${a}^2}{2} + 3.4${a})`;
 
 function f(x) {
   return x ** 4 / 4 - x ** 3 - x ** 2 / 2 + 3.4 * x;
@@ -18,100 +21,6 @@ const LEARNING_RATES = [0.02, 0.05, 0.1, 0.3];
 function randomStartX() {
   const [min, max] = START_RANGE;
   return min + Math.random() * (max - min);
-}
-
-function DesmosGraph({ x, startX, trail, onPick, resetRef }) {
-  const containerRef = useRef(null);
-  const maxTrailRef = useRef(0);
-  const lastSyncedARef = useRef(startX);
-  const calcRef = useDesmosCalculator(containerRef, (calculator, Desmos) => {
-    calculator.setMathBounds({ left: -3, right: 5, bottom: -4, top: 4 });
-
-    calculator.setExpression({
-      id: 'curve',
-      latex: 'y = \\frac{x^4}{4} - x^3 - \\frac{x^2}{2} + 3.4x',
-      color: '#e85d4a',
-      lineWidth: 3,
-    });
-
-    calculator.setExpression({ id: 'a', latex: `a = ${startX}` });
-
-    calculator.setExpression({
-      id: 'pick-halo',
-      latex: '(a, \\frac{a^4}{4} - a^3 - \\frac{a^2}{2} + 3.4a)',
-      color: '#6366f1',
-      pointSize: 34,
-      pointOpacity: 0.25,
-      dragMode: Desmos.DragModes.NONE,
-      secret: true,
-    });
-    calculator.setExpression({
-      id: 'pick',
-      latex: '(a, \\frac{a^4}{4} - a^3 - \\frac{a^2}{2} + 3.4a)',
-      color: '#6366f1',
-      pointSize: 16,
-      dragMode: Desmos.DragModes.X,
-    });
-
-    calculator.observe('expressionAnalysis', () => {
-      const analysis = calculator.expressionAnalysis['a'];
-      if (analysis && analysis.evaluation && analysis.evaluation.value != null) {
-        const value = analysis.evaluation.value;
-        if (Math.abs(value - lastSyncedARef.current) > 1e-9) {
-          onPick(value);
-        }
-      }
-    });
-
-    if (resetRef) {
-      resetRef.current = (newStartX, options = {}) => {
-        for (let i = 0; i < maxTrailRef.current; i++) {
-          calculator.removeExpression({ id: `trail-${i}` });
-        }
-        calculator.removeExpression({ id: 'path' });
-        maxTrailRef.current = 0;
-        lastSyncedARef.current = newStartX;
-        calculator.setExpression({ id: 'a', latex: `a = ${newStartX}` });
-        if (!options.keepView) {
-          calculator.setMathBounds({ left: -3, right: 5, bottom: -4, top: 4 });
-        }
-      };
-    }
-  });
-
-  React.useEffect(() => {
-    const calculator = calcRef.current;
-    if (!calculator) return;
-
-    trail.forEach((tx, i) => {
-      calculator.setExpression({
-        id: `trail-${i}`,
-        latex: `(${tx}, ${f(tx)})`,
-        color: '#e85d4a',
-        pointSize: 9,
-        pointOpacity: 0.55,
-      });
-    });
-    maxTrailRef.current = Math.max(maxTrailRef.current, trail.length);
-
-    if (trail.length > 0) {
-      const points = [...trail, x].map((tx) => `(${tx},${f(tx)})`).join(',');
-      calculator.setExpression({
-        id: 'path',
-        latex: `[${points}]`,
-        lines: true,
-        points: false,
-        color: '#1a1a2e',
-        lineOpacity: 0.35,
-        lineWidth: 1.5,
-      });
-    }
-
-    lastSyncedARef.current = x;
-    calculator.setExpression({ id: 'a', latex: `a = ${x}` });
-  }, [x, trail, calcRef]);
-
-  return <div ref={containerRef} className="gd-desmos-container" />;
 }
 
 function WhatIsGradientDescent() {
@@ -208,7 +117,7 @@ function WhatIsGradientDescent() {
               At every step, move a little in the opposite direction of the slope. That's it, that's
               the whole algorithm.
             </p>
-            <p className="gd-math">{"$$x_{new} = x_{old} - \\alpha \\cdot f'(x_{old})$$"}</p>
+            <p className="gd-math">{"$$x_{i+1} = x_i - \\alpha \\cdot f'(x_i)$$"}</p>
             <p className="gd-text">
               {'$\\alpha$'} is the <strong>learning rate</strong>, how big a step to take. Too small
               and you crawl forever. Too big and you overshoot the valley entirely.
@@ -268,12 +177,15 @@ function WhatIsGradientDescent() {
           <span className="gd-graph-hint">
             <strong>Drag the point</strong> to choose a starting spot.
           </span>
-          <DesmosGraph
+          <CurveDesmosGraph
+            curveLatex={CURVE_LATEX}
+            pointLatex={POINT_LATEX}
+            f={f}
             x={x}
-            startX={startX}
             trail={trail}
             onPick={handlePick}
             resetRef={resetRef}
+            className="gd-desmos-container"
           />
           <div className="gd-controls">
             <button

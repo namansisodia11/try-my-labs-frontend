@@ -13,7 +13,6 @@
 - Pages go in `src/pages/<PageName>/`.
 - Learning content goes in `src/learning/<subject>/<topic>/`.
 - Shared/reusable components go in `src/common/<package>/` (e.g. `src/common/mathbox/`).
-- Always create a matching CSS file alongside every new component file, even if initially empty.
 - Every new learning file in `src/learning/machine-learning/` must also: (1) have a `<Route>` added in `src/common/Routes.js`, and (2) have a `<Link>` added in the correct section of `src/pages/Home/Home.js`.
 
 ## File Naming
@@ -49,6 +48,10 @@
 
 - Never use em dashes (—) in UI-facing text. Use a colon, comma, or period instead.
 - Write like a person explaining to a friend, not a language model writing a report. Casual is fine. Funny is fine. Short is better. Avoid stiff, over-formal phrasing — if it sounds like something a textbook would say in a boring lecture, rewrite it.
+
+## Math Notation
+
+- Use step-indexed notation for iterative update formulas: `x_i`, `x_{i+1}`, `v_i`, etc. Never use `x_old` / `x_new` or `x_prev`.
 
 ## Teaching Philosophy
 

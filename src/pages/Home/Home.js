@@ -28,6 +28,11 @@ function Home() {
               What is Gradient Descent?
             </Link>
           </li>
+          <li>
+            <Link to="/learning/machine-learning/what-is-gradient-descent-with-momentum">
+              What is Gradient Descent with Momentum?
+            </Link>
+          </li>
         </ul>
       </section>
     </div>
