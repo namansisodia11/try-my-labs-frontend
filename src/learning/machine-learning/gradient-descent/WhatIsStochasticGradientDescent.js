@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import StochasticGradientDescentGraph from '../../../common/desmos/StochasticGradientDescentGraph';
+import ScatterFitCanvas from '../../../common/mathbox/ScatterFitCanvas';
 import useMathJax from '../../../common/hooks/useMathJax';
 import './WhatIsStochasticGradientDescent.css';
 
@@ -40,6 +41,19 @@ const initialState = (startM) => ({
   reset: () => {},
 });
 
+const FIT_STEP_INTERVAL_MS = 400;
+const FIT_RATE = 0.03;
+const FIT_BATCH_THRESHOLD = 0.05;
+const FIT_STOCHASTIC_THRESHOLD = 0.5;
+
+function fitFullGrad(m) {
+  return POINTS.reduce((s, { x, y }) => s + 2 * x * (m * x - y), 0) / POINTS.length;
+}
+
+function fitPointGrad(m, point) {
+  return 2 * point.x * (m * point.x - point.y);
+}
+
 function WhatIsStochasticGradientDescent() {
   const mathReady = useMathJax();
   const [startM] = useState(randomStartM);
@@ -47,6 +61,74 @@ function WhatIsStochasticGradientDescent() {
   const [state, setState] = useState(() => initialState(startM));
 
   const { m, grad, step, converged, history, running, start, stop, reset } = state;
+
+  const [fitStochastic, setFitStochastic] = useState(true);
+  const [fitM, setFitM] = useState(startM);
+  const [fitRunning, setFitRunning] = useState(false);
+  const [fitActiveIndex, setFitActiveIndex] = useState(null);
+  const [fitHistory, setFitHistory] = useState([]);
+  const fitMRef = useRef(fitM);
+  fitMRef.current = fitM;
+  const fitActiveIndexRef = useRef(null);
+  const fitStochasticRef = useRef(fitStochastic);
+  fitStochasticRef.current = fitStochastic;
+  const fitIntervalRef = useRef(null);
+
+  const fitGrad = fitFullGrad(fitM);
+  const fitThreshold = fitStochastic ? FIT_STOCHASTIC_THRESHOLD : FIT_BATCH_THRESHOLD;
+  const fitConverged = Math.abs(fitGrad) < fitThreshold;
+
+  function fitStop() {
+    setFitRunning(false);
+    if (fitIntervalRef.current) {
+      clearInterval(fitIntervalRef.current);
+      fitIntervalRef.current = null;
+    }
+  }
+
+  function fitTakeStep() {
+    const curM = fitMRef.current;
+    const curThreshold = fitStochasticRef.current ? FIT_STOCHASTIC_THRESHOLD : FIT_BATCH_THRESHOLD;
+    if (Math.abs(fitFullGrad(curM)) < curThreshold) {
+      fitStop();
+      return;
+    }
+    let curGrad;
+    let pointIndex = null;
+    let residual = null;
+    if (fitStochasticRef.current) {
+      const idx = Math.floor(Math.random() * POINTS.length);
+      const point = POINTS[idx];
+      residual = curM * point.x - point.y;
+      curGrad = fitPointGrad(curM, point);
+      pointIndex = idx;
+      fitActiveIndexRef.current = idx;
+      setFitActiveIndex(idx);
+    } else {
+      curGrad = fitFullGrad(curM);
+      fitActiveIndexRef.current = null;
+      setFitActiveIndex(null);
+    }
+    const mNew = curM - FIT_RATE * curGrad;
+    setFitHistory((h) => [...h, { m: curM, mNew, pointIndex, residual }]);
+    setFitM(mNew);
+  }
+
+  function fitStart() {
+    if (fitConverged || fitRunning) return;
+    setFitRunning(true);
+    fitIntervalRef.current = setInterval(fitTakeStep, FIT_STEP_INTERVAL_MS);
+  }
+
+  function fitReset() {
+    fitStop();
+    fitActiveIndexRef.current = null;
+    setFitActiveIndex(null);
+    setFitHistory([]);
+    setFitM(randomStartM());
+  }
+
+  useEffect(() => fitStop, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="sgd-container" style={{ visibility: mathReady ? 'visible' : 'hidden' }}>
@@ -205,6 +287,101 @@ function WhatIsStochasticGradientDescent() {
               </div>
             </div>
           )}
+        </div>
+      </div>
+
+      <div className="sgd-block sgd-block-full">
+        <span className="sgd-block-label">Same idea, watching the line instead of the bowl</span>
+        <p className="sgd-text">
+          The loss curve above is honest but abstract, it's a step removed from what's actually
+          happening. Here's the exact same descent, but watching the fitted line {'$y = mx$'} wiggle
+          against the actual scattered points instead. The highlighted point is the one stochastic
+          descent is using for the current step.
+        </p>
+
+        <div className="sgd-fit-layout">
+          <ScatterFitCanvas
+            dataPoints={POINTS}
+            mRef={fitMRef}
+            activeIndexRef={fitActiveIndexRef}
+            range={15}
+          />
+          <div className="sgd-fit-side">
+            <div className="sgd-rate-row">
+              <button
+                className={`sgd-rate-btn ${fitStochastic ? 'active' : ''}`}
+                onClick={() => setFitStochastic(true)}
+              >
+                Stochastic
+              </button>
+              <button
+                className={`sgd-rate-btn ${!fitStochastic ? 'active' : ''}`}
+                onClick={() => setFitStochastic(false)}
+              >
+                Batch
+              </button>
+            </div>
+            <div className="sgd-readout-grid sgd-fit-readout-grid">
+              <div className="sgd-readout">
+                <span className="sgd-readout-label">m</span>
+                <span className="sgd-readout-value">{fitM.toFixed(3)}</span>
+              </div>
+              <div className="sgd-readout">
+                <span className="sgd-readout-label">true slope</span>
+                <span className="sgd-readout-value">{fitGrad.toFixed(3)}</span>
+              </div>
+              <div className="sgd-readout">
+                <span className="sgd-readout-label">using</span>
+                <span className="sgd-readout-value">
+                  {fitActiveIndex != null
+                    ? `(${POINTS[fitActiveIndex].x}, ${POINTS[fitActiveIndex].y})`
+                    : fitStochastic
+                      ? 'none yet'
+                      : 'all points'}
+                </span>
+              </div>
+            </div>
+            {fitConverged && <p className="sgd-converged">The fit has settled.</p>}
+            <div className="sgd-controls">
+              <button
+                className={`sgd-step-btn ${fitRunning ? 'running' : ''}`}
+                onClick={fitRunning ? fitStop : fitStart}
+                disabled={fitConverged}
+              >
+                <span className={`sgd-btn-icon ${fitRunning ? 'icon-stop' : 'icon-play'}`} />
+                {fitConverged ? 'Converged' : fitRunning ? 'Stop' : 'Start'}
+              </button>
+              <button className="sgd-reset-btn" onClick={fitReset}>
+                Reset
+              </button>
+            </div>
+
+            {fitHistory.length > 0 && (
+              <div className="sgd-block sgd-history-block">
+                <span className="sgd-block-label">Step by step</span>
+                <div className="sgd-history">
+                  {fitHistory.map((h, i) => (
+                    <div className="sgd-history-row" key={i}>
+                      <span className="sgd-history-step">{i + 1}</span>
+                      <span className="sgd-history-calc">
+                        {h.pointIndex != null ? (
+                          <>
+                            residual at ({POINTS[h.pointIndex].x}, {POINTS[h.pointIndex].y}):{' '}
+                            {h.m.toFixed(2)}&times;{POINTS[h.pointIndex].x} &minus;{' '}
+                            {POINTS[h.pointIndex].y} = {h.residual >= 0 ? '+' : ''}
+                            {h.residual.toFixed(2)}
+                          </>
+                        ) : (
+                          <>using the average residual over all points</>
+                        )}
+                        {' '}&rarr; m: {h.m.toFixed(3)} &rarr; {h.mNew.toFixed(3)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

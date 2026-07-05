@@ -318,6 +318,24 @@
   color: #9ca3af;
 }
 
+.sgd-fit-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+.sgd-fit-side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sgd-fit-readout-grid {
+  grid-template-columns: 1fr;
+}
+
 @media (max-width: 860px) {
   .sgd-layout {
     grid-template-columns: 1fr;
@@ -325,5 +343,9 @@
 
   .sgd-readout-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sgd-fit-layout {
+    grid-template-columns: 1fr;
   }
 }
