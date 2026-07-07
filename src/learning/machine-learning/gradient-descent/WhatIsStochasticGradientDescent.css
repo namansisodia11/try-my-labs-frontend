@@ -126,6 +126,16 @@
   color: #16a34a;
 }
 
+.sgd-rate-cols {
+  display: flex;
+  gap: 24px;
+}
+
+.sgd-rate-col {
+  display: flex;
+  flex-direction: column;
+}
+
 .sgd-rate-row {
   display: flex;
   gap: 8px;
@@ -316,5 +326,10 @@
 
   .sgd-readout-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sgd-rate-cols {
+    flex-direction: column;
+    gap: 16px;
   }
 }
