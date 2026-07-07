@@ -126,6 +126,16 @@
   color: #16a34a;
 }
 
+.sgd-rate-cols {
+  display: flex;
+  gap: 24px;
+}
+
+.sgd-rate-col {
+  display: flex;
+  flex-direction: column;
+}
+
 .sgd-rate-row {
   display: flex;
   gap: 8px;
@@ -153,26 +163,17 @@
 }
 
 .sgd-graph-hint {
-  display: inline-block;
+  display: block;
   font-size: 0.85rem;
   color: #4338ca;
   background: #eef2ff;
-  padding: 6px 12px;
-  border-radius: 20px;
+  padding: 8px 12px;
+  border-radius: 10px;
   margin-bottom: 10px;
 }
 
 .sgd-graph-hint strong {
   font-weight: 700;
-}
-
-.sgd-desmos-container {
-  width: 100%;
-  height: 400px;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid #ddd;
-  cursor: ew-resize;
 }
 
 .sgd-controls {
@@ -318,24 +319,6 @@
   color: #9ca3af;
 }
 
-.sgd-fit-layout {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 24px;
-  align-items: start;
-  margin-top: 16px;
-}
-
-.sgd-fit-side {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.sgd-fit-readout-grid {
-  grid-template-columns: 1fr;
-}
-
 @media (max-width: 860px) {
   .sgd-layout {
     grid-template-columns: 1fr;
@@ -345,7 +328,8 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .sgd-fit-layout {
-    grid-template-columns: 1fr;
+  .sgd-rate-cols {
+    flex-direction: column;
+    gap: 16px;
   }
 }
