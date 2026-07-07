@@ -189,8 +189,8 @@ function WhatIsStochasticGradientDescent() {
               }
             </p>
             <p className="sgd-text">
-              <strong>Batch</strong> gradient descent averages that pull over{' '}
-              <strong>every</strong> point, then moves:
+              <strong>Batch</strong> gradient descent averages that pull over <strong>every</strong>{' '}
+              point, then moves:
             </p>
             <p className="sgd-math">
               {'$$m_{i+1} = m_i - \\alpha \\cdot \\frac{1}{n}\\sum_j \\text{pull}_j$$'}
@@ -278,17 +278,17 @@ function WhatIsStochasticGradientDescent() {
             </div>
             <p className="sgd-text sgd-rate-hint">
               Batch glides straight to the best fit. Stochastic gets there too, just noisier and
-              slower since it only sees one point per step, try Fast to speed that up. Sometimes
-              the points it randomly generated barely correlate with each other, so SGD can take a
-              long time to converge. If that happens, hit Reset to try a new set of points.
+              slower since it only sees one point per step, try Fast to speed that up. Sometimes the
+              points it randomly generated barely correlate with each other, so SGD can take a long
+              time to converge. If that happens, hit Reset to try a new set of points.
             </p>
           </div>
         </div>
 
         <div className="sgd-right">
           <span className="sgd-graph-hint">
-            The <strong>highlighted point(s)</strong> are the ones the last step just used, one
-            for stochastic, all five for batch.
+            The <strong>highlighted point(s)</strong> are the ones the last step just used, one for
+            stochastic, all five for batch.
           </span>
           <ScatterFitCanvas
             pointsRef={pointsRef}
@@ -328,7 +328,8 @@ function WhatIsStochasticGradientDescent() {
                       {h.pointIndex != null && (
                         <span className="sgd-history-point">
                           {' '}
-                          using point ({points[h.pointIndex].x}, {points[h.pointIndex].y.toFixed(1)})
+                          using point ({points[h.pointIndex].x}, {points[h.pointIndex].y.toFixed(1)}
+                          )
                         </span>
                       )}
                     </span>

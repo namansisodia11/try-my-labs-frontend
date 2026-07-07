@@ -31,6 +31,7 @@
 - `src/common/mathbox/Cartesian3DCanvas.js`: `CartesianCanvas` wrapper for a single draggable point in xyz space.
 - `src/common/mathbox/VectorAdditionCanvas.js`: 2D scene showing two draggable vectors, their sum, and the parallelogram between them.
 - `src/common/mathbox/VectorScalingCanvas.js`: 2D scene showing a draggable vector and its scalar multiples.
+- `src/common/mathbox/ScatterFitCanvas.js`: MathBox scene showing a fixed scatter of points, a fitted line `y = m*x`, residual gaps to each point, and a highlight for the point(s) the last gradient descent step used.
 
 ## File Naming
 
