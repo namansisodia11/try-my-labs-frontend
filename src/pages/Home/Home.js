@@ -1,14 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import GaltonBoard from './GaltonBoard';
 import './Home.css';
 
 function Home() {
   return (
     <div className="home">
+      <section className="home-hero">
+        <h1>Learn math by playing with it.</h1>
+        <p>
+          Every lesson here is interactive. Like this Galton board: pure randomness, dropped
+          through pegs enough times, turns into a predictable shape.
+        </p>
+      </section>
+      <GaltonBoard />
       <section className="home-topics">
         <h2 className="home-topics-heading">
           <Link to="/learning/machine-learning" className="home-topics-link">
-            Learning Machine Learning
+            Machine Learning
           </Link>
         </h2>
         <ul className="home-topics-list">
