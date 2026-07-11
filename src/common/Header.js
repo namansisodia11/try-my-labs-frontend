@@ -6,7 +6,7 @@ function Header() {
   return (
     <header className="site-header">
       <Link to="/" className="site-header-brand">
-        TRY MY LABS
+        Try My <span className="site-header-brand-accent">Labs</span>
       </Link>
       <nav className="site-header-nav">
         <div className="site-header-dropdown">

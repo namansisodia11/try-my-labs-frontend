@@ -10,11 +10,16 @@
 }
 
 .site-header-brand {
-  font-size: 0.85rem;
-  font-weight: 800;
-  letter-spacing: 0.22em;
-  color: #4f46e5;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e1b4b;
   text-decoration: none;
+}
+
+.site-header-brand-accent {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 600;
+  color: #4f46e5;
 }
 
 .site-header-dropdown {
