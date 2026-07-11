@@ -40,13 +40,17 @@ function GaltonBoard() {
     function dropBall() {
       // offsets[r] is the ball's horizontal distance from center at peg row r, in colGap units
       const offsets = [0];
+      const turns = [];
       let col = 0;
       for (let row = 0; row < ROWS; row++) {
-        col += Math.random() < 0.5 ? -0.5 : 0.5;
+        const goRight = Math.random() < 0.5;
+        turns.push(goRight);
+        col += goRight ? 0.5 : -0.5;
         offsets.push(col);
       }
       balls.push({
         offsets,
+        turns,
         finalBin: Math.round(col + ROWS / 2),
         progress: 0,
         speed: 0.9 + Math.random() * 0.25,
@@ -83,12 +87,39 @@ function GaltonBoard() {
         ctx.fillRect(x - colGap / 2 + 1, binFloor - displayH[i], colGap - 2, displayH[i]);
       }
 
+      // once enough balls have piled up, trace the normal curve they're approximating
+      if (totalDropped > 40) {
+        const sigma = Math.sqrt(ROWS) / 2;
+        const mean = ROWS / 2;
+        const gaussian = (i) => Math.exp(-((i - mean) ** 2) / (2 * sigma * sigma));
+        const peak = Math.max(...binCounts.map((_, i) => gaussian(i)));
+
+        ctx.beginPath();
+        for (let i = 0; i < BINS; i++) {
+          const x = center + (i - ROWS / 2) * colGap;
+          const y = binFloor - (gaussian(i) / peak) * maxBinHeight;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = 'rgba(79, 70, 229, 0.55)';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([5, 4]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.font = 'italic 12px "Georgia", serif';
+        ctx.fillStyle = 'rgba(79, 70, 229, 0.6)';
+        ctx.textAlign = 'right';
+        ctx.fillText('y = e^(-x²/2σ²)', width, binFloor - maxBinHeight - 4);
+      }
+
       ctx.strokeStyle = '#e2e8f0';
       ctx.beginPath();
       ctx.moveTo(0, binFloor);
       ctx.lineTo(width, binFloor);
       ctx.stroke();
 
+      let leadBall = null;
       ctx.fillStyle = '#4f46e5';
       for (let bi = balls.length - 1; bi >= 0; bi--) {
         const ball = balls[bi];
@@ -119,11 +150,43 @@ function GaltonBoard() {
           // sideways movement happens late, like rolling off the peg
           x = fromX + (toX - fromX) * t * t * (3 - 2 * t);
           y = pegY(i) + rowGap * (0.4 * t + 0.6 * t * t) - Math.sin(t * Math.PI) * rowGap * 0.25;
+
+          // the ball nearest its peg mid-bounce is the clearest one to annotate
+          if (t > 0.35 && t < 0.75 && (!leadBall || ball.progress > leadBall.progress)) {
+            leadBall = { x: fromX, y: pegY(i), goRight: ball.turns[i] };
+          }
         }
 
         ctx.beginPath();
         ctx.arc(x, y, 3.4, 0, Math.PI * 2);
         ctx.fill();
+      }
+
+      // show the coin-flip the lead ball just made at its peg: two faint paths, the taken one lit up
+      if (leadBall) {
+        const { x, y, goRight } = leadBall;
+        const forkX = x + (goRight ? 1 : -1) * colGap * 0.55;
+        const forkY = y + rowGap * 0.6;
+        const otherX = x - (goRight ? 1 : -1) * colGap * 0.55;
+
+        ctx.setLineDash([3, 3]);
+        ctx.strokeStyle = '#d1d5db';
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(otherX, forkY);
+        ctx.stroke();
+
+        ctx.strokeStyle = '#4f46e5';
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(forkX, forkY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.font = '11px sans-serif';
+        ctx.fillStyle = '#4f46e5';
+        ctx.textAlign = goRight ? 'left' : 'right';
+        ctx.fillText(goRight ? 'right ½' : 'left ½', x + (goRight ? 1 : -1) * 8, y - 6);
       }
 
       ctx.font = '12px sans-serif';
@@ -138,18 +201,7 @@ function GaltonBoard() {
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  return (
-    <section className="galton-board">
-      <span className="galton-board-label">Randomness, piling up</span>
-      <p className="galton-board-text">
-        Each ball bounces left or right at every peg, a coin flip each time. One ball's path looks
-        totally random. Thousands of them stack into a bell curve, because most left/right
-        sequences roughly cancel out and only land far from center if you get a long unlikely
-        streak.
-      </p>
-      <canvas ref={canvasRef} className="galton-board-canvas" />
-    </section>
-  );
+  return <canvas ref={canvasRef} className="galton-board-canvas" />;
 }
 
 export default GaltonBoard;

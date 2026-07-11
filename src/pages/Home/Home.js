@@ -7,13 +7,24 @@ function Home() {
   return (
     <div className="home">
       <section className="home-hero">
-        <h1>Learn math by playing with it.</h1>
-        <p>
-          Every lesson here is interactive. Like this Galton board: pure randomness, dropped
-          through pegs enough times, turns into a predictable shape.
-        </p>
+        <div className="home-hero-board">
+          <GaltonBoard />
+        </div>
+        <div className="home-hero-copy">
+          <span className="home-hero-brand">TRY MY LABS</span>
+          <h1>Learn math by playing with it.</h1>
+          <p>
+            Every lesson here is interactive. Like this Galton board: pure randomness, dropped
+            through pegs enough times, turns into a predictable shape.
+          </p>
+          <p>
+            Each ball bounces left or right at every peg, a coin flip each time. One ball's path
+            looks totally random. Thousands of them stack into a bell curve, because most
+            left/right sequences roughly cancel out and only land far from center if you get a
+            long unlikely streak.
+          </p>
+        </div>
       </section>
-      <GaltonBoard />
       <section className="home-topics">
         <h2 className="home-topics-heading">
           <Link to="/learning/machine-learning" className="home-topics-link">
