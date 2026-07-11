@@ -11,7 +11,6 @@ function Home() {
           <GaltonBoard />
         </div>
         <div className="home-hero-copy">
-          <span className="home-hero-brand">TRY MY LABS</span>
           <h1>Learn math by playing with it.</h1>
           <p>
             Every lesson here is interactive. Like this Galton board: pure randomness, dropped
