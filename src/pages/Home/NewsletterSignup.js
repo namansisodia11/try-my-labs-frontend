@@ -9,7 +9,7 @@ const SUBSCRIBED_KEY = 'newsletter-subscribed';
 function NewsletterSignup() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(
-    () => localStorage.getItem(SUBSCRIBED_KEY) === 'true'
+    () => localStorage.getItem(SUBSCRIBED_KEY) === 'true',
   );
   const [justSubscribed, setJustSubscribed] = useState(false);
 
