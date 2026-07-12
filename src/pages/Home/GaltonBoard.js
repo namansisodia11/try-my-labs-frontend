@@ -20,11 +20,11 @@ function GaltonBoard() {
     ctx.scale(dpr, dpr);
 
     const pegTop = 30;
-    const pegBottom = height - 90;
+    const pegBottom = height - 104;
     const rowGap = (pegBottom - pegTop) / ROWS;
     const colGap = Math.min(28, width / (BINS + 2));
     const center = width / 2;
-    const binFloor = height - 6;
+    const binFloor = height - 20;
     const binAreaTop = pegBottom + 14;
     const maxBinHeight = binFloor - binAreaTop;
 
@@ -79,12 +79,20 @@ function GaltonBoard() {
       }
 
       const maxCount = Math.max(1, ...binCounts);
-      ctx.fillStyle = 'rgba(99, 102, 241, 0.85)';
       for (let i = 0; i < BINS; i++) {
         const targetH = (binCounts[i] / maxCount) * maxBinHeight;
         displayH[i] += (targetH - displayH[i]) * 0.12;
         const x = center + (i - ROWS / 2) * colGap;
+
+        ctx.fillStyle = 'rgba(99, 102, 241, 0.85)';
         ctx.fillRect(x - colGap / 2 + 1, binFloor - displayH[i], colGap - 2, displayH[i]);
+
+        if (binCounts[i] > 0) {
+          ctx.font = '10px sans-serif';
+          ctx.fillStyle = '#94a3b8';
+          ctx.textAlign = 'center';
+          ctx.fillText(binCounts[i], x, binFloor + 13);
+        }
       }
 
       // once enough balls have piled up, trace the normal curve they're approximating

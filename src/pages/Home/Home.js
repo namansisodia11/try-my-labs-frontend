@@ -18,9 +18,9 @@ function Home() {
           </p>
           <p>
             Each ball bounces left or right at every peg, a coin flip each time. One ball's path
-            looks totally random. Thousands of them stack into a bell curve, because most
-            left/right sequences roughly cancel out and only land far from center if you get a
-            long unlikely streak.
+            looks totally random. Thousands of them stack into a bell curve, because most left/right
+            sequences roughly cancel out and only land far from center if you get a long unlikely
+            streak.
           </p>
         </div>
       </section>
