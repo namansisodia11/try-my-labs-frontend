@@ -39,8 +39,17 @@ function NewsletterSignup() {
         <p className="newsletter-thanks">You're in! Thanks for subscribing.</p>
       ) : (
         <>
-          <h2 className="newsletter-heading">Get new lessons in your inbox</h2>
-          <p className="newsletter-copy">No spam, just new interactive lessons as they drop.</p>
+          <div className="newsletter-dots" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <h2 className="newsletter-heading">Converge on our newsletter</h2>
+          <p className="newsletter-copy">One email a week. No local minima, just new lessons.</p>
           <form className="newsletter-form" onSubmit={handleSubmit}>
             <input
               type="email"
