@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import GaltonBoard from './GaltonBoard';
+import NewsletterSignup from './NewsletterSignup';
 import './Home.css';
 
 function Home() {
@@ -59,6 +60,7 @@ function Home() {
           </li>
         </ul>
       </section>
+      <NewsletterSignup />
     </div>
   );
 }

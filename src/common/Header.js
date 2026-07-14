@@ -1,12 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Logo from './Logo';
 import './Header.css';
 
 function Header() {
   return (
     <header className="site-header">
       <Link to="/" className="site-header-brand">
-        Try My <span className="site-header-brand-accent">Labs</span>
+        <Logo />
+        <span className="site-header-brand-text">
+          <span className="site-header-brand-line">Try My</span>
+          <span className="site-header-brand-line site-header-brand-accent">Labs</span>
+        </span>
       </Link>
       <nav className="site-header-nav">
         <div className="site-header-dropdown">

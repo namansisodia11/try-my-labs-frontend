@@ -10,10 +10,29 @@
 }
 
 .site-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 1.05rem;
   font-weight: 700;
   color: #1e1b4b;
   text-decoration: none;
+}
+
+.logo-mark {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.site-header-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.site-header-brand-line {
+  font-size: 0.85rem;
 }
 
 .site-header-brand-accent {
