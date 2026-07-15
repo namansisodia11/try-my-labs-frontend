@@ -12,7 +12,7 @@ function Home() {
           <GaltonBoard />
         </div>
         <div className="home-hero-copy">
-          <h1>Learn math by playing with it (deployed!).</h1>
+          <h1>Learn math by playing with it (deployed successfully!).</h1>
           <p>
             Every lesson here is interactive. Like this Galton board: pure randomness, dropped
             through pegs enough times, turns into a predictable shape.
