@@ -12,21 +12,36 @@ function GaltonBoard() {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    ctx.scale(dpr, dpr);
-
     const pegTop = 30;
-    const pegBottom = height - 104;
-    const rowGap = (pegBottom - pegTop) / ROWS;
-    const colGap = Math.min(28, width / (BINS + 2));
-    const center = width / 2;
-    const binFloor = height - 20;
-    const binAreaTop = pegBottom + 14;
-    const maxBinHeight = binFloor - binAreaTop;
+
+    let width;
+    let height;
+    let pegBottom;
+    let rowGap;
+    let colGap;
+    let center;
+    let binFloor;
+    let maxBinHeight;
+
+    function resize() {
+      const dpr = window.devicePixelRatio || 1;
+      width = canvas.clientWidth;
+      height = canvas.clientHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      pegBottom = height - 104;
+      rowGap = (pegBottom - pegTop) / ROWS;
+      colGap = Math.min(28, width / (BINS + 2));
+      center = width / 2;
+      binFloor = height - 20;
+      const binAreaTop = pegBottom + 14;
+      maxBinHeight = binFloor - binAreaTop;
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
 
     const pegY = (row) => pegTop + row * rowGap;
 
@@ -206,7 +221,10 @@ function GaltonBoard() {
     }
 
     frame = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', resize);
+    };
   }, []);
 
   return <canvas ref={canvasRef} className="galton-board-canvas" />;

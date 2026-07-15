@@ -72,7 +72,8 @@
   z-index: 100;
 }
 
-.site-header-dropdown:hover .site-header-dropdown-menu {
+.site-header-dropdown:hover .site-header-dropdown-menu,
+.site-header-dropdown.open .site-header-dropdown-menu {
   display: flex;
 }
 
@@ -87,4 +88,32 @@
 .site-header-dropdown-menu a:hover {
   background: #f5f5ff;
   color: #4f46e5;
+}
+
+@media (max-width: 600px) {
+  .site-header {
+    padding: 14px 16px;
+  }
+
+  .site-header-brand {
+    font-size: 0.95rem;
+    gap: 8px;
+  }
+
+  .site-header-dropdown-label {
+    font-size: 0.85rem;
+  }
+
+  .site-header-dropdown-menu {
+    right: -16px;
+    min-width: 220px;
+  }
+
+  .site-header-dropdown:hover .site-header-dropdown-menu {
+    display: none;
+  }
+
+  .site-header-dropdown.open .site-header-dropdown-menu {
+    display: flex;
+  }
 }

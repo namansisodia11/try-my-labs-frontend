@@ -1,6 +1,7 @@
 .newsletter {
   max-width: 480px;
   margin: 0 auto 40px;
+  padding: 0 16px;
   text-align: center;
 }
 
@@ -10,6 +11,7 @@
   justify-content: center;
   gap: 6px;
   height: 28px;
+  margin-top: 24px;
   margin-bottom: 10px;
 }
 

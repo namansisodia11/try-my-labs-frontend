@@ -253,3 +253,34 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 600px) {
+  .mm-container {
+    padding: 0 16px;
+    margin: 24px auto;
+  }
+
+  .mm-title {
+    font-size: 1.5rem;
+  }
+
+  .mm-desmos-container {
+    height: 300px;
+  }
+
+  .mm-example-row {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'badge' 'x' 'eq' 'note';
+    justify-items: start;
+    row-gap: 6px;
+  }
+
+  .mm-example-eq {
+    font-size: 1rem;
+  }
+
+  .mm-graph-header {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}

@@ -13,6 +13,12 @@
   cursor: default;
 }
 
+@media (max-width: 600px) {
+  .mathbox-canvas {
+    height: 320px;
+  }
+}
+
 .mathbox-hint {
   position: absolute;
   bottom: 12px;

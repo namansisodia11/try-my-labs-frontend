@@ -5,11 +5,13 @@ const FORM_ACTION_URL =
   'https://docs.google.com/forms/d/e/1FAIpQLSdtb-oXFb2l1jGlSejpJa5cua9VssCkh_s5Ef1vCpYwbdiiXw/formResponse';
 const EMAIL_ENTRY_ID = 'entry.955308745';
 const SUBSCRIBED_KEY = 'newsletter-subscribed';
+// single flag to disable all localStorage-backed caching for local testing, set in .env.local
+const USE_CACHE = process.env.REACT_APP_DISABLE_CACHE !== 'true';
 
 function NewsletterSignup() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(
-    () => localStorage.getItem(SUBSCRIBED_KEY) === 'true',
+    () => USE_CACHE && localStorage.getItem(SUBSCRIBED_KEY) === 'true',
   );
   const [justSubscribed, setJustSubscribed] = useState(false);
 
@@ -24,7 +26,9 @@ function NewsletterSignup() {
       body: formData,
     });
 
-    localStorage.setItem(SUBSCRIBED_KEY, 'true');
+    if (USE_CACHE) {
+      localStorage.setItem(SUBSCRIBED_KEY, 'true');
+    }
     setSubscribed(true);
     setJustSubscribed(true);
   }
