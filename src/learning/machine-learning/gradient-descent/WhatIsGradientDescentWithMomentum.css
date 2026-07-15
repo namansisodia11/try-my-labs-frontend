@@ -22,7 +22,7 @@
 
 .gdwm-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 40px;
   align-items: start;
 }
@@ -31,6 +31,7 @@
   display: flex;
   flex-direction: column;
   gap: 22px;
+  min-width: 0;
 }
 
 .gdwm-right {
@@ -73,11 +74,13 @@
   font-size: 1.05rem;
   color: #1a1a2e;
   margin: 6px 0;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .gdwm-readout-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px 10px;
   background: #fafafa;
   border: 1px solid #ebebeb;
@@ -89,6 +92,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
 
 .gdwm-readout-label {
@@ -101,6 +105,7 @@
   font-family: monospace;
   font-weight: 700;
   color: #1a1a2e;
+  overflow-wrap: break-word;
 }
 
 .gdwm-readout-plain {
@@ -276,6 +281,7 @@
   gap: 10px;
   padding: 7px 10px;
   border-radius: 6px;
+  min-width: 0;
 }
 
 .gdwm-history-row:not(:last-child)::before {
@@ -311,6 +317,7 @@
   font-size: 0.85rem;
   font-family: monospace;
   color: #333;
+  overflow-wrap: break-word;
 }
 
 @media (max-width: 860px) {
@@ -319,6 +326,33 @@
   }
 
   .gdwm-readout-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .gdwm-container {
+    padding: 0 16px;
+    margin: 24px auto;
+  }
+
+  .gdwm-title {
+    font-size: 1.5rem;
+  }
+
+  .gdwm-desmos-container {
+    height: 300px;
+  }
+
+  .gdwm-rate-row {
+    flex-wrap: wrap;
+  }
+
+  .gdwm-controls {
+    flex-direction: column;
+  }
+
+  .gdwm-reset-btn {
+    padding: 10px 20px;
   }
 }

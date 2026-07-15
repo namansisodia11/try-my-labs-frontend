@@ -109,3 +109,31 @@
   flex-direction: column;
   gap: 16px;
 }
+
+@media (max-width: 860px) {
+  .point-card {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 32px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .point-container {
+    padding: 0 16px;
+    margin: 24px auto;
+  }
+
+  .point-title {
+    font-size: 1.5rem;
+  }
+
+  .point-section {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+  }
+
+  .point-heading {
+    font-size: 1.1rem;
+  }
+}

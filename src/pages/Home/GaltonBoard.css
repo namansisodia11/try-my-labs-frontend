@@ -3,3 +3,9 @@
   height: 420px;
   display: block;
 }
+
+@media (max-width: 600px) {
+  .galton-board-canvas {
+    height: 300px;
+  }
+}

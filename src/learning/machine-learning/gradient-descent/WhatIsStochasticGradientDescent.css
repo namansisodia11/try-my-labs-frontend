@@ -22,7 +22,7 @@
 
 .sgd-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 40px;
   align-items: start;
 }
@@ -31,6 +31,7 @@
   display: flex;
   flex-direction: column;
   gap: 22px;
+  min-width: 0;
 }
 
 .sgd-right {
@@ -73,6 +74,8 @@
   font-size: 1.05rem;
   color: #1a1a2e;
   margin: 6px 0;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .sgd-points-grid {
@@ -93,7 +96,7 @@
 
 .sgd-readout-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px 10px;
   background: #fafafa;
   border: 1px solid #ebebeb;
@@ -105,6 +108,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
 
 .sgd-readout-label {
@@ -117,6 +121,7 @@
   font-family: monospace;
   font-weight: 700;
   color: #1a1a2e;
+  overflow-wrap: break-word;
 }
 
 .sgd-converged {
@@ -134,11 +139,13 @@
 .sgd-rate-col {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .sgd-rate-row {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .sgd-rate-btn {
@@ -278,6 +285,7 @@
   gap: 10px;
   padding: 7px 10px;
   border-radius: 6px;
+  min-width: 0;
 }
 
 .sgd-history-row:not(:last-child)::before {
@@ -313,6 +321,7 @@
   font-size: 0.85rem;
   font-family: monospace;
   color: #333;
+  overflow-wrap: break-word;
 }
 
 .sgd-history-point {
@@ -325,11 +334,34 @@
   }
 
   .sgd-readout-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .sgd-rate-cols {
     flex-direction: column;
     gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sgd-container {
+    padding: 0 16px;
+    margin: 24px auto;
+  }
+
+  .sgd-title {
+    font-size: 1.5rem;
+  }
+
+  .sgd-rate-row {
+    flex-wrap: wrap;
+  }
+
+  .sgd-controls {
+    flex-direction: column;
+  }
+
+  .sgd-reset-btn {
+    padding: 10px 20px;
   }
 }
