@@ -38,6 +38,7 @@ function Home() {
             What appears unguessable is often only a mystery awaiting sufficient data & right
             analysis.
           </p>
+          <NewsletterSignup compact />
         </div>
       </section>
       <section className="home-topics">
@@ -75,7 +76,6 @@ function Home() {
           </li>
         </ul>
       </section>
-      <NewsletterSignup />
     </div>
   );
 }
