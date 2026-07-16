@@ -60,10 +60,9 @@ function CartesianCanvas({ setup, hints = [] }) {
     function mathToScreen(mx, my, mz) {
       scratch.set(mx, my, mz).applyMatrix4(viewMatrix);
       scratch.project(camera);
-      const dpr = window.devicePixelRatio || 1;
       return {
-        sx: ((scratch.x + 1) / 2) * canvas.offsetWidth * dpr,
-        sy: ((-scratch.y + 1) / 2) * canvas.offsetHeight * dpr,
+        sx: ((scratch.x + 1) / 2) * canvas.offsetWidth,
+        sy: ((-scratch.y + 1) / 2) * canvas.offsetHeight,
       };
     }
 
@@ -97,8 +96,7 @@ function CartesianCanvas({ setup, hints = [] }) {
     }
 
     function onMouseDown(e) {
-      const dpr = window.devicePixelRatio || 1;
-      const i = hitTest(e.offsetX * dpr, e.offsetY * dpr);
+      const i = hitTest(e.offsetX, e.offsetY);
       if (i < 0) return;
       e.preventDefault();
       e.stopPropagation();
@@ -107,13 +105,12 @@ function CartesianCanvas({ setup, hints = [] }) {
     }
 
     function onMouseMove(e) {
-      const dpr = window.devicePixelRatio || 1;
       if (dragging >= 0) {
         e.preventDefault();
         movePoint(dragging, e.offsetX, e.offsetY);
         return;
       }
-      hovered = hitTest(e.offsetX * dpr, e.offsetY * dpr);
+      hovered = hitTest(e.offsetX, e.offsetY);
     }
 
     function onMouseUp(e) {
@@ -126,11 +123,15 @@ function CartesianCanvas({ setup, hints = [] }) {
       if (e.touches.length !== 1 || e.targetTouches.length !== 1) return;
       const touch = e.targetTouches[0];
       const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      const i = hitTest((touch.pageX - rect.left) * dpr, (touch.pageY - rect.top) * dpr);
+      const i = hitTest(touch.clientX - rect.left, touch.clientY - rect.top);
       if (i < 0) return;
       e.preventDefault();
+      e.stopPropagation();
+      canvas.removeEventListener('touchmove', onTouchMove);
+      canvas.removeEventListener('touchend', onTouchEnd);
+      canvas.removeEventListener('touchcancel', onTouchEnd);
       dragging = i;
+      hovered = i;
       canvas.addEventListener('touchmove', onTouchMove, { passive: false });
       canvas.addEventListener('touchend', onTouchEnd, false);
       canvas.addEventListener('touchcancel', onTouchEnd, false);
@@ -141,13 +142,14 @@ function CartesianCanvas({ setup, hints = [] }) {
       e.preventDefault();
       const touch = e.targetTouches[0];
       const rect = canvas.getBoundingClientRect();
-      movePoint(dragging, touch.pageX - rect.left, touch.pageY - rect.top);
+      movePoint(dragging, touch.clientX - rect.left, touch.clientY - rect.top);
     }
 
     function onTouchEnd(e) {
       if (dragging < 0) return;
       e.preventDefault();
       dragging = -1;
+      hovered = -1;
       canvas.removeEventListener('touchmove', onTouchMove);
       canvas.removeEventListener('touchend', onTouchEnd);
       canvas.removeEventListener('touchcancel', onTouchEnd);
@@ -162,14 +164,14 @@ function CartesianCanvas({ setup, hints = [] }) {
     canvas.addEventListener('mousedown', onMouseDown, true);
     canvas.addEventListener('mousemove', onMouseMove, false);
     canvas.addEventListener('mouseup', onMouseUp, false);
-    canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+    canvas.addEventListener('touchstart', onTouchStart, { passive: false, capture: true });
     three.on('post', post);
 
     return () => {
       canvas.removeEventListener('mousedown', onMouseDown, true);
       canvas.removeEventListener('mousemove', onMouseMove);
       canvas.removeEventListener('mouseup', onMouseUp);
-      canvas.removeEventListener('touchstart', onTouchStart);
+      canvas.removeEventListener('touchstart', onTouchStart, true);
       three.off('post', post);
       three.renderer.dispose();
       container.innerHTML = '';
