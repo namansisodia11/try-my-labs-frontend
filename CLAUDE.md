@@ -58,7 +58,8 @@
 
 ## Verification
 
-- Don't install or launch a browser (Playwright, Puppeteer, chromium-cli, etc.) to visually verify UI changes. The user runs the dev server themselves and checks the UI visually.
+- Don't install or launch a browser (Playwright, Puppeteer, chromium-cli, etc.) to visually verify UI changes by default. The user runs the dev server themselves and checks the UI visually.
+- Browser automation is allowed when the user explicitly asks for it in the moment (e.g. "take chromium access and check yourself") — treat that as permission for that task, not a standing change to the default above.
 - It's fine to confirm the dev server compiles cleanly (no build errors) as a sanity check, but stop there for routine UI work.
 - Reserve heavier verification (browser automation, extensive scripted checks, multi-step debugging) for genuinely complex problems you're stuck on, not everyday component/style changes.
 
