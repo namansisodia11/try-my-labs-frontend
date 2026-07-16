@@ -43,6 +43,7 @@
 
 - Plain CSS files per component. No CSS-in-JS, no Tailwind, no styled-components.
 - Keep styles minimal — only write what is actually needed for the UI to look correct.
+- Every UI implementation must be mobile responsive. Add the necessary media queries/layout adjustments as part of the same change, not as a follow-up.
 
 ## Comments
 

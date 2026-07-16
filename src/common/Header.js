@@ -23,7 +23,7 @@ function Header() {
       <Link to="/" className="site-header-brand">
         <Logo />
         <span className="site-header-brand-text">
-          <span className="site-header-brand-line">Try My</span>
+          <span className="site-header-brand-line">Try MY</span>
           <span className="site-header-brand-line site-header-brand-accent">Labs</span>
         </span>
       </Link>

@@ -10,18 +10,33 @@ function Home() {
       <section className="home-hero">
         <div className="home-hero-board">
           <GaltonBoard />
+          <p className="home-hero-board-credit">
+            <a
+              href="https://en.wikipedia.org/wiki/Galton_board"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Galton board
+            </a>{' '}
+            simulation, after Francis Galton's 1894 "bean machine".
+          </p>
         </div>
         <div className="home-hero-copy">
-          <h1>Learn math by playing with it.</h1>
+          <h1>
+            Try MY <span className="home-hero-title-accent">Labs</span>
+          </h1>
           <p>
-            Every lesson here is interactive. Like this Galton board: pure randomness, dropped
-            through pegs enough times, turns into a predictable shape.
+            This platform is not meant to become the next big thing, but rather a fun platform to
+            explore ideas.
           </p>
           <p>
-            Each ball bounces left or right at every peg, a coin flip each time. One ball's path
-            looks totally random. Thousands of them stack into a bell curve, because most left/right
-            sequences roughly cancel out and only land far from center if you get a long unlikely
-            streak.
+            Balls have two decisions in every path, either to go left or right, which seems
+            completely random. Performing it on a sufficient number of balls reveals a pattern in
+            the dropping location.
+          </p>
+          <p>
+            What appears unguessable is often only a mystery awaiting sufficient data & right
+            analysis.
           </p>
         </div>
       </section>
