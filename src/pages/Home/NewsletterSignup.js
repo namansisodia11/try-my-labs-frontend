@@ -8,7 +8,8 @@ const SUBSCRIBED_KEY = 'newsletter-subscribed';
 // single flag to disable all localStorage-backed caching for local testing, set in .env.local
 const USE_CACHE = process.env.REACT_APP_DISABLE_CACHE !== 'true';
 
-function NewsletterSignup() {
+// compact: true renders a smaller inline variant for use inside the hero copy column
+function NewsletterSignup({ compact }) {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(
     () => USE_CACHE && localStorage.getItem(SUBSCRIBED_KEY) === 'true',
@@ -38,22 +39,32 @@ function NewsletterSignup() {
   }
 
   return (
-    <section className="newsletter">
+    <section className={`newsletter${compact ? ' newsletter-compact' : ''}`}>
       {justSubscribed ? (
-        <p className="newsletter-thanks">You're in! Thanks for subscribing.</p>
+        <p className="newsletter-thanks">Done, you are in! Welcome to the gang.</p>
       ) : (
         <>
-          <div className="newsletter-dots" aria-hidden="true">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <h2 className="newsletter-heading">Converge on our newsletter</h2>
-          <p className="newsletter-copy">One email a week. No local minima, just new lessons.</p>
+          {compact ? (
+            <p className="newsletter-copy">
+              Subscribe to my newsletter. Boring emails? Not from here, promise.
+            </p>
+          ) : (
+            <>
+              <div className="newsletter-dots" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <h2 className="newsletter-heading">Converge on our newsletter</h2>
+              <p className="newsletter-copy">
+                One email a week, that's all. No local minima, only new lessons.
+              </p>
+            </>
+          )}
           <form className="newsletter-form" onSubmit={handleSubmit}>
             <input
               type="email"

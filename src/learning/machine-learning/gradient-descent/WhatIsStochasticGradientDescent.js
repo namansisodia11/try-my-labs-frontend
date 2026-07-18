@@ -156,12 +156,13 @@ function WhatIsStochasticGradientDescent() {
     <div className="sgd-container" style={{ visibility: mathReady ? 'visible' : 'hidden' }}>
       <h1 className="sgd-title">Stochastic Gradient Descent</h1>
       <p className="sgd-lead">
-        Regular gradient descent checks every single data point before it takes one step. That's
-        fine for five points, but real datasets can have millions. Stochastic gradient descent (SGD)
-        cheats a little: it grabs just one random point, gets a rough idea of which way to move, and
-        steps anyway. If you haven't seen plain gradient descent yet, start with{' '}
-        <Link to="/learning/machine-learning/what-is-gradient-descent">Gradient Descent</Link>{' '}
-        first.
+        Regular gradient descent checks every single data point before taking even one step. Fine
+        for five points. But real datasets have millions. Checking everyone every time is like
+        asking the whole colony before buying a scooter. Stochastic gradient descent (SGD) does
+        jugaad: grab one random point, get a rough idea of which way to move, and just step. If
+        plain gradient descent is new for you, first see{' '}
+        <Link to="/learning/machine-learning/what-is-gradient-descent">Gradient Descent</Link>,
+        then come back.
       </p>
 
       <div className="sgd-layout">
@@ -169,7 +170,7 @@ function WhatIsStochasticGradientDescent() {
           <div className="sgd-block">
             <span className="sgd-block-label">The setup</span>
             <p className="sgd-text">
-              We're fitting a line {'$y = mx$'} through these 5 points, and we want to find the{' '}
+              We are fitting a line {'$y = mx$'} through these 5 points. Goal is simple: find the{' '}
               {'$m$'} that fits best.
             </p>
             <div className="sgd-points-grid">
@@ -180,8 +181,9 @@ function WhatIsStochasticGradientDescent() {
               ))}
             </div>
             <p className="sgd-text">
-              Each point pulls the line toward it. Differentiating the squared error of one point
-              with respect to {'$m$'} gives its pull:
+              Every point pulls the line toward itself, like relatives pulling you to sit in their
+              corner at a wedding. Differentiate the squared error of one point with respect to{' '}
+              {'$m$'} and you get its pull:
             </p>
             <p className="sgd-math">
               {
@@ -197,7 +199,7 @@ function WhatIsStochasticGradientDescent() {
             </p>
             <p className="sgd-text">
               <strong>Stochastic</strong> gradient descent grabs <strong>one random point</strong>{' '}
-              and moves using just its pull instead of the average:
+              and moves using just its pull. No averaging, no waiting:
             </p>
             <p className="sgd-math">{'$$m_{i+1} = m_i - \\alpha \\cdot \\text{pull}_i$$'}</p>
           </div>
@@ -239,7 +241,7 @@ function WhatIsStochasticGradientDescent() {
                 <span className="sgd-readout-value">{history.length}</span>
               </div>
             </div>
-            {converged && <p className="sgd-converged">The fit has settled, you've landed.</p>}
+            {converged && <p className="sgd-converged">The fit has settled. Landed. Done.</p>}
           </div>
 
           <div className="sgd-block">
@@ -277,10 +279,10 @@ function WhatIsStochasticGradientDescent() {
               </div>
             </div>
             <p className="sgd-text sgd-rate-hint">
-              Batch glides straight to the best fit. Stochastic gets there too, just noisier and
-              slower since it only sees one point per step, try Fast to speed that up. Sometimes the
-              points it randomly generated barely correlate with each other, so SGD can take a long
-              time to converge. If that happens, hit Reset to try a new set of points.
+              Batch glides straight to the best fit, smooth. Stochastic also reaches, but with full
+              drama: zigzag here, zigzag there, since it sees only one point per step. Try Fast to
+              speed it up. Sometimes the random points barely agree with each other, so SGD takes
+              forever to settle. If that happens, hit Reset and get a fresh set of points.
             </p>
           </div>
         </div>
@@ -344,17 +346,17 @@ function WhatIsStochasticGradientDescent() {
       <div className="sgd-block sgd-block-full">
         <span className="sgd-block-label">Why bother with the noise</span>
         <p className="sgd-text">
-          For 5 points, batch descent is obviously better, there's no reason to guess when you can
-          just check everything. But real datasets can have millions or billions of points. Adding
-          up the pull from every single one means touching all of them before you're allowed to move
-          at all.
+          For 5 points, batch is obviously better. Why guess when you can check everything? But
+          real datasets have millions, even billions of points. Adding up the pull from every
+          single one means touching all of them before you are allowed to move even one step. Too
+          costly, boss.
         </p>
         <p className="sgd-text">
-          SGD trades a little accuracy per step for a lot of speed: one point's pull is a rough
-          guess, but it's a guess you can make thousands of times in the time it'd take to add up
-          one exact batch step. In practice, people often split the difference and use{' '}
-          <strong>mini-batches</strong>, a small handful of random points per step instead of just
-          one.
+          SGD makes a deal: a little accuracy per step, in exchange for a lot of speed. One
+          point's pull is a rough guess, sure. But you can make that guess thousands of times in
+          the time one exact batch step takes. In practice people split the difference and use{' '}
+          <strong>mini-batches</strong>: a small handful of random points per step instead of just
+          one. Middle path, works best.
         </p>
       </div>
     </div>

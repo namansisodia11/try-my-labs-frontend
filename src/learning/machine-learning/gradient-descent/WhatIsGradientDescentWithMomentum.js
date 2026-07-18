@@ -48,12 +48,13 @@ function WhatIsGradientDescentWithMomentum() {
     <div className="gdwm-container" style={{ visibility: mathReady ? 'visible' : 'hidden' }}>
       <h1 className="gdwm-title">Gradient Descent with Momentum</h1>
       <p className="gdwm-lead">
-        Plain gradient descent has a short memory: it only looks at the slope right now. Momentum
-        gives it a memory of where it's been, so it keeps moving in a direction it's already been
-        heading, the same way a ball rolling downhill doesn't stop the instant the ground flattens
-        out. If you haven't seen plain gradient descent yet, start with{' '}
-        <Link to="/learning/machine-learning/what-is-gradient-descent">Gradient Descent</Link>{' '}
-        first.
+        Plain gradient descent has zero memory. It looks at the slope right now, takes a step, and
+        forgets everything. Momentum fixes this: it remembers which way it was already going and
+        keeps some of that speed. Think of a cyclist coming down a slope. The road becomes flat,
+        but does the cycle stop immediately? No na, it keeps rolling. Same idea. If plain
+        gradient descent is new for you, first see{' '}
+        <Link to="/learning/machine-learning/what-is-gradient-descent">Gradient Descent</Link>,
+        then come back.
       </p>
 
       <div className="gdwm-layout">
@@ -61,13 +62,14 @@ function WhatIsGradientDescentWithMomentum() {
           <div className="gdwm-block">
             <span className="gdwm-block-label">The problem with plain descent</span>
             <p className="gdwm-text">
-              Say step {'$i$'} is at {'$x_i$'}. Regular gradient descent gets to the next step using
-              only the slope right there:
+              Say step {'$i$'} is at {'$x_i$'}. Regular gradient descent decides the next step
+              using only the slope right there:
             </p>
             <p className="gdwm-math">{"$$x_{i+1} = x_i - \\alpha \\cdot f'(x_i)$$"}</p>
             <p className="gdwm-text">
-              On a flat-ish stretch, the slope is tiny, so the steps are tiny too. It can take
-              forever to cross a shallow valley floor.
+              Problem comes on flat-ish stretches. Slope is tiny, so steps are also tiny. Crossing
+              a shallow valley floor takes forever, like being stuck behind a tractor on a single
+              lane road.
             </p>
           </div>
 
@@ -75,16 +77,17 @@ function WhatIsGradientDescentWithMomentum() {
             <span className="gdwm-block-label">Adding memory</span>
             <p className="gdwm-text">
               Momentum takes the normal gradient step, then adds back a fraction of{' '}
-              <strong>whatever step it took last time</strong>. That's the whole trick.
+              <strong>whatever step it took last time</strong>. That's the whole trick, nothing
+              more.
             </p>
             <p className="gdwm-math">
               {"$$x_{i+1} = x_i - \\alpha \\cdot f'(x_i) + \\beta \\cdot (x_i - x_{i-1})$$"}
             </p>
             <p className="gdwm-text">
-              {'$(x_i - x_{i-1})$'} is just last step's move. {'$\\beta$'} decides how much of it
-              carries into the next one, somewhere between 0 and 1. {'$\\beta = 0$'} means no memory
-              at all, just plain gradient descent. The bigger {'$\\beta$'} is, the more of the old
-              step keeps pushing you forward.
+              {'$(x_i - x_{i-1})$'} is just the last step's move. {'$\\beta$'} decides how much of
+              it carries forward, somewhere between 0 and 1. {'$\\beta = 0$'} means no memory at
+              all, back to plain gradient descent. Bigger the {'$\\beta$'}, more the old step
+              keeps pushing you ahead.
             </p>
           </div>
 
@@ -117,7 +120,7 @@ function WhatIsGradientDescentWithMomentum() {
             </div>
             {converged && (
               <p className="gdwm-converged">
-                Slope and last step are basically zero, you've landed.
+                Slope and last step are basically zero. Landed. Done.
               </p>
             )}
           </div>
@@ -136,7 +139,8 @@ function WhatIsGradientDescentWithMomentum() {
               ))}
             </div>
             <p className="gdwm-text gdwm-rate-hint">
-              Try {'$\\beta = 0.9$'}: watch it barrel through the flat stretch instead of crawling.
+              Try {'$\\beta = 0.9$'} once. Watch it barrel through the flat stretch like a Rajdhani
+              express instead of crawling.
             </p>
           </div>
         </div>
@@ -171,8 +175,8 @@ function WhatIsGradientDescentWithMomentum() {
             </button>
           </div>
           <p className="gdwm-run-note">
-            Try different {'$\\beta$'} values and hit Start to see how much momentum changes the
-            ride.
+            Try different {'$\\beta$'} values and hit Start. You will see yourself how much
+            momentum changes the ride.
           </p>
 
           {history.length > 0 && (
@@ -201,13 +205,10 @@ function WhatIsGradientDescentWithMomentum() {
       <div className="gdwm-block gdwm-block-full">
         <span className="gdwm-block-label">Why it can go wrong</span>
         <p className="gdwm-text">
-          Momentum can overshoot. Since it keeps carrying over part of the last step, it can blow
-          past a minimum and have to swing back, oscillating before it settles. A high {'$\\beta$'}{' '}
-          makes this worse, a low one makes it barely different from plain descent.
-        </p>
-        <p className="gdwm-text">
-          In practice {'$\\beta$'} around 0.8 to 0.9 tends to work well: fast through flat regions,
-          without wild overshooting.
+          Momentum can overshoot. It keeps carrying part of the last step, so sometimes it blows
+          right past the minimum and has to swing back, this side, that side, before settling.
+          Like braking late at a speed breaker. High {'$\\beta$'} makes this worse, low{' '}
+          {'$\\beta$'} makes it barely different from plain descent.
         </p>
       </div>
     </div>

@@ -10,19 +10,35 @@ function Home() {
       <section className="home-hero">
         <div className="home-hero-board">
           <GaltonBoard />
+          <p className="home-hero-board-credit">
+            <a
+              href="https://en.wikipedia.org/wiki/Galton_board"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Galton board
+            </a>{' '}
+            simulation, after Francis Galton's 1894 "bean machine".
+          </p>
         </div>
         <div className="home-hero-copy">
-          <h1>Learn math by playing with it.</h1>
+          <h1>
+            Try MY <span className="home-hero-title-accent">Labs</span>
+          </h1>
           <p>
-            Every lesson here is interactive. Like this Galton board: pure randomness, dropped
-            through pegs enough times, turns into a predictable shape.
+            This is not trying to be the next big thing. It is just a fun place to play with ideas
+            and actually understand them.
           </p>
           <p>
-            Each ball bounces left or right at every peg, a coin flip each time. One ball's path
-            looks totally random. Thousands of them stack into a bell curve, because most left/right
-            sequences roughly cancel out and only land far from center if you get a long unlikely
-            streak.
+            See these balls. At every peg, each ball has one choice: left or right. Looks totally
+            random, na? But drop enough balls and a clean pattern shows up at the bottom. Every
+            single time.
           </p>
+          <p>
+            That's the whole point. What looks unguessable is usually just a mystery waiting for
+            enough data and the right analysis.
+          </p>
+          <NewsletterSignup compact />
         </div>
       </section>
       <section className="home-topics">
@@ -60,7 +76,6 @@ function Home() {
           </li>
         </ul>
       </section>
-      <NewsletterSignup />
     </div>
   );
 }

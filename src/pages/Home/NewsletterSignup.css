@@ -109,3 +109,25 @@
     width: 100%;
   }
 }
+
+.newsletter-compact {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.newsletter-compact .newsletter-copy {
+  color: #475569;
+  margin-bottom: 10px;
+}
+
+.newsletter-compact .newsletter-form {
+  max-width: 380px;
+}
+
+@media (max-width: 480px) {
+  .newsletter-compact .newsletter-form {
+    max-width: none;
+  }
+}
