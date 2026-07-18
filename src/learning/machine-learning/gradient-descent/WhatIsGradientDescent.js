@@ -49,10 +49,12 @@ function WhatIsGradientDescent() {
     <div className="gd-container" style={{ visibility: mathReady ? 'visible' : 'hidden' }}>
       <h1 className="gd-title">Gradient Descent</h1>
       <p className="gd-lead">
-        Gradient descent is how a lot of machine learning actually learns: start somewhere, check
-        which way is downhill, take a small step, repeat. No formula for the minimum, just a rule
-        for moving closer to it. If you haven't seen how to read a curve's slope yet, check out{' '}
-        <Link to="/learning/machine-learning/what-is-minima-maxima">Minima and Maxima</Link> first.
+        Gradient descent is the simple funda behind how most of machine learning actually learns.
+        Start anywhere, see which side is downhill, take a small step, again check. That's it. No
+        magic formula for the minimum, just a rule for moving closer to it, step by step. If
+        reading a curve's slope is new for you, first go through{' '}
+        <Link to="/learning/machine-learning/what-is-minima-maxima">Minima and Maxima</Link>, then
+        come back here.
       </p>
 
       <div className="gd-layout">
@@ -60,8 +62,8 @@ function WhatIsGradientDescent() {
           <div className="gd-block">
             <span className="gd-block-label">The curve and its derivative</span>
             <p className="gd-text">
-              To know which way is downhill at any point, we differentiate {'$f(x)$'} to get{' '}
-              {"$f'(x)$"}, the slope.
+              To know which side is downhill at any point, differentiate {'$f(x)$'} and you get{' '}
+              {"$f'(x)$"}, the slope. That one number is all the algorithm needs.
             </p>
             <p className="gd-math">{'$$f(x) = \\dfrac{x^4}{4} - x^3 - \\dfrac{x^2}{2} + 3.4x$$'}</p>
             <p className="gd-math">{"$$f'(x) = x^3 - 3x^2 - x + 3.4$$"}</p>
@@ -70,13 +72,14 @@ function WhatIsGradientDescent() {
           <div className="gd-block">
             <span className="gd-block-label">The update rule</span>
             <p className="gd-text">
-              At every step, move a little in the opposite direction of the slope. That's it, that's
-              the whole algorithm.
+              Every step, move a little in the opposite direction of the slope. That's it. Full
+              algorithm, one line.
             </p>
             <p className="gd-math">{"$$x_{i+1} = x_i - \\alpha \\cdot f'(x_i)$$"}</p>
             <p className="gd-text">
-              {'$\\alpha$'} is the <strong>learning rate</strong>, how big a step to take. Too small
-              and you crawl forever. Too big and you overshoot the valley entirely.
+              {'$\\alpha$'} is the <strong>learning rate</strong>, meaning how big a step to take.
+              Too small, and you will crawl for ages. Too big, and you jump right over the valley.
+              Like salt in dal, the amount has to be just right.
             </p>
           </div>
 
@@ -107,7 +110,7 @@ function WhatIsGradientDescent() {
                 <span className="gd-readout-value">{history.length}</span>
               </div>
             </div>
-            {converged && <p className="gd-converged">Slope is basically zero, you've landed.</p>}
+            {converged && <p className="gd-converged">Slope is basically zero. Landed. Done.</p>}
           </div>
 
           <div className="gd-block">
@@ -124,7 +127,8 @@ function WhatIsGradientDescent() {
               ))}
             </div>
             <p className="gd-text gd-rate-hint">
-              Try 0.3: watch it overshoot past the valley before settling down.
+              Try 0.3 once. Watch how it overshoots past the valley, this side, that side, before
+              finally settling down.
             </p>
           </div>
         </div>
@@ -182,15 +186,15 @@ function WhatIsGradientDescent() {
       <div className="gd-block gd-block-full">
         <span className="gd-block-label">Why it can go wrong</span>
         <p className="gd-text">
-          Gradient descent only ever looks at the slope right under its feet. It has no idea whether
-          the valley it's falling into is the deepest one on the curve, or just the closest. Start
-          on the wrong side of a bump and you'll converge to a local minimum instead of the global
-          one.
+          Gradient descent only looks at the slope right under its feet, nothing else. It has no
+          idea whether the valley it is falling into is the deepest one or just the closest one.
+          Start on the wrong side of a bump, and it will happily settle in a local minimum and
+          think the job is done. It is not.
         </p>
         <p className="gd-text">
-          The learning rate matters just as much as the starting point. Too small wastes steps
-          crawling toward the answer. Too large and each step can fling you past the minimum, and if
-          it's large enough, the whole thing diverges instead of converging.
+          And the learning rate matters just as much as the starting point. Too small, you waste
+          hundred steps crawling to the answer. Too large, every step flings you past the minimum,
+          and if it is large enough, the whole thing diverges instead of converging. Total waste.
         </p>
       </div>
     </div>

@@ -26,17 +26,17 @@ function Home() {
             Try MY <span className="home-hero-title-accent">Labs</span>
           </h1>
           <p>
-            This platform is not meant to become the next big thing, but rather a fun platform to
-            explore ideas.
+            This is not trying to be the next big thing. It is just a fun place to play with ideas
+            and actually understand them.
           </p>
           <p>
-            Balls have two decisions in every path, either to go left or right, which seems
-            completely random. Performing it on a sufficient number of balls reveals a pattern in
-            the dropping location.
+            See these balls. At every peg, each ball has one choice: left or right. Looks totally
+            random, na? But drop enough balls and a clean pattern shows up at the bottom. Every
+            single time.
           </p>
           <p>
-            What appears unguessable is often only a mystery awaiting sufficient data & right
-            analysis.
+            That's the whole point. What looks unguessable is usually just a mystery waiting for
+            enough data and the right analysis.
           </p>
           <NewsletterSignup compact />
         </div>

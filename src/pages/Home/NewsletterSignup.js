@@ -41,12 +41,12 @@ function NewsletterSignup({ compact }) {
   return (
     <section className={`newsletter${compact ? ' newsletter-compact' : ''}`}>
       {justSubscribed ? (
-        <p className="newsletter-thanks">You're in! Thanks for subscribing.</p>
+        <p className="newsletter-thanks">Done, you are in! Welcome to the gang.</p>
       ) : (
         <>
           {compact ? (
             <p className="newsletter-copy">
-              Subscribe to my newsletter & I will make sure you don't get bored.
+              Subscribe to my newsletter. Boring emails? Not from here, promise.
             </p>
           ) : (
             <>
@@ -61,7 +61,7 @@ function NewsletterSignup({ compact }) {
               </div>
               <h2 className="newsletter-heading">Converge on our newsletter</h2>
               <p className="newsletter-copy">
-                One email a week. No local minima, just new lessons.
+                One email a week, that's all. No local minima, only new lessons.
               </p>
             </>
           )}

@@ -126,19 +126,19 @@ function WhatIsMinimaMaxima() {
   const slopeSign = slope > 0.01 ? 'pos' : slope < -0.01 ? 'neg' : 'zero';
   const slopeLabel =
     slope > 0.01
-      ? 'Going uphill. Gradient descent steps left.'
+      ? 'Uphill. Gradient descent will step left.'
       : slope < -0.01
-        ? 'Going downhill. Gradient descent steps right.'
-        : "Flat. You're at a turning point.";
+        ? 'Downhill. Gradient descent will step right.'
+        : 'Flat. Turning point, this is the spot.';
 
   return (
     <div className="mm-container" style={{ visibility: mathReady ? 'visible' : 'hidden' }}>
       <h1 className="mm-title">Minima and Maxima</h1>
       <p className="mm-lead">
-        Gradient descent's whole job is finding the lowest point of a function. Most real functions
-        have more than one valley, and where you start decides which one you fall into. Before
-        running the algorithm, we need to read a curve: where it's rising, where it's falling, and
-        what makes a point a min or a max.
+        Gradient descent has one job only: find the lowest point of a function. But most real
+        functions have many valleys, and where you start decides which valley you fall into. So
+        before running the algorithm, first learn to read a curve properly: where it goes up,
+        where it goes down, and what exactly makes a point a min or a max.
       </p>
 
       <div className="mm-layout">
@@ -151,8 +151,8 @@ function WhatIsMinimaMaxima() {
           <div className="mm-block">
             <span className="mm-block-label">Slope = derivative</span>
             <p className="mm-text">
-              The slope at any point is just {"$f'(x)$"}, the derivative. Plug in an x and the sign
-              of the answer tells you which way the curve is tilting there.
+              Slope at any point is just {"$f'(x)$"}, the derivative. Simple funda: plug in an x,
+              check the sign of the answer, and it tells you which way the curve is tilting there.
             </p>
             <p className="mm-math">{"$$f'(x) = x^3 - 3x^2 - x + 3.4$$"}</p>
             <div className="mm-example-grid">
@@ -188,8 +188,9 @@ function WhatIsMinimaMaxima() {
               flips positive to negative.
             </p>
             <p className="mm-def">
-              <strong>Global minimum:</strong> the lowest value across the entire domain, not just
-              nearby. Every local min is a candidate, only the deepest one is global.
+              <strong>Global minimum:</strong> the lowest value in the entire domain, not just in
+              the neighbourhood. Every local min is like a district topper, but global min is the
+              all-India rank 1. Only one.
             </p>
           </div>
         </div>
@@ -226,13 +227,14 @@ function WhatIsMinimaMaxima() {
       <div className="mm-block mm-block-full">
         <span className="mm-block-label">Why it matters</span>
         <p className="mm-text">
-          Gradient descent only ever sees the slope where it's standing. It walks downhill, hits a
-          flat spot, and stops, with no idea if that's the best valley or just the nearest one.
+          Here is the thing: gradient descent can only see the slope where it is standing. Like
+          walking downhill in full fog. It walks down, hits a flat spot, and stops. It has no clue
+          whether this is the best valley or just the nearest one.
         </p>
         <p className="mm-text">
-          Start left of the peak here and you roll into the global min. Start right and you get
-          stuck in the shallower local min. Same algorithm, same rule, different answer. That's why
-          initialization and learning rate matter so much.
+          Start left of the peak here, you roll into the global min. Lucky. Start right, you get
+          stuck in the shallow local min. Poor fellow. Same algorithm, same rule, different
+          answer. This is exactly why initialization and learning rate matter so much.
         </p>
       </div>
     </div>

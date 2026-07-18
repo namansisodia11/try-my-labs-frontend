@@ -67,7 +67,13 @@
 ## Content Writing
 
 - Never use em dashes (—) in UI-facing text. Use a colon, comma, or period instead.
-- Write like a person explaining to a friend, not a language model writing a report. Casual is fine. Funny is fine. Short is better. Avoid stiff, over-formal phrasing — if it sounds like something a textbook would say in a boring lecture, rewrite it.
+- Write in Indian English, in the style of Chetan Bhagat: the way an Indian friend explains something over chai, not the way a textbook or a polished Western blog writes.
+- The English should sound Indian, not perfect. Slightly imperfect, conversational grammar is the goal. Do not polish sentences into formal correctness. "Simple only it is" beats "It is quite simple."
+- Short, punchy sentences. Sentence fragments are fine. Rhetorical questions are fine ("Why does this work? See.").
+- Use everyday Indian references and analogies where they help: chai, cricket, local trains, traffic, bargaining at the market, exam marks, tuition classes.
+- Light Hinglish is welcome in moderation: words like "funda", "jugaad", "yaar", "na", "only", "itself", "do the needful" style constructions. Sprinkle, do not flood. Math terms stay in English.
+- Talk directly to the reader as "you". Be a little dramatic and filmy when it fits ("The point is stuck in the valley. Poor fellow.").
+- Example of the tone. Bad: "Gradient descent is an iterative optimization algorithm." Good: "Gradient descent is simple funda: see which side is downhill, take small step, again check. That's it."
 
 ## Math Notation
 

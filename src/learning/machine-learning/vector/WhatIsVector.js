@@ -29,9 +29,9 @@ function WhatIsVector() {
       <section className="vector-section">
         <h1 className="vector-title">What is a Vector?</h1>
         <p className="vector-lead">
-          A <strong>vector</strong> is any object that lives inside a <em>vector space</em>: a
-          collection of objects {'$V$'} where two operations are always defined and always stay
-          inside {'$V$'}:
+          A <strong>vector</strong> is any object living inside a <em>vector space</em>. And
+          vector space is like a gated society: a collection {'$V$'} with two strict rules, and
+          whatever you do, you must stay inside {'$V$'} only. The two rules:
         </p>
       </section>
 
@@ -43,7 +43,8 @@ function WhatIsVector() {
               {'$\\mathbf{u}, \\mathbf{v} \\in V \\implies \\mathbf{u} + \\mathbf{v} \\in V$'}
             </span>
             <span className="axiom-gloss">
-              Add two objects: you must land back in the same collection.
+              Add any two objects, and the answer must land back in the same collection. No
+              escaping.
             </span>
           </div>
           <div className="axiom-example">
@@ -59,11 +60,13 @@ function WhatIsVector() {
               <strong style={{ color: '#059669' }}>
                 sum ({sum.x},{sum.y})
               </strong>{' '}
-              is the diagonal of the parallelogram. Still a 2D arrow, still inside the same space.
+              is the diagonal of the parallelogram. Still a 2D arrow, still inside the same
+              space. Rule followed.
             </p>
             <VectorAdditionCanvas a={{ x: 2, y: 1 }} b={{ x: 1, y: 2 }} onDrag={handleAddDrag} />
             <p className="canvas-note">
-              No matter which two 2D vectors you pick, their sum is always another 2D vector.
+              Try any two vectors, drag them anywhere. Their sum is always another 2D vector.
+              Always.
             </p>
           </div>
         </div>
@@ -75,7 +78,8 @@ function WhatIsVector() {
               {'$\\mathbf{v} \\in V,\\; c \\in \\mathbb{R} \\implies c\\mathbf{v} \\in V$'}
             </span>
             <span className="axiom-gloss">
-              Scale any object by a real number: you must land back in the same collection.
+              Multiply any object by any real number, and again you must land back in the same
+              collection.
             </span>
           </div>
           <div className="axiom-example">
@@ -86,8 +90,8 @@ function WhatIsVector() {
               </strong>
               : multiplying by <strong style={{ color: '#059669' }}>2</strong> stretches it,{' '}
               <strong style={{ color: '#d97706' }}>0.5</strong> shrinks it, and{' '}
-              <strong style={{ color: '#e53e3e' }}>-1</strong> flips it. All results stay on the
-              same line through the origin.
+              <strong style={{ color: '#e53e3e' }}>-1</strong> flips it fully. But see, all of
+              them stay on the same line through the origin. Nobody leaves the line.
             </p>
             <VectorScalingCanvas
               vector={{ x: 2, y: 1 }}
@@ -99,16 +103,16 @@ function WhatIsVector() {
               onDrag={handleScaleDrag}
             />
             <p className="canvas-note">
-              Every scaled version is still a 2D vector. The scalar can be any real number:
-              positive, fractional, or negative.
+              Every scaled version is still a 2D vector. The scalar can be anything: positive,
+              fraction, negative, does not matter.
             </p>
           </div>
         </div>
       </div>
 
       <p className="vector-closing">
-        That's the whole definition. The objects can be anything: arrows, polynomials, audio
-        signals, images. As long as both rules hold.
+        And that's the full definition, done. The objects can be anything: arrows, polynomials,
+        audio signals, images. Two rules pass, vector space it is. That simple.
       </p>
     </div>
   );
