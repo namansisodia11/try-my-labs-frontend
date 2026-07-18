@@ -33,18 +33,14 @@ function Header() {
             Machine Learning
           </span>
           <div className="site-header-dropdown-menu" onClick={() => setMenuOpen(false)}>
-            <Link to="/learning/machine-learning/what-is-point">What is a Point?</Link>
-            <Link to="/learning/machine-learning/what-is-vector">What is a Vector?</Link>
-            <Link to="/learning/machine-learning/what-is-minima-maxima">
-              What is Minima and Maxima?
-            </Link>
-            <Link to="/learning/machine-learning/what-is-gradient-descent">
-              What is Gradient Descent?
-            </Link>
-            <Link to="/learning/machine-learning/what-is-gradient-descent-with-momentum">
+            <Link to="/machine-learning/what-is-point">What is a Point?</Link>
+            <Link to="/machine-learning/what-is-vector">What is a Vector?</Link>
+            <Link to="/machine-learning/what-is-minima-maxima">What is Minima and Maxima?</Link>
+            <Link to="/machine-learning/what-is-gradient-descent">What is Gradient Descent?</Link>
+            <Link to="/machine-learning/what-is-gradient-descent-with-momentum">
               What is Gradient Descent with Momentum?
             </Link>
-            <Link to="/learning/machine-learning/what-is-stochastic-gradient-descent">
+            <Link to="/machine-learning/what-is-stochastic-gradient-descent">
               What is Stochastic Gradient Descent?
             </Link>
           </div>

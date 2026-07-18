@@ -43,34 +43,30 @@ function Home() {
       </section>
       <section className="home-topics">
         <h2 className="home-topics-heading">
-          <Link to="/learning/machine-learning" className="home-topics-link">
+          <Link to="/machine-learning" className="home-topics-link">
             Machine Learning
           </Link>
         </h2>
         <ul className="home-topics-list">
           <li>
-            <Link to="/learning/machine-learning/what-is-point">What is a Point?</Link>
+            <Link to="/machine-learning/what-is-point">What is a Point?</Link>
           </li>
           <li>
-            <Link to="/learning/machine-learning/what-is-vector">What is a Vector?</Link>
+            <Link to="/machine-learning/what-is-vector">What is a Vector?</Link>
           </li>
           <li>
-            <Link to="/learning/machine-learning/what-is-minima-maxima">
-              What is Minima and Maxima?
-            </Link>
+            <Link to="/machine-learning/what-is-minima-maxima">What is Minima and Maxima?</Link>
           </li>
           <li>
-            <Link to="/learning/machine-learning/what-is-gradient-descent">
-              What is Gradient Descent?
-            </Link>
+            <Link to="/machine-learning/what-is-gradient-descent">What is Gradient Descent?</Link>
           </li>
           <li>
-            <Link to="/learning/machine-learning/what-is-gradient-descent-with-momentum">
+            <Link to="/machine-learning/what-is-gradient-descent-with-momentum">
               What is Gradient Descent with Momentum?
             </Link>
           </li>
           <li>
-            <Link to="/learning/machine-learning/what-is-stochastic-gradient-descent">
+            <Link to="/machine-learning/what-is-stochastic-gradient-descent">
               What is Stochastic Gradient Descent?
             </Link>
           </li>

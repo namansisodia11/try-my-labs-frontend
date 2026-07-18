@@ -161,8 +161,8 @@ function WhatIsStochasticGradientDescent() {
         asking the whole colony before buying a scooter. Stochastic gradient descent (SGD) does
         jugaad: grab one random point, get a rough idea of which way to move, and just step. If
         plain gradient descent is new for you, first see{' '}
-        <Link to="/learning/machine-learning/what-is-gradient-descent">Gradient Descent</Link>,
-        then come back.
+        <Link to="/machine-learning/what-is-gradient-descent">Gradient Descent</Link>, then come
+        back.
       </p>
 
       <div className="sgd-layout">
@@ -346,15 +346,14 @@ function WhatIsStochasticGradientDescent() {
       <div className="sgd-block sgd-block-full">
         <span className="sgd-block-label">Why bother with the noise</span>
         <p className="sgd-text">
-          For 5 points, batch is obviously better. Why guess when you can check everything? But
-          real datasets have millions, even billions of points. Adding up the pull from every
-          single one means touching all of them before you are allowed to move even one step. Too
-          costly, boss.
+          For 5 points, batch is obviously better. Why guess when you can check everything? But real
+          datasets have millions, even billions of points. Adding up the pull from every single one
+          means touching all of them before you are allowed to move even one step. Too costly, boss.
         </p>
         <p className="sgd-text">
-          SGD makes a deal: a little accuracy per step, in exchange for a lot of speed. One
-          point's pull is a rough guess, sure. But you can make that guess thousands of times in
-          the time one exact batch step takes. In practice people split the difference and use{' '}
+          SGD makes a deal: a little accuracy per step, in exchange for a lot of speed. One point's
+          pull is a rough guess, sure. But you can make that guess thousands of times in the time
+          one exact batch step takes. In practice people split the difference and use{' '}
           <strong>mini-batches</strong>: a small handful of random points per step instead of just
           one. Middle path, works best.
         </p>

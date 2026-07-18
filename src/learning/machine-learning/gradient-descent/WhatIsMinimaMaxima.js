@@ -137,8 +137,8 @@ function WhatIsMinimaMaxima() {
       <p className="mm-lead">
         Gradient descent has one job only: find the lowest point of a function. But most real
         functions have many valleys, and where you start decides which valley you fall into. So
-        before running the algorithm, first learn to read a curve properly: where it goes up,
-        where it goes down, and what exactly makes a point a min or a max.
+        before running the algorithm, first learn to read a curve properly: where it goes up, where
+        it goes down, and what exactly makes a point a min or a max.
       </p>
 
       <div className="mm-layout">
@@ -233,8 +233,8 @@ function WhatIsMinimaMaxima() {
         </p>
         <p className="mm-text">
           Start left of the peak here, you roll into the global min. Lucky. Start right, you get
-          stuck in the shallow local min. Poor fellow. Same algorithm, same rule, different
-          answer. This is exactly why initialization and learning rate matter so much.
+          stuck in the shallow local min. Poor fellow. Same algorithm, same rule, different answer.
+          This is exactly why initialization and learning rate matter so much.
         </p>
       </div>
     </div>

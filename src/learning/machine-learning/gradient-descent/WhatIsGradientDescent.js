@@ -51,10 +51,10 @@ function WhatIsGradientDescent() {
       <p className="gd-lead">
         Gradient descent is the simple funda behind how most of machine learning actually learns.
         Start anywhere, see which side is downhill, take a small step, again check. That's it. No
-        magic formula for the minimum, just a rule for moving closer to it, step by step. If
-        reading a curve's slope is new for you, first go through{' '}
-        <Link to="/learning/machine-learning/what-is-minima-maxima">Minima and Maxima</Link>, then
-        come back here.
+        magic formula for the minimum, just a rule for moving closer to it, step by step. If reading
+        a curve's slope is new for you, first go through{' '}
+        <Link to="/machine-learning/what-is-minima-maxima">Minima and Maxima</Link>, then come back
+        here.
       </p>
 
       <div className="gd-layout">
@@ -188,8 +188,8 @@ function WhatIsGradientDescent() {
         <p className="gd-text">
           Gradient descent only looks at the slope right under its feet, nothing else. It has no
           idea whether the valley it is falling into is the deepest one or just the closest one.
-          Start on the wrong side of a bump, and it will happily settle in a local minimum and
-          think the job is done. It is not.
+          Start on the wrong side of a bump, and it will happily settle in a local minimum and think
+          the job is done. It is not.
         </p>
         <p className="gd-text">
           And the learning rate matters just as much as the starting point. Too small, you waste

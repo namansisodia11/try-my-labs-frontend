@@ -50,11 +50,11 @@ function WhatIsGradientDescentWithMomentum() {
       <p className="gdwm-lead">
         Plain gradient descent has zero memory. It looks at the slope right now, takes a step, and
         forgets everything. Momentum fixes this: it remembers which way it was already going and
-        keeps some of that speed. Think of a cyclist coming down a slope. The road becomes flat,
-        but does the cycle stop immediately? No na, it keeps rolling. Same idea. If plain
-        gradient descent is new for you, first see{' '}
-        <Link to="/learning/machine-learning/what-is-gradient-descent">Gradient Descent</Link>,
-        then come back.
+        keeps some of that speed. Think of a cyclist coming down a slope. The road becomes flat, but
+        does the cycle stop immediately? No na, it keeps rolling. Same idea. If plain gradient
+        descent is new for you, first see{' '}
+        <Link to="/machine-learning/what-is-gradient-descent">Gradient Descent</Link>, then come
+        back.
       </p>
 
       <div className="gdwm-layout">
@@ -62,14 +62,14 @@ function WhatIsGradientDescentWithMomentum() {
           <div className="gdwm-block">
             <span className="gdwm-block-label">The problem with plain descent</span>
             <p className="gdwm-text">
-              Say step {'$i$'} is at {'$x_i$'}. Regular gradient descent decides the next step
-              using only the slope right there:
+              Say step {'$i$'} is at {'$x_i$'}. Regular gradient descent decides the next step using
+              only the slope right there:
             </p>
             <p className="gdwm-math">{"$$x_{i+1} = x_i - \\alpha \\cdot f'(x_i)$$"}</p>
             <p className="gdwm-text">
-              Problem comes on flat-ish stretches. Slope is tiny, so steps are also tiny. Crossing
-              a shallow valley floor takes forever, like being stuck behind a tractor on a single
-              lane road.
+              Problem comes on flat-ish stretches. Slope is tiny, so steps are also tiny. Crossing a
+              shallow valley floor takes forever, like being stuck behind a tractor on a single lane
+              road.
             </p>
           </div>
 
@@ -86,8 +86,8 @@ function WhatIsGradientDescentWithMomentum() {
             <p className="gdwm-text">
               {'$(x_i - x_{i-1})$'} is just the last step's move. {'$\\beta$'} decides how much of
               it carries forward, somewhere between 0 and 1. {'$\\beta = 0$'} means no memory at
-              all, back to plain gradient descent. Bigger the {'$\\beta$'}, more the old step
-              keeps pushing you ahead.
+              all, back to plain gradient descent. Bigger the {'$\\beta$'}, more the old step keeps
+              pushing you ahead.
             </p>
           </div>
 
@@ -175,8 +175,8 @@ function WhatIsGradientDescentWithMomentum() {
             </button>
           </div>
           <p className="gdwm-run-note">
-            Try different {'$\\beta$'} values and hit Start. You will see yourself how much
-            momentum changes the ride.
+            Try different {'$\\beta$'} values and hit Start. You will see yourself how much momentum
+            changes the ride.
           </p>
 
           {history.length > 0 && (
@@ -206,9 +206,9 @@ function WhatIsGradientDescentWithMomentum() {
         <span className="gdwm-block-label">Why it can go wrong</span>
         <p className="gdwm-text">
           Momentum can overshoot. It keeps carrying part of the last step, so sometimes it blows
-          right past the minimum and has to swing back, this side, that side, before settling.
-          Like braking late at a speed breaker. High {'$\\beta$'} makes this worse, low{' '}
-          {'$\\beta$'} makes it barely different from plain descent.
+          right past the minimum and has to swing back, this side, that side, before settling. Like
+          braking late at a speed breaker. High {'$\\beta$'} makes this worse, low {'$\\beta$'}{' '}
+          makes it barely different from plain descent.
         </p>
       </div>
     </div>

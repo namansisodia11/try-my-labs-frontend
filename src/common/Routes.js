@@ -12,22 +12,19 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/learning/machine-learning/what-is-vector" element={<WhatIsVector />} />
-      <Route path="/learning/machine-learning/what-is-point" element={<WhatIsPoint />} />
+      <Route path="/machine-learning/what-is-vector" element={<WhatIsVector />} />
+      <Route path="/machine-learning/what-is-point" element={<WhatIsPoint />} />
+      <Route path="/machine-learning/what-is-minima-maxima" element={<WhatIsMinimaMaxima />} />
       <Route
-        path="/learning/machine-learning/what-is-minima-maxima"
-        element={<WhatIsMinimaMaxima />}
-      />
-      <Route
-        path="/learning/machine-learning/what-is-gradient-descent"
+        path="/machine-learning/what-is-gradient-descent"
         element={<WhatIsGradientDescent />}
       />
       <Route
-        path="/learning/machine-learning/what-is-gradient-descent-with-momentum"
+        path="/machine-learning/what-is-gradient-descent-with-momentum"
         element={<WhatIsGradientDescentWithMomentum />}
       />
       <Route
-        path="/learning/machine-learning/what-is-stochastic-gradient-descent"
+        path="/machine-learning/what-is-stochastic-gradient-descent"
         element={<WhatIsStochasticGradientDescent />}
       />
     </Routes>

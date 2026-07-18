@@ -33,9 +33,9 @@ function WhatIsPoint() {
       <section className="point-section">
         <h1 className="point-title">What is a Point?</h1>
         <p className="point-lead">
-          A <strong>point</strong> is just a location, that's all. No size, no direction, no
-          length. Like when you drop a pin on the map to share your location. The pin is not a
-          thing, it just says "here".
+          A <strong>point</strong> is just a location, that's all. No size, no direction, no length.
+          Like when you drop a pin on the map to share your location. The pin is not a thing, it
+          just says "here".
         </p>
       </section>
 
@@ -45,8 +45,7 @@ function WhatIsPoint() {
           <p className="point-heading">Simplest case: just (x)</p>
           <p className="point-desc">
             On a number line, a point is one number only. That's it. Like seat number in a train
-            coach: one number, and everyone knows exactly where you are sitting. Nowhere else to
-            go.
+            coach: one number, and everyone knows exactly where you are sitting. Nowhere else to go.
           </p>
           <p className="point-desc">Drag the point left and right, see how x changes.</p>
         </div>
@@ -94,10 +93,10 @@ function WhatIsPoint() {
           <span className="point-label">3D</span>
           <p className="point-heading">Add one more number: (x, y, z)</p>
           <p className="point-desc">
-            In 3D, one more number comes: z, going in and out of the screen. Think of a flat
-            address versus full address. (x, y) tells the building and z tells which floor. The
-            blue lines show how far the point is from each plane, so you can read all three
-            coordinates in one go.
+            In 3D, one more number comes: z, going in and out of the screen. Think of a flat address
+            versus full address. (x, y) tells the building and z tells which floor. The blue lines
+            show how far the point is from each plane, so you can read all three coordinates in one
+            go.
           </p>
           <p className="point-desc">
             Drag the point to move it along the floor. Right-click and drag to orbit around, see it
@@ -127,14 +126,14 @@ function WhatIsPoint() {
         </p>
         <p className="point-desc">
           One catch: you cannot visualize it. Our brain gives up after 3D. But computer? Computer
-          does not care, yaar. For it, a point with 1000 coordinates is same as a point with 2.
-          In machine learning, one point can have thousands of coordinates, one for each feature
-          in your data. Still just a location, only the space is much much bigger.
+          does not care, yaar. For it, a point with 1000 coordinates is same as a point with 2. In
+          machine learning, one point can have thousands of coordinates, one for each feature in
+          your data. Still just a location, only the space is much much bigger.
         </p>
         <p className="point-desc">
-          And this is why points matter so much in ML. Every data sample you have is a point
-          sitting somewhere in a high-dimensional space. Distance, similarity, clusters,
-          everything else is built on top of this one idea. Master this, half the battle is done.
+          And this is why points matter so much in ML. Every data sample you have is a point sitting
+          somewhere in a high-dimensional space. Distance, similarity, clusters, everything else is
+          built on top of this one idea. Master this, half the battle is done.
         </p>
       </section>
     </div>

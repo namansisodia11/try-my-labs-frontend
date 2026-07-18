@@ -29,9 +29,9 @@ function WhatIsVector() {
       <section className="vector-section">
         <h1 className="vector-title">What is a Vector?</h1>
         <p className="vector-lead">
-          A <strong>vector</strong> is any object living inside a <em>vector space</em>. And
-          vector space is like a gated society: a collection {'$V$'} with two strict rules, and
-          whatever you do, you must stay inside {'$V$'} only. The two rules:
+          A <strong>vector</strong> is any object living inside a <em>vector space</em>. And vector
+          space is like a gated society: a collection {'$V$'} with two strict rules, and whatever
+          you do, you must stay inside {'$V$'} only. The two rules:
         </p>
       </section>
 
@@ -60,8 +60,8 @@ function WhatIsVector() {
               <strong style={{ color: '#059669' }}>
                 sum ({sum.x},{sum.y})
               </strong>{' '}
-              is the diagonal of the parallelogram. Still a 2D arrow, still inside the same
-              space. Rule followed.
+              is the diagonal of the parallelogram. Still a 2D arrow, still inside the same space.
+              Rule followed.
             </p>
             <VectorAdditionCanvas a={{ x: 2, y: 1 }} b={{ x: 1, y: 2 }} onDrag={handleAddDrag} />
             <p className="canvas-note">
@@ -90,8 +90,8 @@ function WhatIsVector() {
               </strong>
               : multiplying by <strong style={{ color: '#059669' }}>2</strong> stretches it,{' '}
               <strong style={{ color: '#d97706' }}>0.5</strong> shrinks it, and{' '}
-              <strong style={{ color: '#e53e3e' }}>-1</strong> flips it fully. But see, all of
-              them stay on the same line through the origin. Nobody leaves the line.
+              <strong style={{ color: '#e53e3e' }}>-1</strong> flips it fully. But see, all of them
+              stay on the same line through the origin. Nobody leaves the line.
             </p>
             <VectorScalingCanvas
               vector={{ x: 2, y: 1 }}
